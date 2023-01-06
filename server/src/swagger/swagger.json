@@ -5,19 +5,6 @@
     "description": "This is a simple API for an E-Commerce application",
     "version": "1.0.0"
   },
-  "servers": [
-    {
-      "url": "/"
-    }
-  ],
-  "security": [
-    {
-      "password": [
-        "read",
-        "write"
-      ]
-    }
-  ],
   "tags": [
     {
       "name": "Customer"
@@ -44,8 +31,7 @@
               }
             }
           }
-        },
-        "security": []
+        }
       },
       "post": {
         "tags": [
@@ -76,8 +62,7 @@
           "409": {
             "description": "Conflict - Customer already created"
           }
-        },
-        "security": []
+        }
       }
     },
     "/customers/{uuid}": {
@@ -186,20 +171,6 @@
             "type": "string",
             "format": "email",
             "nullable": false
-          }
-        }
-      }
-    },
-    "securitySchemes": {
-      "password": {
-        "type": "oauth2",
-        "flows": {
-          "password": {
-            "tokenUrl": "http://example.com/oauth/token",
-            "scopes": {
-              "write": "allows modifying resources",
-              "read": "allows reading resources"
-            }
           }
         }
       }

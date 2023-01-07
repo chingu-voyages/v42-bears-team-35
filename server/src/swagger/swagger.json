@@ -8,6 +8,12 @@
   "tags": [
     {
       "name": "Customer"
+    },
+    {
+      "name": "Items"
+    },
+    {
+      "name":"Ratings"
     }
   ],
   "paths": {
@@ -121,6 +127,16 @@
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CustomerCreate"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200":{
             "description": "OK"
@@ -130,6 +146,168 @@
           },
           "404": {
             "description": "Not found - Customer not found"
+          }
+        }
+      }
+    },
+    "/items":{
+      "get":{
+        "tags":[
+          "Items"
+        ],
+        "summary": "Sends a list of all the items",
+        "responses":{
+          "200":{
+            "description": "OK",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "type":"array",
+                  "items":{
+                    "$ref":"#/components/schemas/ItemsResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post":{
+        "tags":[
+          "Items"
+        ],
+        "summary": "Creates a new item",
+        "requestBody":{
+          "content":{
+            "application/json":{
+              "schema":{
+                "$ref":"#/components/schemas/ItemsCreate"
+              }
+            }
+          },
+          "required":true
+        },
+        "responses":{
+          "201":{
+            "description": "OK",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/ItemsResponse"
+                }
+              }
+            }
+          },
+          "409":{
+            "description":"Conflict - Item already created"
+          }
+        }}
+    },
+    "/items/{uuid}":{
+      "get":{
+        "tags":[
+          "Items"
+        ],
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "summary": "Sends a specific items",
+        "responses":{
+          "200":{
+            "description": "OK",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/ItemsResponse"
+                }
+              }
+            }
+          },
+          "400":{
+            "description":"Invialid UUID"
+          },
+          "404":{
+            "description":"Not found - Item not found"
+          }
+        }
+      },
+      "put":{
+        "tags":[
+          "Items"
+        ],
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "summary": "Updates a specific item",
+        "requestBody":{
+          "content":{
+            "application/json":{
+              "schema":{
+                "$ref":"#/components/schemas/ItemsCreate"
+              }
+            }
+          },
+          "required":true
+        },
+        "responses":{
+          "200":{
+            "description": "OK",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/ItemsResponse"
+                }
+              }
+            }
+          },
+          "400":{
+            "description":"Invialid UUID"
+          },
+          "404":{
+            "description":"Not found - Item not found"
+          }
+        }
+      }
+    },
+    "/ratings":{
+      "post":{
+        "tags":[
+         "Ratings" 
+        ],
+        "summary":" Add a rating to each item",
+        "requestBody":{ 
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RatingCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses":{
+          "204":{
+            "description":"Rating added"
           }
         }
       }
@@ -171,6 +349,95 @@
             "type": "string",
             "format": "email",
             "nullable": false
+          }
+        }
+      },
+      "ItemsResponse":{
+        "type":"object",
+        "properties":{
+          "uuid":{
+            "type": "string",
+            "format": "uuid"
+          },
+          "description":{
+            "type":"string"
+          },
+          "price":{
+            "type": "number",
+            "format": "float"
+          },
+          "length":{
+            "type":"number",
+            "format":"float"
+          },
+          "width":{
+            "type":"number",
+            "format":"float"
+          },
+          "height": {
+            "type":"number",
+            "format": "float"
+          },
+          "tags":{
+            "type":"array",
+            "items":{
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ItemsCreate":{
+        "type":"object",
+        "properties":{
+          "description":{
+            "type":"string"
+          },
+          "price":{
+            "type": "number",
+            "format": "float"
+          },
+          "length":{
+            "type":"number",
+            "format":"float"
+          },
+          "width":{
+            "type":"number",
+            "format":"float"
+          },
+          "height": {
+            "type":"number",
+            "format": "float"
+          },
+          "tags":{
+            "type":"array",
+            "items":{
+              "type": "string"
+            }
+          }
+        }
+      },
+      "RatingCreate":{
+        "type":"object",
+        "properties":{
+          "item_uuid":{
+            "type":"string",
+            "format":"uuid",
+            "nullable":false
+          },
+          "customer_uuid":{
+            "type":"string",
+            "format":"uuid",
+            "nullable":false
+          },
+          "rating":{
+            "type":"integer",
+            "minimum":1,
+            "maximum":5,
+            "nullable": true
+          },
+          "comment":{
+            "type": "string",
+            "nullable": true
           }
         }
       }

@@ -14,6 +14,12 @@
     },
     {
       "name":"Ratings"
+    },
+    {
+      "name": "Supplier"
+    },
+    {
+      "name": "Orders"
     }
   ],
   "paths": {
@@ -311,6 +317,358 @@
           }
         }
       }
+    },
+    "/suppliers":{
+      "get":{
+        "summary":"Gets all of the suppliers",
+        "tags":["Supplier"],
+        "responses":{
+          "200":{
+            "description":"OK",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "type":"array",
+                  "items":{
+                    "$ref":"#/components/schemas/SupplierResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post":{
+        "summary": "Creates a new supplier",
+        "tags":["Supplier"],
+        "requestBody":{
+          "required":true,
+          "content":{
+            "application/json":{
+              "schema":{
+                "$ref":"#/components/schemas/SupplierCreate"
+              }
+            }
+          }
+        },
+        "responses":{
+          "201":{
+            "description": "Created",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/SupplierResponse"
+                }
+              }
+            }
+          },
+          "409":{
+            "description":"Conflict - Supplier already created"
+          }
+        }
+      }
+    },
+    "/suppliers/{uuid}":{
+      "get":{
+        "summary":"Gets a specific supplier",
+        "tags":["Supplier"],
+        "parameters":[
+          {
+            "name":"uuid",
+            "in":"path",
+            "required":true,
+            "schema":{
+              "type":"string",
+              "format":"uuid"
+            }
+          }
+        ],
+        "responses":{
+          "200":{
+            "description":"OK",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/SupplierResponse"
+                }
+              }
+            }
+          },
+          "400":{
+            "description":"Invialid UUID"
+          },
+          "404":{
+            "description":"Not found - Supplier not found"
+          }
+        }
+      },
+      "put":{
+        "summary":"Updates a specific supplier",
+        "tags":["Supplier"],
+        "parameters":[
+          {
+            "name":"uuid",
+            "in":"path",
+            "required":true,
+            "schmea":{
+              "type":"string",
+              "format":"uuid"
+            }
+          }
+        ],
+        "requestBody":{
+          "required":true,
+          "content":{
+            "application/json":{
+              "schema":{
+                "$ref":"#/components/schemas/SupplierCreate"
+              }
+            }
+          }
+        },
+        "responses":{
+          "200":{
+            "description":"OK",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/SupplierResponse"
+                }
+              }
+            }
+          },
+          "400":{
+            "description":"Invialid UUID"
+          },
+          "404":{
+            "description":"Not found - Supplier not found"
+          }
+        }
+      }
+    },
+    "/orders":{
+      "get":{
+        "summary": "Gets all of the orders",
+        "tags":["Orders"],
+        "responses":{
+          "200":{
+            "description":"OK",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "type":"array",
+                  "items":{
+                    "$ref":"#/components/schemas/OrdersResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post":{
+        "summary": "Creates a new order",
+        "tags":["Orders"],
+        "requestBody":{
+          "required":true,
+          "content":{
+            "application/json":{
+              "schema":{
+                "$ref":"#/components/schemas/OrdersCreate"
+              }
+            }
+          }
+        },
+        "responses":{
+          "201":{
+            "description":"Created",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/OrdersResponse"
+                }
+              }
+            }
+          },
+          "400":{
+            "description":"Invalid parameters"
+          },
+          "404":{
+            "description":"Not found - Customer not found"
+          },
+          "409":{
+            "description":"Conflict - Order already created"
+          }
+        }
+      }
+    },
+    "/orders/{uuid}":{
+      "get":{
+        "summary":"Gets a specific order",
+        "tags":["Orders"],
+        "parameters":[
+          {
+            "name":"uuid",
+            "in":"path",
+            "required":true,
+            "schema":{
+              "type":"string",
+              "format":"uuid"
+            }
+          }
+        ],
+        "responses":{
+          "200":{
+            "description":"OK",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/OrdersResponse"
+                }
+              }
+            }
+          },
+          "400":{
+            "description":"Invialid UUID"
+          },
+          "404":{
+            "description":"Not found - Order not found"
+          }
+        }
+      }
+    },
+    "/orders/{uuid}/items":{
+      "get":{
+        "summary": "Gets all the items of a specific order",
+        "tags":["Orders"],
+        "parameters":[
+          {
+            "name":"uuid",
+            "in":"path",
+            "required":true,
+            "description": "Order UUID",
+            "schema":{
+              "type":"string",
+              "format":"uuid"
+            }
+          }
+        ],
+        "responses":{
+          "200":{
+            "description":"OK",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "type":"array",
+                  "items":{
+                    "$ref":"#/components/schemas/OrdersItemsResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400":{
+            "description":"Invialid UUID"
+          },
+          "404":{
+            "description":"Not found - Order not found"
+          }
+        }
+      },
+      "post":{
+        "summary": "Creates a new item in a specific order",
+        "tags":["Orders"],
+        "parameters":[
+          {
+            "name":"uuid",
+            "in":"path",
+            "required":true,
+            "description": "Order UUID",
+            "schema":{
+              "type":"string",
+              "format":"uuid"
+            }
+          }
+        ],
+        "requestBody":{
+          "required":true,
+          "content":{
+            "application/json":{
+              "schema":{
+                "$ref":"#/components/schemas/OrdersItemsCreate"
+              }
+            }
+          }
+        },
+        "responses":{
+          "200":{
+            "description":"OK",
+            "content":{
+              "application/json":{
+                "schema":{
+                    "$ref":"#/components/schemas/OrdersItemsResponse"
+                }
+              }
+            }
+          },
+          "400":{
+            "description":"Invialid UUID"
+          },
+          "404":{
+            "description":"Not found - Order not found"
+          }
+        }
+      }
+    },
+    "/orders/{uuid}/items/{item_uuid}":{
+      "put":{
+        "summary": "Updates a specific item in a specific order",
+        "tags":["Orders"],
+        "parameters":[
+          {
+            "name":"uuid",
+            "in":"path",
+            "required":true,
+            "description": "Order UUID",
+            "schema":{
+              "type":"string",
+              "format":"uuid"
+            }
+          },
+          {
+            "name": "item_uuid",
+            "in":"path",
+            "required":true,
+            "description": "Item UUID",
+            "schema":{
+              "type":"string",
+              "format":"uuid"
+            }
+          }
+        ],
+        "requestBody":{
+          "required":true,
+          "content":{
+            "application/json":{
+              "schema":{
+                "$ref":"#/components/schemas/OrdersItemsUpdate"
+              }
+            }
+          }
+        },
+        "responses":{
+          "200":{
+            "description":"OK",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/OrdersItemsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -383,6 +741,9 @@
             "items":{
               "type": "string"
             }
+          },
+          "supplier":{
+              "$ref":"#/components/schemas/SupplierResponse"
           }
         }
       },
@@ -438,6 +799,150 @@
           "comment":{
             "type": "string",
             "nullable": true
+          }
+        }
+      },
+      "SupplierCreate":{
+        "type": "object",
+        "properties":{
+          "name":{
+            "type":"string",
+            "nullable":false
+          },
+          "phone":{
+            "type":"string",
+            "nullable":false
+          },
+          "address":{
+            "type":"string",
+            "nullable":false
+          },
+          "email":{
+            "type":"string",
+            "format":"email",
+            "nullable":false
+          }
+        }
+      },
+      "SupplierResponse":{
+        "type": "object",
+        "properties":{
+          "uuid":{
+            "type":"string",
+            "format":"uuid"
+          },
+          "name":{
+            "type":"string"
+          },
+          "phone":{
+            "type":"string"
+          },
+          "address":{
+            "type":"string"
+          },
+          "email":{
+            "type":"string",
+            "format":"email"
+          }
+        }
+      },
+      "OrdersResponse":{
+        "type":"object",
+        "properties":{
+          "uuid":{
+            "type":"string",
+            "format":"uuid"
+          },
+          "customer":{
+              "$ref":"#/components/schemas/CustomerResponse"
+          },
+          "date":{
+            "type":"string",
+            "format":"date"
+          },
+          "total":{
+            "type":"number",
+            "format":"float"
+          },
+          "items":{
+            "type":"array",
+            "items":{
+              "$ref":"#/components/schemas/OrdersItemsResponse"
+            }
+          }
+        }
+      },
+      "OrdersCreate":{
+        "type":"object",
+        "properties":{
+          "customer_uuid":{
+            "type":"string",
+            "format":"uuid",
+            "nullable":false
+          },
+          "date":{
+            "type":"string",
+            "format":"date",
+            "nullable":false
+          }
+        }
+      },
+      "OrdersItemsResponse":{
+        "type":"object",
+        "properties":{
+          "uuid":{
+            "type":"string",
+            "format":"uuid"
+          },
+          "item":{
+            "$ref":"#/components/schemas/ItemsResponse"
+          },
+          "quantity":{
+            "type":"number",
+            "format":"float"
+          },
+          "cost":{
+            "type":"number",
+            "format":"float"
+          },
+          "total":{
+            "type":"number",
+            "format":"float"
+          }
+        }
+      },
+      "OrdersItemsCreate":{
+        "type":"object",
+        "properties":{
+          "item_uuid":{
+            "type":"string",
+            "format":"uuid",
+            "nullable":false
+          },
+          "quantity":{
+            "type":"number",
+            "format":"float",
+            "nullable":false
+          },
+          "cost":{
+            "type":"number",
+            "format":"float",
+            "nullable":false
+          }
+        }
+      },
+      "OrdersItemsUpdate":{
+        "type":"object",
+        "properties":{
+          "quantity":{
+            "type":"number",
+            "format":"float",
+            "nullable":false
+          },
+          "cost":{
+            "type":"number",
+            "format":"float",
+            "nullable":false
           }
         }
       }

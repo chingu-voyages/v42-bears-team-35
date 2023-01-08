@@ -13,15 +13,16 @@
       "name": "Items"
     },
     {
-      "name":"Ratings"
+      "name": "Ratings"
+    },
+    {
+      "name": "Comments"
     }
   ],
   "paths": {
     "/customers": {
       "get": {
-        "tags": [
-          "Customer"
-        ],
+        "tags": ["Customer"],
         "summary": "Sends a list of all of the customers registerd in the application.",
         "responses": {
           "200": {
@@ -40,9 +41,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Customer"
-        ],
+        "tags": ["Customer"],
         "summary": "Creates a new customer",
         "requestBody": {
           "content": {
@@ -73,9 +72,7 @@
     },
     "/customers/{uuid}": {
       "get": {
-        "tags": [
-          "Customer"
-        ],
+        "tags": ["Customer"],
         "summary": "Gets a specific customer",
         "parameters": [
           {
@@ -110,11 +107,9 @@
         }
       },
       "put": {
-        "tags": [
-          "Customer"
-        ],
+        "tags": ["Customer"],
         "summary": "Updates a specific customer",
-        "parameters":[
+        "parameters": [
           {
             "name": "uuid",
             "in": "path",
@@ -138,7 +133,7 @@
           "required": true
         },
         "responses": {
-          "200":{
+          "200": {
             "description": "OK"
           },
           "400": {
@@ -150,21 +145,19 @@
         }
       }
     },
-    "/items":{
-      "get":{
-        "tags":[
-          "Items"
-        ],
+    "/items": {
+      "get": {
+        "tags": ["Items"],
         "summary": "Sends a list of all the items",
-        "responses":{
-          "200":{
+        "responses": {
+          "200": {
             "description": "OK",
-            "content":{
-              "application/json":{
-                "schema":{
-                  "type":"array",
-                  "items":{
-                    "$ref":"#/components/schemas/ItemsResponse"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ItemsResponse"
                   }
                 }
               }
@@ -172,42 +165,39 @@
           }
         }
       },
-      "post":{
-        "tags":[
-          "Items"
-        ],
+      "post": {
+        "tags": ["Items"],
         "summary": "Creates a new item",
-        "requestBody":{
-          "content":{
-            "application/json":{
-              "schema":{
-                "$ref":"#/components/schemas/ItemsCreate"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ItemsCreate"
               }
             }
           },
-          "required":true
+          "required": true
         },
-        "responses":{
-          "201":{
+        "responses": {
+          "201": {
             "description": "OK",
-            "content":{
-              "application/json":{
-                "schema":{
-                  "$ref":"#/components/schemas/ItemsResponse"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemsResponse"
                 }
               }
             }
           },
-          "409":{
-            "description":"Conflict - Item already created"
+          "409": {
+            "description": "Conflict - Item already created"
           }
-        }}
+        }
+      }
     },
-    "/items/{uuid}":{
-      "get":{
-        "tags":[
-          "Items"
-        ],
+    "/items/{uuid}": {
+      "get": {
+        "tags": ["Items"],
         "parameters": [
           {
             "name": "uuid",
@@ -222,29 +212,27 @@
           }
         ],
         "summary": "Sends a specific items",
-        "responses":{
-          "200":{
+        "responses": {
+          "200": {
             "description": "OK",
-            "content":{
-              "application/json":{
-                "schema":{
-                  "$ref":"#/components/schemas/ItemsResponse"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemsResponse"
                 }
               }
             }
           },
-          "400":{
-            "description":"Invialid UUID"
+          "400": {
+            "description": "Invialid UUID"
           },
-          "404":{
-            "description":"Not found - Item not found"
+          "404": {
+            "description": "Not found - Item not found"
           }
         }
       },
-      "put":{
-        "tags":[
-          "Items"
-        ],
+      "put": {
+        "tags": ["Items"],
         "parameters": [
           {
             "name": "uuid",
@@ -259,43 +247,41 @@
           }
         ],
         "summary": "Updates a specific item",
-        "requestBody":{
-          "content":{
-            "application/json":{
-              "schema":{
-                "$ref":"#/components/schemas/ItemsCreate"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ItemsCreate"
               }
             }
           },
-          "required":true
+          "required": true
         },
-        "responses":{
-          "200":{
+        "responses": {
+          "200": {
             "description": "OK",
-            "content":{
-              "application/json":{
-                "schema":{
-                  "$ref":"#/components/schemas/ItemsResponse"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemsResponse"
                 }
               }
             }
           },
-          "400":{
-            "description":"Invialid UUID"
+          "400": {
+            "description": "Invalid UUID"
           },
-          "404":{
-            "description":"Not found - Item not found"
+          "404": {
+            "description": "Not found - Item not found"
           }
         }
       }
     },
-    "/ratings":{
-      "post":{
-        "tags":[
-         "Ratings" 
-        ],
-        "summary":" Add a rating to each item",
-        "requestBody":{ 
+    "/ratings": {
+      "post": {
+        "tags": ["Ratings"],
+        "summary": " Add a rating to each item",
+        "requestBody": {
           "content": {
             "application/json": {
               "schema": {
@@ -305,9 +291,141 @@
           },
           "required": true
         },
-        "responses":{
-          "204":{
-            "description":"Rating added"
+        "responses": {
+          "204": {
+            "description": "Rating added"
+          }
+        }
+      }
+    },
+    "/comments": {
+      "get": {
+        "tags": ["Comments"],
+        "summary": "Sends a list of all the comments",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CommentResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Comments"],
+        "summary": "Creates a new comment",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommentCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict - Comment already created"
+          }
+        }
+      }
+    },
+    "/comments/{uuid}": {
+      "get": {
+        "tags": ["Comments"],
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "summary": "Gets a specific comment",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid UUID"
+          },
+          "404": {
+            "description": "Not found - Comment not found"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Comments"],
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "summary": "Updates a specific comment",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommentCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid UUID"
+          },
+          "404": {
+            "description": "Not found - Comment not found"
           }
         }
       }
@@ -352,92 +470,132 @@
           }
         }
       },
-      "ItemsResponse":{
-        "type":"object",
-        "properties":{
-          "uuid":{
+      "ItemsResponse": {
+        "type": "object",
+        "properties": {
+          "uuid": {
             "type": "string",
             "format": "uuid"
           },
-          "description":{
-            "type":"string"
+          "description": {
+            "type": "string"
           },
-          "price":{
+          "price": {
             "type": "number",
             "format": "float"
           },
-          "length":{
-            "type":"number",
-            "format":"float"
-          },
-          "width":{
-            "type":"number",
-            "format":"float"
-          },
-          "height": {
-            "type":"number",
+          "length": {
+            "type": "number",
             "format": "float"
           },
-          "tags":{
-            "type":"array",
-            "items":{
+          "width": {
+            "type": "number",
+            "format": "float"
+          },
+          "height": {
+            "type": "number",
+            "format": "float"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
               "type": "string"
             }
           }
         }
       },
-      "ItemsCreate":{
-        "type":"object",
-        "properties":{
-          "description":{
-            "type":"string"
+      "ItemsCreate": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
           },
-          "price":{
+          "price": {
             "type": "number",
             "format": "float"
           },
-          "length":{
-            "type":"number",
-            "format":"float"
-          },
-          "width":{
-            "type":"number",
-            "format":"float"
-          },
-          "height": {
-            "type":"number",
+          "length": {
+            "type": "number",
             "format": "float"
           },
-          "tags":{
-            "type":"array",
-            "items":{
+          "width": {
+            "type": "number",
+            "format": "float"
+          },
+          "height": {
+            "type": "number",
+            "format": "float"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
               "type": "string"
             }
           }
         }
       },
-      "RatingCreate":{
-        "type":"object",
-        "properties":{
-          "item_uuid":{
-            "type":"string",
-            "format":"uuid",
-            "nullable":false
+      "RatingCreate": {
+        "type": "object",
+        "properties": {
+          "item_uuid": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": false
           },
-          "customer_uuid":{
-            "type":"string",
-            "format":"uuid",
-            "nullable":false
+          "customer_uuid": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": false
           },
-          "rating":{
-            "type":"integer",
-            "minimum":1,
-            "maximum":5,
+          "rating": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5,
             "nullable": true
           },
-          "comment":{
+          "comment": {
             "type": "string",
             "nullable": true
+          }
+        }
+      },
+      "CommentCreate": {
+        "type": "object",
+        "properties": {
+          "item_uuid": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": false
+          },
+          "customer_uuid": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": false
+          },
+          "comment": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string",
+            "format": {
+              "date": "2000-01-01"
+            },
+            "nullable": false
+          }
+        }
+      },
+      "CommentResponse": {
+        "type": "object",
+        "properties": {
+          "comment": {
+            "type": "string",
+            "nullable": true
+          },
+          "created_at": {
+            "type": "string",
+            "format": {
+              "date": "2000-01-01"
+            }
           }
         }
       }

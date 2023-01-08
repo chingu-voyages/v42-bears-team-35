@@ -302,6 +302,18 @@
       "get": {
         "tags": ["Comments"],
         "summary": "Sends a list of all the comments",
+        "parameters": [
+          {
+            "name": "Items",
+            "in": "query",
+            "description": "Item uuid provided.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -365,51 +377,6 @@
           }
         ],
         "summary": "Gets a specific comment",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CommentResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid UUID"
-          },
-          "404": {
-            "description": "Not found - Comment not found"
-          }
-        }
-      },
-      "put": {
-        "tags": ["Comments"],
-        "parameters": [
-          {
-            "name": "uuid",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "summary": "Updates a specific comment",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CommentCreate"
-              }
-            }
-          },
-          "required": true
-        },
         "responses": {
           "200": {
             "description": "OK",
@@ -574,28 +541,24 @@
           },
           "comment": {
             "type": "string"
-          },
-          "created_at": {
-            "type": "string",
-            "format": {
-              "date": "2000-01-01"
-            },
-            "nullable": false
           }
         }
       },
       "CommentResponse": {
         "type": "object",
         "properties": {
+          "uuid": {
+            "type": "string",
+            "format": "uuid"
+          },
           "comment": {
             "type": "string",
             "nullable": true
           },
           "created_at": {
             "type": "string",
-            "format": {
-              "date": "2000-01-01"
-            }
+            "format": "date",
+            "nullable": false
           }
         }
       }

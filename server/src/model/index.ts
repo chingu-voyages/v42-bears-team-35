@@ -1,4 +1,4 @@
-import Test from "./Test";
+import Supplier from "./Supplier";
+import Item from "./Items";
 
-// eslint-disable-next-line import/prefer-default-export
-export { Test };
+export { Supplier, Item };

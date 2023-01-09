@@ -1,17 +1,17 @@
 import express, { Express, Request, Response } from "express";
 import swaggerUi from "swagger-ui-express";
 import AppDataSource from "./db";
-import { Test } from "./model";
 import { PORT } from "../environment";
 import swagger from "./swagger/swagger.json";
+import { Supplier } from "./model";
 
 const app: Express = express();
 const port = PORT;
 
-const testRepository = AppDataSource.getRepository(Test);
+const supplierRepository = AppDataSource.getRepository(Supplier);
 
 app.get("/", async (req: Request, res: Response) => {
-  const data = await testRepository.find();
+  const data = await supplierRepository.find();
   res.json(data);
 });
 

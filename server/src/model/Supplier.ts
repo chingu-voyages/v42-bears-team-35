@@ -17,7 +17,7 @@ export default class Supplier extends BaseEntity {
   @PrimaryColumn({
     type: "uuid",
   })
-  uuid: string;
+  id: string;
 
   @Column({
     nullable: false,

@@ -16,7 +16,7 @@ export default class Item extends BaseEntity {
   @PrimaryColumn({
     type: "uuid",
   })
-  uuid: string;
+  id: string;
 
   @Column({
     nullable: false,

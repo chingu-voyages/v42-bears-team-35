@@ -1,17 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { StyleSheet, Text, TextInput, View, Button, Alert } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-
+import React, { useState } from "react";
+import { Text, TextInput, View, Pressable } from "react-native";
+import styles from "../style";
 const Login = ({ navigation }) => {
   const [email, onChangeEmail] = useState("");
   const [password, onChangePassword] = useState("");
 
+  function conditionalNavigation() {
+    navigation.navigate("Main");
+  }
+
   return (
-    <>
-      <Text>Login</Text>
-      <View style={styles.inputContainer}>
-        <Text>Email</Text>
+    <View style={styles.container}>
+      <View style={styles.flexDiv}>
+        <Text style={styles.h1}>Login</Text>
+        <Text style={styles.label}>Email</Text>
         <TextInput
           style={styles.input}
           onChangeText={onChangeEmail}
@@ -19,8 +21,8 @@ const Login = ({ navigation }) => {
           value={email}
         />
       </View>
-      <View style={styles.inputContainer}>
-        <Text>Password</Text>
+      <View style={styles.flexDiv}>
+        <Text style={styles.label}>Password</Text>
         <TextInput
           style={styles.input}
           onChangeText={onChangePassword}
@@ -29,29 +31,20 @@ const Login = ({ navigation }) => {
           placeholder="password"
         />
       </View>
-      <View style={styles.inputContainer}>
-        <Button title="Login" onPress={() => navigation.navigate("Main")} />
+      <View style={styles.flexDiv}>
+        <Pressable
+          onPressOut={() => conditionalNavigation()}
+          style={styles.greenButton}
+        >
+          <Text style={styles.greenButtonText}>Login</Text>
+        </Pressable>
       </View>
-      <View>
-        <Text onPress={() => navigation.navigate("Main")}>
-          create new account
-        </Text>
+      <View style={styles.flexDiv}>
+        <Text style={styles.bold}>create new account</Text>
       </View>
-    </>
+      <Text style={styles.bottom}>continue as guest</Text>
+    </View>
   );
 };
-
-const styles = StyleSheet.create({
-  input: {
-    height: 40,
-    margin: 12,
-    borderWidth: 1,
-    padding: 10,
-  },
-  inputContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
 
 export default Login;

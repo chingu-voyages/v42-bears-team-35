@@ -16,11 +16,10 @@ describe("setup", () => {
     await connection.clear();
   });
 
-  it("should expect true", async () => {
+  it("should receive status code 200 and an empty array when getting the home route", async () => {
     const response = await request(app).get("/");
 
-    console.log(response);
-
     expect(response.statusCode).toBe(200);
+    expect(response.body.length).toBe(0);
   });
 });

@@ -7,7 +7,7 @@ import {
   DB_PASSWORD,
   DB_NAME,
 } from "../../environment";
-import { Item, Supplier } from "../model";
+import { Item, Supplier, Comments } from "../model";
 
 const AppDataSource = new DataSource({
   type: "postgres",
@@ -17,7 +17,7 @@ const AppDataSource = new DataSource({
   password: DB_PASSWORD,
   database: DB_NAME,
   synchronize: true,
-  entities: [Supplier, Item],
+  entities: [Supplier, Item, Comments],
 });
 
 AppDataSource.initialize();

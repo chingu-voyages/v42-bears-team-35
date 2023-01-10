@@ -20,6 +20,8 @@ describe("setup", () => {
     const response = await request(app).get("/");
 
     expect(response.statusCode).toBe(200);
+
+    // response.body -> where the response.json() data will be
     expect(response.body.length).toBe(0);
   });
 });

@@ -9,6 +9,8 @@ import {
 } from "typeorm";
 // eslint-disable-next-line import/no-cycle
 import Supplier from "./Supplier";
+// eslint-disable-next-line import/no-cycle
+import Comments from "./Comments";
 
 @Entity()
 @Unique(["supplier", "description"])
@@ -49,4 +51,7 @@ export default class Item extends BaseEntity {
 
   @ManyToOne(() => Supplier, (supplier) => supplier.items)
   supplier: Relation<Supplier>;
+
+  @ManyToOne(() => Comments, (comment) => comment.items)
+  comments: Relation<Comments>;
 }

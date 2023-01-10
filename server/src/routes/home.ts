@@ -1,13 +1,13 @@
 import { Router, Request, Response } from "express";
 import AppDataSource from "../db";
-import { Test } from "../model";
+import { Supplier } from "../model";
 
-const testRepository = AppDataSource.getRepository(Test);
+const supplierRepository = AppDataSource.getRepository(Supplier);
 
 const router: Router = Router();
 
 router.get("/", async (req: Request, res: Response) => {
-  const data = await testRepository.find();
+  const data = await supplierRepository.find();
   return res.status(200).json(data);
 });
 

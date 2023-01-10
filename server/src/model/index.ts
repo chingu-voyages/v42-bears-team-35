@@ -1,4 +1,8 @@
-import Test from "./Test";
+/* eslint-disable import/no-cycle */
+import Supplier from "./Supplier";
+import Item from "./Items";
+import Customers from "./Customers";
+import Ratings from "./Ratings";
+import Comments from "./Comments";
 
-// eslint-disable-next-line import/prefer-default-export
-export { Test };
+export { Supplier, Item, Ratings, Customers, Comments };

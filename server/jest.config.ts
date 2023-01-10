@@ -1,8 +1,10 @@
 import type { Config } from "jest";
 
 const config: Config = {
-  verbose: true,
   testMatch: ["**/__tests__/*.ts"],
+  preset: "ts-jest",
+  testEnvironment: "node",
+  clearMocks: true,
 };
 
 export default config;

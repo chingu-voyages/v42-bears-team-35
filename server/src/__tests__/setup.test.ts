@@ -1,4 +1,7 @@
+/* eslint-disable no-console */
+import request from "supertest";
 import connection from "../db/connection";
+import app from "../app";
 
 describe("setup", () => {
   beforeAll(async () => {
@@ -13,7 +16,11 @@ describe("setup", () => {
     await connection.clear();
   });
 
-  it("should expect true", () => {
-    expect(true).toBe(true);
+  it("should expect true", async () => {
+    const response = await request(app).get("/");
+
+    console.log(response);
+
+    expect(response.statusCode).toBe(200);
   });
 });

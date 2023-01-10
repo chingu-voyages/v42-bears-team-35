@@ -5,14 +5,14 @@ import { Test } from "./model";
 import swagger from "./swagger/swagger.json";
 
 const app: Express = express();
+app.use(express.json());
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swagger));
 
 const testRepository = AppDataSource.getRepository(Test);
 
 app.get("/", async (req: Request, res: Response) => {
   const data = await testRepository.find();
-  res.json(data);
+  return res.status(200).json(data);
 });
-
-app.use("/docs", swaggerUi.serve, swaggerUi.setup(swagger));
 
 export default app;

@@ -8,5 +8,4 @@ export default {
   username: DB_USER,
   password: DB_PASSWORD,
   database: DB_NAME,
-  dropSchema: true,
 };

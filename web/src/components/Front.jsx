@@ -1,6 +1,6 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
-import { Text, View } from "react-native";
+import { Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ROUTES } from "../constants";
 import ItemCards from "./ItemCards";
@@ -13,7 +13,9 @@ const Front = () => {
     <>
       <SafeAreaView>
         <Text>This is gonna be the Header Bar</Text>
-        <Text>Add drawer navigators here</Text>
+        <Text>
+          This is a nested navigator. Add drawer navigators into Front.jsx
+        </Text>
       </SafeAreaView>
       <Stack.Navigator>
         <Stack.Screen

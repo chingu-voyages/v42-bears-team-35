@@ -51,8 +51,8 @@ export default class Item extends BaseEntity {
   @ManyToOne(() => Supplier, (supplier) => supplier.items)
   supplier: Relation<Supplier>;
 
-  @ManyToOne(() => Comment, (comment) => comment.items)
-  comments: Relation<Comment>;
+  @OneToMany(() => Comment, (comment: Comment) => comment.item)
+  comments: Comment[];
 
   @OneToMany(() => Rating, (rating) => rating.item)
   ratings: Rating[];

@@ -3,7 +3,6 @@ import {
   Column,
   Entity,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
   Relation,
 } from "typeorm";
@@ -20,11 +19,8 @@ export default class Comment extends BaseEntity {
   })
   comment: string;
 
-  // eslint-disable-next-line @typescript-eslint/no-dupe-class-members
-  @OneToMany(() => Item, (item) => item.comments)
-  comments: Comment[];
-
-  items: [];
+  @ManyToOne(() => Item, (item) => item.comments)
+  item: Relation<Item>;
 
   @ManyToOne(() => Customer, (customer) => customer.comment)
   customer: Relation<Comment>;

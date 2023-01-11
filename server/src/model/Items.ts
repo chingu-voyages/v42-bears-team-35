@@ -3,21 +3,18 @@ import {
   Column,
   Entity,
   ManyToOne,
-  PrimaryColumn,
+  OneToMany,
+  PrimaryGeneratedColumn,
   Relation,
   Unique,
 } from "typeorm";
 // eslint-disable-next-line import/no-cycle
-import Supplier from "./Supplier";
-// eslint-disable-next-line import/no-cycle
-import Comments from "./Comments";
+import { Supplier, Comment, Rating } from ".";
 
 @Entity()
 @Unique(["supplier", "description"])
 export default class Item extends BaseEntity {
-  @PrimaryColumn({
-    type: "uuid",
-  })
+  @PrimaryGeneratedColumn("uuid")
   id: string;
 
   @Column({
@@ -52,6 +49,9 @@ export default class Item extends BaseEntity {
   @ManyToOne(() => Supplier, (supplier) => supplier.items)
   supplier: Relation<Supplier>;
 
-  @ManyToOne(() => Comments, (comment) => comment.items)
-  comments: Relation<Comments>;
+  @ManyToOne(() => Comment, (comment) => comment.items)
+  comments: Relation<Comment>;
+
+  @OneToMany(() => Rating, (rating) => rating.item)
+  ratings: Rating[];
 }

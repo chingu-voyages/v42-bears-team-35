@@ -1,12 +1,18 @@
-import { BaseEntity, Column, Entity, OneToMany, PrimaryColumn } from "typeorm";
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  Relation,
+} from "typeorm";
 // eslint-disable-next-line import/no-cycle
-import Items from "./Items";
+import { Item, Customer } from ".";
 
 @Entity()
-export default class Comments extends BaseEntity {
-  @PrimaryColumn({
-    type: "uuid",
-  })
+export default class Comment extends BaseEntity {
+  @PrimaryGeneratedColumn("uuid")
   id: string;
 
   @Column({
@@ -15,8 +21,11 @@ export default class Comments extends BaseEntity {
   comment: string;
 
   // eslint-disable-next-line @typescript-eslint/no-dupe-class-members
-  @OneToMany(() => Items, (item) => item.comments)
-  comments: Comments;
+  @OneToMany(() => Item, (item) => item.comments)
+  comments: Comment[];
 
   items: [];
+
+  @ManyToOne(() => Customer, (customer) => customer.comment)
+  customer: Relation<Comment>;
 }

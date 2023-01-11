@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, View } from "react-native";
 
-const Main = () => {
+const Front = () => {
   return (
     <View>
       <Text>This is gonna be the main container</Text>
@@ -9,4 +9,4 @@ const Main = () => {
   );
 };
 
-export default Main;
+export default Front;

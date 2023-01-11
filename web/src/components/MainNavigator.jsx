@@ -12,9 +12,6 @@ const Stack = createStackNavigator();
 const MainNavigator = () => {
   return (
     <>
-      <SafeAreaView>
-        <HeaderBar />
-      </SafeAreaView>
       <Stack.Navigator initialRouteName={ROUTES.LOGIN}>
         <Stack.Screen
           name={ROUTES.LOGIN}

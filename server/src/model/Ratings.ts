@@ -2,18 +2,16 @@ import {
   Entity,
   ManyToOne,
   Column,
-  PrimaryColumn,
   BaseEntity,
   Relation,
+  PrimaryGeneratedColumn,
 } from "typeorm";
 // eslint-disable-next-line import/no-cycle
-import { Customers } from "./index";
+import { Customer, Item } from ".";
 
 @Entity()
 export default class Ratings extends BaseEntity {
-  @PrimaryColumn({
-    type: "uuid",
-  })
+  @PrimaryGeneratedColumn("uuid")
   id: string;
 
   @Column({
@@ -21,6 +19,9 @@ export default class Ratings extends BaseEntity {
   })
   score: number;
 
-  @ManyToOne(() => Customers, (customer) => customer.rating)
-  customer: Relation<Customers>;
+  @ManyToOne(() => Customer, (customer) => customer.rating)
+  customer: Relation<Customer>;
+
+  @ManyToOne(() => Item, (item) => item.ratings)
+  item: Relation<Item>;
 }

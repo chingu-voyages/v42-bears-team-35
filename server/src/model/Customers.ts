@@ -1,22 +1,20 @@
 import {
   Entity,
   Unique,
-  PrimaryColumn,
   CreateDateColumn,
   Column,
   BaseEntity,
   OneToMany,
+  PrimaryGeneratedColumn,
 } from "typeorm";
 // eslint-disable-next-line import/no-cycle
-import { Ratings } from "./index";
+import { Comment, Rating } from ".";
 
 @Entity()
 @Unique(["name"])
 @Unique(["email"])
-export default class Customers extends BaseEntity {
-  @PrimaryColumn({
-    type: "uuid",
-  })
+export default class Customer extends BaseEntity {
+  @PrimaryGeneratedColumn("uuid")
   id: string;
 
   @Column({
@@ -49,6 +47,9 @@ export default class Customers extends BaseEntity {
   })
   created_at: Date;
 
-  @OneToMany(() => Ratings, (rating) => rating.customer)
-  rating: Ratings[];
+  @OneToMany(() => Rating, (rating) => rating.customer)
+  rating: Rating[];
+
+  @OneToMany(() => Comment, (comment) => comment.customer)
+  comment: Comment[];
 }

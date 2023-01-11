@@ -4,19 +4,17 @@ import {
   CreateDateColumn,
   Entity,
   OneToMany,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
   Unique,
 } from "typeorm";
 // eslint-disable-next-line import/no-cycle
-import Item from "./Items";
+import { Item } from ".";
 
 @Entity()
 @Unique(["email"])
 @Unique(["name"])
 export default class Supplier extends BaseEntity {
-  @PrimaryColumn({
-    type: "uuid",
-  })
+  @PrimaryGeneratedColumn("uuid")
   id: string;
 
   @Column({

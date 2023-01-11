@@ -2,6 +2,8 @@ import {
   BaseEntity,
   Column,
   Entity,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -9,7 +11,7 @@ import {
   Unique,
 } from "typeorm";
 // eslint-disable-next-line import/no-cycle
-import { Supplier, Comment, Rating } from ".";
+import { Supplier, Comment, Rating, Tag } from ".";
 
 @Entity()
 @Unique(["supplier", "description"])
@@ -54,4 +56,8 @@ export default class Item extends BaseEntity {
 
   @OneToMany(() => Rating, (rating) => rating.item)
   ratings: Rating[];
+
+  @ManyToMany(() => Tag)
+  @JoinTable()
+  tags: Tag[];
 }

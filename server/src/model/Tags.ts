@@ -1,14 +1,4 @@
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  PrimaryGeneratedColumn,
-} from "typeorm";
-
-// eslint-disable-next-line import/no-cycle
-import { Item } from ".";
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export default class Tag extends BaseEntity {
@@ -19,8 +9,4 @@ export default class Tag extends BaseEntity {
     nullable: false,
   })
   name: string;
-
-  @ManyToMany(() => Item)
-  @JoinTable()
-  items: Item[];
 }

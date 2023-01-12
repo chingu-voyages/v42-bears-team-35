@@ -2,9 +2,9 @@ import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { StyleSheet } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Login from "./components/Login";
-import Main from "./components/Main";
-import ProductDescription from "./components/ProductDescription";
+import Login from "./pages/Login";
+import Main from "./pages/Main";
+import ProductDescription from "./pages/ProductDescription";
 export default function App() {
   const Screen = createNativeStackNavigator();
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Text, TextInput, View, Pressable, StyleSheet, useWindowDimensions } from "react-native";
-import Navbar from './Navbar'
+import Navbar from '../components/Navbar'
 
 const Login = ({ navigation }) => {
   const {height, width} = useWindowDimensions()

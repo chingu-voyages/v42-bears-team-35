@@ -6,9 +6,11 @@ import {
   BaseEntity,
   OneToMany,
   PrimaryGeneratedColumn,
+  ManyToMany,
+  JoinTable,
 } from "typeorm";
 // eslint-disable-next-line import/no-cycle
-import { Comment, Rating } from ".";
+import { Comment, Item, Rating } from ".";
 
 @Entity()
 @Unique(["name"])
@@ -52,4 +54,18 @@ export default class Customer extends BaseEntity {
 
   @OneToMany(() => Comment, (comment) => comment.customer)
   comment: Comment[];
+
+  @ManyToMany(() => Item)
+  @JoinTable({
+    name: "favorite",
+    joinColumn: {
+      name: "customer",
+      referencedColumnName: "id",
+    },
+    inverseJoinColumn: {
+      name: "item",
+      referencedColumnName: "id",
+    },
+  })
+  items: Item[];
 }

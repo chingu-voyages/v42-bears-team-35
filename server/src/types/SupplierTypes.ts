@@ -13,3 +13,11 @@ export type SupplierResponse = {
   phone: string;
   address: string;
 };
+
+export type SupplierUpdate = {
+  id: string;
+  name: string;
+  phone: string;
+  address: string;
+  email: string;
+};

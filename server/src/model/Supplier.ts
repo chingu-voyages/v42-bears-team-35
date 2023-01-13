@@ -23,6 +23,16 @@ export default class Supplier extends BaseEntity {
   name: string;
 
   @Column({
+    nullable: false,
+  })
+  email: string;
+
+  @Column({
+    nullable: false,
+  })
+  password: string;
+
+  @Column({
     nullable: true,
   })
   phone: string;
@@ -31,11 +41,6 @@ export default class Supplier extends BaseEntity {
     nullable: true,
   })
   address: string;
-
-  @Column({
-    nullable: false,
-  })
-  email: string;
 
   @CreateDateColumn({
     type: "timestamptz",

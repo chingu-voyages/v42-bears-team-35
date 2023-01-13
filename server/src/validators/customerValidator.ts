@@ -1,26 +1,31 @@
 import { Validator } from "../types";
 
-const customerCreateValidator: Validator = {
-  name: {
+const customerCreateValidator: Validator[] = [
+  {
+    key: "name",
     required: true,
     type: "string",
   },
-  phone: {
+  {
+    key: "phone",
     required: true,
     type: "string",
   },
-  address: {
+  {
+    key: "address",
     required: true,
     type: "string",
   },
-  email: {
-    required: true,
-    type: "email",
-  },
-  password: {
+  {
+    key: "password",
     required: true,
     type: "password",
   },
-};
+  {
+    key: "email",
+    required: true,
+    type: "email",
+  },
+];
 
 export default customerCreateValidator;

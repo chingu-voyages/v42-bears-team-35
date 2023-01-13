@@ -1,14 +1,17 @@
 /* eslint-disable consistent-return */
 import { NextFunction, Request, Response } from "express";
 import { isEmailValid } from "./validateEmail";
+import { Validator } from "../types";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default function validateData(dataValidator: any) {
+export default function validateData(dataValidator: Validator[]) {
   return (req: Request, res: Response, next: NextFunction) => {
-    // eslint-disable-next-line no-restricted-syntax, guard-for-in
-    for (const key in dataValidator) {
-      // Check if a required value is present
-      if (dataValidator[key].required && req.body[key] === undefined)
+    for (let i = 0; i < dataValidator.length; i += 1) {
+      const toValidate = dataValidator[i];
+      const { key, required, type } = toValidate;
+
+      // If the key is required then check if it exists
+      if (required && req.body[key] === undefined)
         return res.status(400).json({
           errorKey: key,
           errorDescription: `${key} is required`,
@@ -16,7 +19,7 @@ export default function validateData(dataValidator: any) {
 
       // If the key is email we will use the email validator
       if (
-        dataValidator[key].type === "email" &&
+        type === "email" &&
         req.body[key] !== undefined &&
         req.body[key] !== null &&
         !isEmailValid(req.body[key])

@@ -5,6 +5,7 @@ import {
   SuccessType,
   CustomerCreate,
   CustomerResponse,
+  CustomerUpdate,
 } from "../types";
 import AppDataSource from "../db";
 import { Customer } from "../model";
@@ -77,8 +78,8 @@ export const getAllCustomers = async (): Promise<CustomerResponse[]> => {
 
 export const getOneCustomer = async (
   uuid: string,
-): Promise<CustomerResponse | null> => {
-  const customer: CustomerResponse | null = await customerRepositry
+): Promise<Customer | null> => {
+  const customer: Customer | null = await customerRepositry
     .createQueryBuilder("customer")
     .select("customer.id")
     .addSelect("customer.name")
@@ -91,3 +92,53 @@ export const getOneCustomer = async (
 
   return customer;
 };
+
+export async function updateOneCustomer(
+  body: CustomerUpdate,
+  customer: Customer,
+): Promise<SuccessType | ErrorType> {
+  const customerToUpdate = customer;
+  customerToUpdate.name = body.name ? body.name : customer.name;
+  customerToUpdate.email = body.email ? body.email : customer.email;
+  customerToUpdate.address = body.address ? body.address : customer.address;
+  customerToUpdate.phone = body.phone ? body.phone : customer.phone;
+
+  if (body.password)
+    customerToUpdate.password = await hashPassword(body.password);
+
+  try {
+    await queryRunner.startTransaction();
+
+    const customerUpdateResponse = await queryRunner.manager.save(
+      customerToUpdate,
+    );
+
+    await queryRunner.commitTransaction();
+
+    return {
+      data: {
+        id: customerUpdateResponse.id,
+        name: customerUpdateResponse.name,
+        address: customerToUpdate.address,
+        email: customerToUpdate.email,
+        phone: customerToUpdate.phone,
+      },
+    };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (err: any) {
+    await queryRunner.rollbackTransaction();
+
+    if (err.code !== undefined && err.code === "23505")
+      return {
+        errorCode: 400,
+        errorKey: "email",
+        errorDescription: "Customer with email already exists",
+      };
+
+    return {
+      errorCode: 500,
+      errorKey: "unknown",
+      errorDescription: err.message,
+    };
+  }
+}

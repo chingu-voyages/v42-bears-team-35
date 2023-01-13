@@ -3,6 +3,7 @@ import {
   createCustomer,
   getAllCustomers,
   getOneCustomer,
+  updateOneCustomer,
 } from "../controller/customer";
 import validateData from "../middleware/dataValidation";
 import {
@@ -60,7 +61,12 @@ router.put(
         errorDescription: "Unable to find customer",
       });
 
-    return res.sendStatus(204);
+    const updatedData = await updateOneCustomer(req.body, data);
+
+    if ("errorCode" in updatedData)
+      return res.status(updatedData.errorCode).json({ data: updatedData });
+
+    return res.status(200).json(updatedData);
   },
 );
 

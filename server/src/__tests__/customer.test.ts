@@ -249,9 +249,7 @@ describe("Operations on the customer route", () => {
       it("Should return 400 if an invalid email is sent to the route", async () => {
         const res = await request(app)
           .put(`${HOME_ROUTE}/${validCustomerId}`)
-          .send({
-            email: "aaa",
-          });
+          .send({ email: "aaa" });
 
         expect(res.statusCode).toBe(400);
         expect(res.body).toHaveProperty("errorKey");
@@ -262,7 +260,33 @@ describe("Operations on the customer route", () => {
     });
 
     describe("Expected responses on valid data", () => {
-      it.todo("It should update name if only the name is recieved");
+      it("It should only update name if only the name is recieved", async () => {
+        const res = await request(app)
+          .put(`${HOME_ROUTE}/${validCustomerId}`)
+          .send({ name: "updated customer" });
+
+        expect(res.statusCode).toBe(200);
+        expect(res.body).toHaveProperty("data");
+        expect(res.body.data).not.toHaveProperty("password");
+        expect(res.body.data.name).toBe("updated customer");
+        expect(res.body.data.phone).toBe("12345678");
+        expect(res.body.data.address).toBe("my address");
+        expect(res.body.data.email).toBe("name@email.com");
+      });
+
+      it("It should only update password if only the password is recieved", async () => {
+        const res = await request(app)
+          .put(`${HOME_ROUTE}/${validCustomerId}`)
+          .send({ password: "updatedpassword" });
+
+        expect(res.statusCode).toBe(200);
+        expect(res.body).toHaveProperty("data");
+        expect(res.body.data).not.toHaveProperty("password");
+        expect(res.body.data.name).toBe("updated customer");
+        expect(res.body.data.phone).toBe("12345678");
+        expect(res.body.data.address).toBe("my address");
+        expect(res.body.data.email).toBe("name@email.com");
+      });
     });
   });
 });

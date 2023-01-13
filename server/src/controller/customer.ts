@@ -21,29 +21,15 @@ export const createCustomer = async (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   body: CustomerCreate,
 ): Promise<ErrorType | SuccessType> => {
-  if (body.name === undefined)
-    return {
-      errorKey: "name",
-      errorDescription: "Need to provide a name for the customer",
-      errorCode: 400,
-    };
-
-  if (body.phone === undefined)
-    return {
-      errorKey: "phone",
-      errorDescription: "Need to provide a phone for the customer",
-      errorCode: 400,
-    };
-
   try {
     await queryRunner.startTransaction();
 
     const customer = new Customer();
     customer.name = body.name;
     customer.phone = body.phone;
-    customer.password = await hashPassword(body.password ? body.password : "");
-    customer.address = body.address ? body.address : "";
-    customer.email = body.email ? body.email : "";
+    customer.password = await hashPassword(body.password);
+    customer.address = body.address;
+    customer.email = body.email;
 
     await queryRunner.manager.save(customer);
 

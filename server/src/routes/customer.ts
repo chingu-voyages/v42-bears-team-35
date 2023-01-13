@@ -4,16 +4,22 @@ import {
   getAllCustomers,
   getOneCustomer,
 } from "../controller/customer";
+import validateData from "../middleware/dataValidation";
+import { customerCreateValidator } from "../validators";
 
 const router: Router = Router();
 
-router.post("/", async (req: Request, res: Response) => {
-  const data = await createCustomer(req.body);
+router.post(
+  "/",
+  validateData(customerCreateValidator),
+  async (req: Request, res: Response) => {
+    const data = await createCustomer(req.body);
 
-  if ("errorCode" in data) return res.status(data.errorCode).json(data);
+    if ("errorCode" in data) return res.status(data.errorCode).json(data);
 
-  return res.status(201).json(data);
-});
+    return res.status(201).json(data);
+  },
+);
 
 router.get("/", async (req: Request, res: Response) => {
   const data = await getAllCustomers();

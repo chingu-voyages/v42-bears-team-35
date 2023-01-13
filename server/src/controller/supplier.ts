@@ -20,45 +20,15 @@ const hashPassword = async (password: string): Promise<string> => {
 export const createSupplier = async (
   body: SupplierCreate,
 ): Promise<ErrorType | SuccessType> => {
-  if (body.name === undefined)
-    return {
-      errorKey: "name",
-      errorDescription: "Need to provide a name for the supplier",
-      errorCode: 400,
-    };
-  if (body.email === undefined)
-    return {
-      errorKey: "email",
-      errorDescription: "Need to provide a email for the supplier",
-      errorCode: 400,
-    };
-  if (body.password === undefined)
-    return {
-      errorKey: "password",
-      errorDescription: "Need to provide a password for the supplier",
-      errorCode: 400,
-    };
-  if (body.phone === undefined)
-    return {
-      errorKey: "phone",
-      errorDescription: "Need to provide a phone number for the supplier",
-      errorCode: 400,
-    };
-  if (body.address === undefined)
-    return {
-      errorKey: "address",
-      errorDescription: "Need to provide a address for the supplier",
-      errorCode: 400,
-    };
   try {
     await queryRunner.startTransaction();
 
     const supplier = new Supplier();
     supplier.name = body.name;
-    supplier.email = body.email ? body.email : "";
-    supplier.password = await hashPassword(body.password ? body.password : " ");
     supplier.phone = body.phone;
-    supplier.address = body.address ? body.address : "";
+    supplier.password = await hashPassword(body.password);
+    supplier.address = body.address;
+    supplier.email = body.email;
 
     await queryRunner.manager.save(supplier);
 
@@ -74,12 +44,12 @@ export const createSupplier = async (
       },
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
+  } catch (err: any) {
     await queryRunner.rollbackTransaction();
-    if (error.code === "23505") {
+    if (err.code === "23505") {
       return {
         errorKey: "email",
-        errorDescription: error.detail,
+        errorDescription: err.detail,
         errorCode: 409,
       };
     }
@@ -99,8 +69,40 @@ export const getAllSuppliers = async (): Promise<SupplierResponse[]> => {
     .addSelect("supplier.email")
     .addSelect("supplier.phone")
     .addSelect("supplier.address")
-    .orderBy("name")
+    .orderBy("supplier.name")
     .getMany();
 
   return allSuppliers;
+};
+
+export const getOneSupplier = async (
+  uuid: string,
+): Promise<SupplierResponse | null> => {
+  const supplier: SupplierResponse | null = await supplierRepository
+    .createQueryBuilder("supplier")
+    .select("supplier.name")
+    .addSelect("supplier.email")
+    .addSelect("supplier.address")
+    .addSelect("supplier.phone")
+    .andWhere("supplier.id  = :id")
+    .setParameter("id", uuid)
+    .getOne();
+
+  return supplier;
+};
+
+export const updateOneSupplier = async (
+  uuid: string,
+): Promise<SupplierResponse | null> => {
+  const supplier: SupplierResponse | null = await supplierRepository
+    .createQueryBuilder("supplier")
+    .select("supplier.name")
+    .addSelect("supplier.email")
+    .addSelect("supplier.address")
+    .addSelect("supplier.phone")
+    .andWhere("supplier.id  = :id")
+    .setParameter("id", uuid)
+    .update("supplier");
+
+  return supplier;
 };

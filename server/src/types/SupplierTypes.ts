@@ -1,9 +1,9 @@
 export type SupplierCreate = {
-  name?: string;
-  phone?: string;
-  address?: string;
-  email?: string;
-  password?: string;
+  name: string;
+  phone: string;
+  address: string;
+  email: string;
+  password: string;
 };
 
 export type SupplierResponse = {

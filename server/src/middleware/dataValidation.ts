@@ -28,6 +28,16 @@ export default function validateData(dataValidator: Validator[]) {
           errorKey: key,
           errorDescription: `${key} should be a valid email`,
         });
+
+      if (
+        toValidate.length !== undefined &&
+        toValidate.length !== null &&
+        req.body[key].length < toValidate.length
+      )
+        return res.status(400).json({
+          errorKey: key,
+          errorDescription: `${key} is to short`,
+        });
     }
 
     // if there is no error validation then go to the next function

@@ -64,6 +64,21 @@ describe("Operations on the customer route", () => {
         expect(res.body.errorDescription).toBe("password is required");
       });
 
+      it("Should return 400 if the password is to short", async () => {
+        const res = await request(app).post(HOME_ROUTE).send({
+          name: "new customer",
+          phone: "123456",
+          address: "address",
+          password: "aaa",
+        });
+
+        expect(res.statusCode).toBe(400);
+        expect(res.body).toHaveProperty("errorKey");
+        expect(res.body).toHaveProperty("errorDescription");
+        expect(res.body.errorKey).toBe("password");
+        expect(res.body.errorDescription).toBe("password is to short");
+      });
+
       it("Should return 400 if no email is sent to the route", async () => {
         const res = await request(app).post(HOME_ROUTE).send({
           name: "new customer",
@@ -96,7 +111,7 @@ describe("Operations on the customer route", () => {
       });
     });
 
-    describe("Should return success on valid data", () => {
+    describe("Expected responses on valid data", () => {
       it("Should return 201 if all data is valid", async () => {
         await connection.clear();
         const res = await request(app).post(HOME_ROUTE).send({
@@ -123,11 +138,51 @@ describe("Operations on the customer route", () => {
           password: "whatever",
           email: "c@email.com",
         });
+
         expect(res.statusCode).toBe(409);
         expect(res.body).toHaveProperty("errorKey");
       });
 
-      it.todo("Should return 409 if a customer with the same email exists");
+      it("Should return 409 if a customer with the same email exists", async () => {
+        const res = await request(app).post(HOME_ROUTE).send({
+          name: "customer 2",
+          phone: "12345678",
+          address: "my address",
+          password: "whatever",
+          email: "name@email.com",
+        });
+
+        expect(res.statusCode).toBe(409);
+        expect(res.body).toHaveProperty("errorKey");
+      });
+    });
+  });
+
+  describe("Reading data from customer route", () => {
+    it.todo("Should return 200 and an array when retrieving all the customers");
+
+    describe("Getting a specific customer", () => {
+      it.todo("Should return 400 if the user passes an invalid id");
+      it.todo(
+        "Should return 404 if the customer with the provided id is not found",
+      );
+      it.todo("Should return 200 when the customer is found");
+    });
+  });
+
+  describe("Updating customer information", () => {
+    it.todo("Should return 400 if the user passes an invalid id");
+    it.todo(
+      "Should return 404 if the customer with the provided id is not found",
+    );
+
+    describe("Should return error on ivalid data", () => {
+      it.todo("Should return 400 if the password is to short");
+      it.todo("Should return 400 if the email is invalid");
+    });
+
+    describe("Expected responses on valid data", () => {
+      it.todo("It should update name if only the name is recieved");
     });
   });
 });

@@ -20,6 +20,7 @@ const customerCreateValidator: Validator[] = [
     key: "password",
     required: true,
     type: "password",
+    length: 8,
   },
   {
     key: "email",

@@ -8,6 +8,7 @@ export default function validateData(dataValidator: Validator[]) {
   return (req: Request, res: Response, next: NextFunction) => {
     for (let i = 0; i < dataValidator.length; i += 1) {
       const toValidate = dataValidator[i];
+
       const { key, required, type } = toValidate;
 
       // If the key is required then check if it exists
@@ -32,6 +33,7 @@ export default function validateData(dataValidator: Validator[]) {
       if (
         toValidate.length !== undefined &&
         toValidate.length !== null &&
+        req.body[key] !== undefined &&
         req.body[key].length < toValidate.length
       )
         return res.status(400).json({
@@ -39,7 +41,6 @@ export default function validateData(dataValidator: Validator[]) {
           errorDescription: `${key} is to short`,
         });
     }
-
     // if there is no error validation then go to the next function
     next();
   };

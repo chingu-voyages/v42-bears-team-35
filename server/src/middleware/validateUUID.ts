@@ -19,11 +19,17 @@ export const validateUUID = (
 
   if (uuid.toLowerCase() !== "me") {
     if (!isValidUUID(uuid))
-      return res.status(400).json({ detail: "Invalid UUID" });
+      return res.status(400).json({
+        errorKey: "uuid",
+        errorDescription: "Uuid provided is invalid",
+      });
   }
 
-  if (item_uuid && !isValidUUID(item_uuid))
-    return res.status(400).json({ detail: "Invalid UUID" });
+  if (item_uuid !== undefined && !isValidUUID(item_uuid))
+    return res.status(400).json({
+      errorKey: "uuid",
+      errorDescription: "Uuid provided is invalid",
+    });
 
   next();
 };

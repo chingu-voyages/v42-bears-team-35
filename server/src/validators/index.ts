@@ -1,4 +1,6 @@
-import customerCreateValidator from "./customerValidator";
+import {
+  customerCreateValidator,
+  customerUpdateValidator,
+} from "./customerValidator";
 
-// eslint-disable-next-line import/prefer-default-export
-export { customerCreateValidator };
+export { customerCreateValidator, customerUpdateValidator };

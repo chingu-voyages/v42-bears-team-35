@@ -14,10 +14,10 @@ const Front = () => {
   return (
     <>
       <SafeAreaView>
-        {/* <Text>This is gonna be the Header Bar</Text>
+        <Text>This is gonna be the Header Bar</Text>
         <Text>
           This is a nested navigator. Add drawer navigators into Front.jsx
-        </Text> */}
+        </Text>
       </SafeAreaView>
         <Drawer.Navigator
               screenOptions={{

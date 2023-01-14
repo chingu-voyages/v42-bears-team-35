@@ -2,6 +2,7 @@
 import { NextFunction, Request, Response } from "express";
 import { isEmailValid } from "./validateEmail";
 import { Validator } from "../types";
+import validateDate from "./validateDate";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function validateData(dataValidator: Validator[]) {
@@ -39,6 +40,18 @@ export default function validateData(dataValidator: Validator[]) {
         return res.status(400).json({
           errorKey: key,
           errorDescription: `${key} is to short`,
+        });
+
+      if (
+        type === "date" &&
+        req.body[key] !== undefined &&
+        req.body[key] !== null &&
+        !validateDate(req.body[key])
+      )
+        return res.status(400).json({
+          errorKey: "date",
+          errorDescription: `${key} is not a valid date`,
+          errorStatus: 400,
         });
     }
     // if there is no error validation then go to the next function

@@ -27,9 +27,52 @@ describe("Order route tests", () => {
         expect(res.body.errorKey).toBe("date");
         expect(res.body.errorDescription).toBe("date is required");
       });
-      it.todo(
-        "Should return 400 if the user is not logged in or provide an email",
-      );
+
+      it("Should return 400 if the user sends an invalid date", async () => {
+        let res = await request(app).post(HOME_ROUTE).send({
+          date: "2023-01-45",
+        });
+
+        expect(res.statusCode).toBe(400);
+        expect(res.body).toHaveProperty("errorKey");
+        expect(res.body).toHaveProperty("errorDescription");
+        expect(res.body.errorKey).toBe("date");
+        expect(res.body.errorDescription).toBe("date is not a valid date");
+
+        res = await request(app).post(HOME_ROUTE).send({
+          date: "20230130",
+        });
+
+        expect(res.statusCode).toBe(400);
+        expect(res.body).toHaveProperty("errorKey");
+        expect(res.body).toHaveProperty("errorDescription");
+        expect(res.body.errorKey).toBe("date");
+        expect(res.body.errorDescription).toBe("date is not a valid date");
+
+        res = await request(app).post(HOME_ROUTE).send({
+          date: "2023-30-01",
+        });
+
+        expect(res.statusCode).toBe(400);
+        expect(res.body).toHaveProperty("errorKey");
+        expect(res.body).toHaveProperty("errorDescription");
+        expect(res.body.errorKey).toBe("date");
+        expect(res.body.errorDescription).toBe("date is not a valid date");
+      });
+
+      it("Should return 400 if the user is not logged in or provide an email", async () => {
+        const res = await request(app).post(HOME_ROUTE).send({
+          date: "2023-01-30",
+        });
+
+        expect(res.statusCode).toBe(400);
+        expect(res.body).toHaveProperty("errorKey");
+        expect(res.body).toHaveProperty("errorDescription");
+        expect(res.body.errorKey).toBe("email");
+        expect(res.body.errorDescription).toBe("email is required");
+      });
+
+      it.todo("Should return 400 if the user sends an ivalid email");
     });
 
     describe("When the informations ent by the user is valid", () => {

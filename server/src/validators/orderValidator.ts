@@ -7,4 +7,9 @@ export const orderCreateValidator: Validator[] = [
     type: "date",
     required: true,
   },
+  {
+    key: "email",
+    type: "email",
+    required: true,
+  },
 ];

@@ -6,7 +6,10 @@ import {
   updateOneSupplier,
 } from "../controller/supplier";
 import validateData from "../middleware/dataValidation";
-import { supplierCreateValidator } from "../validators";
+import {
+  supplierUpdateValidator,
+  supplierCreateValidator,
+} from "../validators/supplierValidator";
 
 const router: Router = Router();
 
@@ -30,13 +33,6 @@ router.get("/", async (req: Request, res: Response) => {
 
 router.get("/:uuid", async (req: Request, res: Response) => {
   const { uuid } = req.params;
-  const data = await getOneSupplier(uuid);
-
-  return res.status(200).json({ data });
-});
-
-router.put("/:uuid", async (req: Request, res: Response) => {
-  const { uuid } = req.params;
 
   const supplier = await getOneSupplier(uuid);
 
@@ -47,9 +43,30 @@ router.put("/:uuid", async (req: Request, res: Response) => {
       errorCode: 404,
     });
 
-  const data = await updateOneSupplier(req.body, supplier);
+  const data = await getOneSupplier(uuid);
 
-  return res.status(200).json(data);
+  return res.status(200).json({ data });
 });
+
+router.put(
+  "/:uuid",
+  validateData(supplierUpdateValidator),
+  async (req: Request, res: Response) => {
+    const { uuid } = req.params;
+
+    const supplier = await getOneSupplier(uuid);
+
+    if (!supplier)
+      return res.status(404).json({
+        errorKey: "uuid",
+        errorDescription: "Unable to find supplier",
+        errorCode: 404,
+      });
+
+    const data = await updateOneSupplier(req.body, supplier);
+
+    return res.status(200).json(data);
+  },
+);
 
 export default router;

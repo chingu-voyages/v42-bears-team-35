@@ -1,6 +1,6 @@
 import { Validator } from "../types";
 
-const customerCreateValidator: Validator[] = [
+export const customerCreateValidator: Validator[] = [
   {
     key: "name",
     required: true,
@@ -29,4 +29,31 @@ const customerCreateValidator: Validator[] = [
   },
 ];
 
-export default customerCreateValidator;
+export const customerUpdateValidator: Validator[] = [
+  {
+    key: "name",
+    required: false,
+    type: "string",
+  },
+  {
+    key: "phone",
+    required: false,
+    type: "string",
+  },
+  {
+    key: "address",
+    required: false,
+    type: "string",
+  },
+  {
+    key: "password",
+    required: false,
+    type: "password",
+    length: 8,
+  },
+  {
+    key: "email",
+    required: false,
+    type: "email",
+  },
+];

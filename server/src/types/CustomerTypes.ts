@@ -13,3 +13,11 @@ export type CustomerResponse = {
   address: string;
   email: string;
 };
+
+export type CustomerUpdate = {
+  name?: string;
+  phone?: string;
+  address?: string;
+  email?: string;
+  password?: string;
+};

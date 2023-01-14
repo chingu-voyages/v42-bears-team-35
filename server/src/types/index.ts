@@ -1,6 +1,10 @@
 import { ErrorType } from "./ErrorType";
 import { SuccessType } from "./SuccessType";
-import { CustomerCreate, CustomerResponse } from "./CustomerTypes";
+import {
+  CustomerCreate,
+  CustomerResponse,
+  CustomerUpdate,
+} from "./CustomerTypes";
 import {
   SupplierCreate,
   SupplierResponse,
@@ -17,4 +21,5 @@ export {
   SupplierResponse,
   SupplierUpdate,
   Validator,
+  CustomerUpdate,
 };

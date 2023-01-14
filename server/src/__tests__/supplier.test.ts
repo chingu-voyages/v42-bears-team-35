@@ -50,35 +50,6 @@ describe("Operations on the supplier route", () => {
         expect(res.body.errorDescription).toBe("address is required");
       });
 
-      it("Should return 400 if no password is sent to the route", async () => {
-        const res = await request(app).post(HOME_ROUTE).send({
-          name: "new supplier",
-          phone: "123456",
-          address: "address",
-        });
-
-        expect(res.statusCode).toBe(400);
-        expect(res.body).toHaveProperty("errorKey");
-        expect(res.body).toHaveProperty("errorDescription");
-        expect(res.body.errorKey).toBe("password");
-        expect(res.body.errorDescription).toBe("password is required");
-      });
-
-      it("Should return 400 if the password is to short", async () => {
-        const res = await request(app).post(HOME_ROUTE).send({
-          name: "new supplier",
-          phone: "123456",
-          address: "address",
-          password: "aaa",
-        });
-
-        expect(res.statusCode).toBe(400);
-        expect(res.body).toHaveProperty("errorKey");
-        expect(res.body).toHaveProperty("errorDescription");
-        expect(res.body.errorKey).toBe("password");
-        expect(res.body.errorDescription).toBe("password is to short");
-      });
-
       it("Should return 400 if no email is sent to the route", async () => {
         const res = await request(app).post(HOME_ROUTE).send({
           name: "new supplier",

@@ -3,7 +3,6 @@ export type SupplierCreate = {
   phone: string;
   address: string;
   email: string;
-  password: string;
 };
 
 export type SupplierResponse = {
@@ -18,7 +17,6 @@ export type SupplierUpdate = {
   id: string;
   name: string;
   phone: string;
-  password: string;
   address: string;
   email: string;
 };

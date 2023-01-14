@@ -28,11 +28,6 @@ export default class Supplier extends BaseEntity {
   phone: string;
 
   @Column({
-    nullable: false,
-  })
-  password: string;
-
-  @Column({
     nullable: true,
   })
   address: string;

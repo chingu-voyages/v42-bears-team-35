@@ -38,9 +38,18 @@ router.get("/:uuid", async (req: Request, res: Response) => {
 router.put("/:uuid", async (req: Request, res: Response) => {
   const { uuid } = req.params;
 
-  const data = await updateOneSupplier(uuid);
+  const supplier = await getOneSupplier(uuid);
 
-  return res.status(204).json({ data });
+  if (!supplier)
+    return res.status(404).json({
+      errorKey: "uuid",
+      errorDescription: "Unable to find supplier",
+      errorCode: 404,
+    });
+
+  const data = await updateOneSupplier(req.body, supplier);
+
+  return res.status(200).json(data);
 });
 
 export default router;

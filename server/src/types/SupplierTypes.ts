@@ -18,6 +18,7 @@ export type SupplierUpdate = {
   id: string;
   name: string;
   phone: string;
+  password: string;
   address: string;
   email: string;
 };

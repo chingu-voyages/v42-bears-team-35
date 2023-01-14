@@ -17,12 +17,6 @@ const supplierCreateValidator: Validator[] = [
     type: "string",
   },
   {
-    key: "password",
-    required: true,
-    type: "password",
-    length: 8,
-  },
-  {
     key: "email",
     required: true,
     type: "email",

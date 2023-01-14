@@ -77,6 +77,7 @@ export const getOneSupplier = async (
   const supplier: Supplier | null = await supplierRepository
     .createQueryBuilder("supplier")
     .select("supplier.name")
+    .addSelect("supplier.id")
     .addSelect("supplier.email")
     .addSelect("supplier.address")
     .addSelect("supplier.phone")

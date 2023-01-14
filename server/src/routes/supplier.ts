@@ -10,6 +10,8 @@ import {
   supplierUpdateValidator,
   supplierCreateValidator,
 } from "../validators/supplierValidator";
+import { isValidUUID } from "../middleware/validateUUID";
+import { isEmailValid } from "../middleware/validateEmail";
 
 const router: Router = Router();
 
@@ -33,6 +35,13 @@ router.get("/", async (req: Request, res: Response) => {
 
 router.get("/:uuid", async (req: Request, res: Response) => {
   const { uuid } = req.params;
+
+  if (!isValidUUID(uuid))
+    return res.status(400).json({
+      errorKey: "uuid",
+      errorDescription: "Uuid provided was invalid",
+      errorCode: 400,
+    });
 
   const data = await getOneSupplier(uuid);
 
@@ -59,6 +68,13 @@ router.put(
         errorKey: "uuid",
         errorDescription: "Unable to find supplier",
         errorCode: 404,
+      });
+
+    if (!isEmailValid(supplier.email))
+      return res.status(400).json({
+        errorKey: "uuid",
+        errorDescription: "email should be a valid email",
+        errorCode: 400,
       });
 
     const data = await updateOneSupplier(req.body, supplier);

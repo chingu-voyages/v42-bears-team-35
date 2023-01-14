@@ -6,9 +6,12 @@ import {
   supplierCreateValidator,
   supplierUpdateValidator,
 } from "./supplierValidator";
+import { orderCreateValidator } from "./orderValidator";
 
-export { customerCreateValidator,
+export {
+  customerCreateValidator,
   customerUpdateValidator,
   supplierCreateValidator,
   supplierUpdateValidator,
+  orderCreateValidator,
 };

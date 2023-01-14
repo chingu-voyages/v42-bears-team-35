@@ -18,7 +18,7 @@ describe("Order route tests", () => {
 
   describe("Add a new order", () => {
     describe("When the information sent by the user is not valid", () => {
-      it.skip("Should return 400 if the user doesn't send a date", async () => {
+      it("Should return 400 if the user doesn't send a date", async () => {
         const res = await request(app).post(HOME_ROUTE).send({});
 
         expect(res.statusCode).toBe(400);

@@ -5,6 +5,11 @@ import {
   CustomerResponse,
   CustomerUpdate,
 } from "./CustomerTypes";
+import {
+  SupplierCreate,
+  SupplierResponse,
+  SupplierUpdate,
+} from "./SupplierTypes";
 import { Validator } from "./ValidatorType";
 
 export {
@@ -12,6 +17,9 @@ export {
   SuccessType,
   CustomerCreate,
   CustomerResponse,
+  SupplierCreate,
+  SupplierResponse,
+  SupplierUpdate,
   Validator,
   CustomerUpdate,
 };

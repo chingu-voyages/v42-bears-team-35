@@ -34,16 +34,14 @@ router.get("/", async (req: Request, res: Response) => {
 router.get("/:uuid", async (req: Request, res: Response) => {
   const { uuid } = req.params;
 
-  const supplier = await getOneSupplier(uuid);
+  const data = await getOneSupplier(uuid);
 
-  if (!supplier)
+  if (!data)
     return res.status(404).json({
       errorKey: "uuid",
       errorDescription: "Unable to find supplier",
       errorCode: 404,
     });
-
-  const data = await getOneSupplier(uuid);
 
   return res.status(200).json({ data });
 });

@@ -5,30 +5,41 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { ROUTES } from "../constants";
 import ItemCards from "./ItemCards";
 import ItemDescript from "./ItemDescript";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 
 const Front = () => {
-  const Stack = createStackNavigator();
+  // const Stack = createStackNavigator();
+  const Drawer = createDrawerNavigator();
 
   return (
     <>
       <SafeAreaView>
-        <Text>This is gonna be the Header Bar</Text>
+        {/* <Text>This is gonna be the Header Bar</Text>
         <Text>
           This is a nested navigator. Add drawer navigators into Front.jsx
-        </Text>
+        </Text> */}
       </SafeAreaView>
-      <Stack.Navigator>
-        <Stack.Screen
+        <Drawer.Navigator
+              screenOptions={{
+              headerShown: false,
+              drawerActiveBackgroundColor: "#346633",
+              drawerActiveTintColor: "white",
+              drawerLabelStyle: {
+                marginLeft: 0,
+              },
+            }}
+        >
+        <Drawer.Screen
           name={ROUTES.ITEM_CARDS}
           component={ItemCards}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
+        <Drawer.Screen
           name={ROUTES.ITEM_DESCRIPTION}
           component={ItemDescript}
           options={{ headerShown: false }}
         />
-      </Stack.Navigator>
+      </Drawer.Navigator>
     </>
   );
 };

@@ -8,25 +8,34 @@ import ItemDescript from "./ItemDescript";
 import Navbar from "./Navbar";
 
 const Front = () => {
-  const Stack = createStackNavigator();
+  const Drawer = createDrawerNavigator();
 
   return (
     <>
       <SafeAreaView>
         <Navbar />
       </SafeAreaView>
-      <Stack.Navigator>
-        <Stack.Screen
+        <Drawer.Navigator
+              screenOptions={{
+              headerShown: false,
+              drawerActiveBackgroundColor: "#346633",
+              drawerActiveTintColor: "white",
+              drawerLabelStyle: {
+                marginLeft: 0,
+              },
+            }}
+        >
+        <Drawer.Screen
           name={ROUTES.ITEM_CARDS}
           component={ItemCards}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
+        <Drawer.Screen
           name={ROUTES.ITEM_DESCRIPTION}
           component={ItemDescript}
           options={{ headerShown: false }}
         />
-      </Stack.Navigator>
+      </Drawer.Navigator>
     </>
   );
 };

@@ -35,4 +35,15 @@ router.get("/:uuid", validateUUID, async (req: Request, res: Response) => {
   return res.status(200).json({ data });
 });
 
+router.put("/:uuid", validateUUID, async (req: Request, res: Response) => {
+  const data = await getOneOrder(req.params.uuid);
+
+  if (data === null)
+    return res
+      .status(404)
+      .json({ errorKey: "uuid", errorDescription: "Unable to find order" });
+
+  return res.sendStatus(204);
+});
+
 export default router;

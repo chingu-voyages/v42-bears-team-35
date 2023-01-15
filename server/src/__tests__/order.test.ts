@@ -157,6 +157,26 @@ describe("Order route tests", () => {
   });
 
   describe("Update the orders", () => {
+    it("Should return 400 if the user sends an invalid uuid", async () => {
+      const res = await request(app).put(`${HOME_ROUTE}/${INVALID_UUID}`);
+
+      expect(res.statusCode).toBe(400);
+      expect(res.body).toHaveProperty("errorKey");
+      expect(res.body).toHaveProperty("errorDescription");
+      expect(res.body.errorKey).toBe("uuid");
+      expect(res.body.errorDescription).toBe("Uuid provided is invalid");
+    });
+
+    it("Should return 404 if there is no order with that specific uuid", async () => {
+      const res = await request(app).put(`${HOME_ROUTE}/${NON_EXISTENT_UUID}`);
+
+      expect(res.status).toBe(404);
+      expect(res.body).toHaveProperty("errorKey");
+      expect(res.body).toHaveProperty("errorDescription");
+      expect(res.body.errorKey).toBe("uuid");
+      expect(res.body.errorDescription).toBe("Unable to find order");
+    });
+
     it.todo("Should not be able to update the order date");
     it.todo("Should not be able to update the order total");
     it.todo("Can modify the tracking number");

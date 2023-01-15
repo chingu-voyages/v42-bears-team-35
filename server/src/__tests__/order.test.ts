@@ -4,7 +4,7 @@ import app from "../app";
 
 const HOME_ROUTE = "/orders";
 let validOrderId: string;
-// const INVALID_UUID = "thisisan-inva-lidu-uidv-aluesoerror";
+const INVALID_UUID = "thisisan-inva-lidu-uidv-aluesoerror";
 // const NON_EXISTENT_UUID = "12345678-1234-1234-1234-1234567890AB";
 
 describe("Order route tests", () => {
@@ -117,11 +117,20 @@ describe("Order route tests", () => {
       expect(res.statusCode).toBe(200);
       expect(res.body).toHaveProperty("data");
       expect(Array.isArray(res.body.data)).toBe(true);
+      expect(typeof res.body.data[0].id).toBe("string");
       validOrderId = res.body.data[0].id;
     });
 
     describe("When retreiving a specifc order", () => {
-      it.todo("Should return 400 if the user sends an invalid uuid");
+      it("Should return 400 if the user sends an invalid uuid", async () => {
+        const res = await request(app).get(`${HOME_ROUTE}/${INVALID_UUID}`);
+
+        expect(res.statusCode).toBe(400);
+        expect(res.body).toHaveProperty("errorKey");
+        expect(res.body).toHaveProperty("errorDescription");
+        expect(res.body.errorKey).toBe("uuid");
+        expect(res.body.errorDescription).toBe("Uuid provided is invalid");
+      });
       it.todo("Should return 404 if there is no order with that specific uuid");
       it.todo("Should return 200 if there is an order with that specific uuid");
     });

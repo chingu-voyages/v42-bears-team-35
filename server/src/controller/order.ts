@@ -4,8 +4,8 @@ import { ErrorType, OrderCreate, SuccessType } from "../types";
 import AppDataSource from "../db";
 
 const queryRunner: QueryRunner = AppDataSource.createQueryRunner();
+const orderRepository = AppDataSource.getRepository(Order);
 
-// eslint-disable-next-line import/prefer-default-export
 export async function createOrder(
   body: OrderCreate,
 ): Promise<ErrorType | SuccessType> {
@@ -40,4 +40,17 @@ export async function createOrder(
       errorKey: "unknown",
     };
   }
+}
+
+export async function getAllOrders(): Promise<Order[]> {
+  const data: Order[] = await orderRepository
+    .createQueryBuilder("order")
+    .select("order.id")
+    .addSelect("order.customer")
+    .addSelect("order.email")
+    .addSelect("order.date")
+    .addSelect("order.total")
+    .getMany();
+
+  return data;
 }

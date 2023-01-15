@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Text, TextInput, View, Pressable, StyleSheet, useWindowDimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { styles } from "../../styles";
 import { ROUTES } from "../constants";
 import Navbar from "./Navbar";
 
@@ -97,6 +96,16 @@ const Login = ({ navigation }) => {
             onChangeText={onChangeEmail}
             placeholder="Email"
             value={email}
+          />
+        </View>
+        <View style={styles.flexDiv}>
+          <Text style={styles.label}>Password</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={onChangePassword}
+            value={password}
+            secureTextEntry={true}
+            placeholder="password"
           />
         </View>
         <View style={styles.flexDiv}>

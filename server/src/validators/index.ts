@@ -7,7 +7,12 @@ import {
   supplierUpdateValidator,
 } from "./supplierValidator";
 
-export { customerCreateValidator,
+import { itemCreateValidator, itemUpdateValidator } from "./ItemValidators";
+
+export {
+  itemCreateValidator,
+  itemUpdateValidator,
+  customerCreateValidator,
   customerUpdateValidator,
   supplierCreateValidator,
   supplierUpdateValidator,

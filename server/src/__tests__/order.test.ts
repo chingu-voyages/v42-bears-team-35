@@ -5,7 +5,7 @@ import app from "../app";
 const HOME_ROUTE = "/orders";
 let validOrderId: string;
 const INVALID_UUID = "thisisan-inva-lidu-uidv-aluesoerror";
-// const NON_EXISTENT_UUID = "12345678-1234-1234-1234-1234567890AB";
+const NON_EXISTENT_UUID = "12345678-1234-1234-1234-1234567890AB";
 
 describe("Order route tests", () => {
   beforeAll(async () => {
@@ -131,8 +131,28 @@ describe("Order route tests", () => {
         expect(res.body.errorKey).toBe("uuid");
         expect(res.body.errorDescription).toBe("Uuid provided is invalid");
       });
-      it.todo("Should return 404 if there is no order with that specific uuid");
-      it.todo("Should return 200 if there is an order with that specific uuid");
+
+      it("Should return 404 if there is no order with that specific uuid", async () => {
+        const res = await request(app).get(
+          `${HOME_ROUTE}/${NON_EXISTENT_UUID}`,
+        );
+
+        expect(res.status).toBe(404);
+        expect(res.body).toHaveProperty("errorKey");
+        expect(res.body).toHaveProperty("errorDescription");
+        expect(res.body.errorKey).toBe("uuid");
+        expect(res.body.errorDescription).toBe("Unable to find order");
+      });
+
+      it("Should return 200 if there is an order with that specific uuid", async () => {
+        const res = await request(app).get(`${HOME_ROUTE}/${validOrderId}`);
+
+        expect(res.statusCode).toBe(200);
+        expect(res.body.data).toHaveProperty("id");
+        expect(res.body.data).toHaveProperty("date");
+        expect(res.body.data).toHaveProperty("email");
+        expect(res.body.data).toHaveProperty("total");
+      });
     });
   });
 

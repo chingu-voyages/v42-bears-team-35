@@ -54,3 +54,18 @@ export async function getAllOrders(): Promise<Order[]> {
 
   return data;
 }
+
+export async function getOneOrder(uuid: string): Promise<Order | null> {
+  const data: Order | null = await orderRepository
+    .createQueryBuilder("order")
+    .select("order.id")
+    .addSelect("order.customer")
+    .addSelect("order.email")
+    .addSelect("order.date")
+    .addSelect("order.total")
+    .andWhere("order.id = :id")
+    .setParameter("id", uuid)
+    .getOne();
+
+  return data;
+}

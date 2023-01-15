@@ -12,4 +12,9 @@ export const orderCreateValidator: Validator[] = [
     type: "email",
     required: true,
   },
+  {
+    key: "traking",
+    type: "string",
+    required: false,
+  },
 ];

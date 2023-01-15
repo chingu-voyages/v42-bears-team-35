@@ -2,6 +2,7 @@
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -31,6 +32,16 @@ export default class Order extends BaseEntity {
     default: 0,
   })
   total: number;
+
+  @CreateDateColumn({
+    type: "timestamptz",
+  })
+  created_at: Date;
+
+  @Column({
+    nullable: true,
+  })
+  tracking_number: string;
 
   @ManyToOne(() => Customer, (customer: Customer) => customer.orders)
   customer: Relation<Customer>;

@@ -5,32 +5,31 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
   Relation,
 } from "typeorm";
-import { OrderItem, Customer } from ".";
+import { Item, Order } from ".";
 
 @Entity()
-export default class Order extends BaseEntity {
+export default class OrderItem extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
   @Column({
+    type: "float",
     nullable: false,
   })
-  email: string;
-
-  @Column({
-    type: "date",
-    nullable: false,
-  })
-  date: Date;
+  quantity: number;
 
   @Column({
     type: "float",
     nullable: false,
-    default: 0,
+  })
+  cost: number;
+
+  @Column({
+    type: "float",
+    nullable: false,
   })
   total: number;
 
@@ -39,14 +38,9 @@ export default class Order extends BaseEntity {
   })
   created_at: Date;
 
-  @Column({
-    nullable: true,
-  })
-  tracking_number: string;
+  @ManyToOne(() => Order, (order: Order) => order.orderItems)
+  order: Relation<Order>;
 
-  @ManyToOne(() => Customer, (customer: Customer) => customer.orders)
-  customer: Relation<Customer>;
-
-  @OneToMany(() => OrderItem, (orderItem: OrderItem) => orderItem.order)
-  orderItems: OrderItem[];
+  @ManyToOne(() => Item, (item: Item) => item.orderItems)
+  item: Relation<Item>;
 }

@@ -1,14 +1,47 @@
 import React from "react";
 import {
+  FlatList,
   ImageBackground,
-  Pressable,
   StyleSheet,
   Text,
   View,
 } from "react-native";
 import { ROUTES } from "../constants";
+import { Dimensions } from "react-native";
 
-const image = { uri: "https://reactjs.org/logo-og.png" };
+const HEADER_HEIGHT = 80;
+const MOCK_DATA = [
+  {
+    id: 1,
+    url: { uri: "https://img.makeupalley.com/3/9/7/8/3630182.jpg" },
+    title: "Lancome",
+  },
+  {
+    id: 2,
+    url: { uri: "https://img.makeupalley.com/3/9/7/8/3630182.jpg" },
+    title: "Lancome2",
+  },
+];
+
+const renderItem = ({ item, _ }) => {
+  const { url, title } = item;
+  return (
+    <View
+      style={{
+        flex: 1,
+        height: Dimensions.get("window").height - HEADER_HEIGHT,
+      }}
+    >
+      <ImageBackground
+        source={url}
+        imageStyle={{ resizeMode: "cover" }}
+        style={styles.imageBackground}
+      >
+        <Text style={styles.itemText}>{title}</Text>
+      </ImageBackground>
+    </View>
+  );
+};
 
 const ItemCards = ({ navigation }) => {
   const onGoBack = () => {
@@ -21,11 +54,13 @@ const ItemCards = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-        <Pressable onPressOut={onGoBack}>
-          <Text style={styles.text}>Go Back</Text>
-        </Pressable>
-      </ImageBackground>
+      <FlatList
+        data={MOCK_DATA}
+        renderItem={renderItem}
+        pagingEnabled
+        keyExtractor={(item) => item.index}
+        decelerationRate="fast"
+      />
     </View>
   );
 };
@@ -35,17 +70,13 @@ export default ItemCards;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // width: "100%",
-    // height: "100%",
-
-    // border: "1px solid red",
   },
-  image: {
+  imageBackground: {
     flex: 1,
   },
-  text: {
-    color: "white",
-    fontSize: 24,
+  itemText: {
+    color: "black",
+    fontSize: 18,
     fontWeight: "bold",
   },
 });

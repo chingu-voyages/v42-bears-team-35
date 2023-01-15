@@ -7,6 +7,8 @@ import Comment from "./Comments";
 import Tag from "./Tags";
 import Picture from "./Picture";
 import PictureMetadata from "./PictureMetadata";
+import Order from "./Order";
+import OrderItem from "./OrderItem";
 
 export {
   Supplier,
@@ -17,4 +19,6 @@ export {
   Tag,
   Picture,
   PictureMetadata,
+  Order,
+  OrderItem,
 };

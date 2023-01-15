@@ -11,7 +11,7 @@ const connection = {
 
   async clear() {
     const clearConnection = getConnection();
-    const entities: string[] = ["customer", "supplier"];
+    const entities: string[] = ['"order"', "customer", "supplier"];
 
     entities.forEach(async (entity) => {
       const repository = clearConnection.getRepository(entity);

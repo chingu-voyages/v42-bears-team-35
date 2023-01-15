@@ -18,8 +18,7 @@ const Front = () => {
       <SafeAreaView>
         <Navbar  />
       </SafeAreaView>
-        <Stack.Navigator
-        >
+      <Stack.Navigator>
         <Stack.Screen
           name={ROUTES.ITEM_CARDS}
           component={ItemCards}

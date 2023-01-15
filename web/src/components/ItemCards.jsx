@@ -1,13 +1,9 @@
 import React from "react";
-import {
-  FlatList,
-  ImageBackground,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { FlatList, ImageBackground, SafeAreaView, Text } from "react-native";
 import { ROUTES } from "../constants";
 import { Dimensions } from "react-native";
+import { styles } from "./ItemCardsStyles";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const HEADER_HEIGHT = 80;
 const MOCK_DATA = [
@@ -26,10 +22,10 @@ const MOCK_DATA = [
 const renderItem = ({ item, _ }) => {
   const { url, title } = item;
   return (
-    <View
+    <TouchableOpacity
       style={{
-        flex: 1,
-        height: Dimensions.get("window").height - HEADER_HEIGHT,
+        height: Dimensions.get("window").height - HEADER_HEIGHT, // this doesn't work refactored into stylesheet
+        ...styles.renderItemContainer,
       }}
     >
       <ImageBackground
@@ -39,7 +35,7 @@ const renderItem = ({ item, _ }) => {
       >
         <Text style={styles.itemText}>{title}</Text>
       </ImageBackground>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -53,7 +49,7 @@ const ItemCards = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <FlatList
         data={MOCK_DATA}
         renderItem={renderItem}
@@ -61,22 +57,8 @@ const ItemCards = ({ navigation }) => {
         keyExtractor={(item) => item.index}
         decelerationRate="fast"
       />
-    </View>
+    </SafeAreaView>
   );
 };
 
 export default ItemCards;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  imageBackground: {
-    flex: 1,
-  },
-  itemText: {
-    color: "black",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-});

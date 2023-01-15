@@ -11,7 +11,7 @@ import {
   SupplierUpdate,
 } from "./SupplierTypes";
 import { Validator } from "./ValidatorType";
-import { OrderCreate } from "./OrderTypes";
+import { OrderCreate, OrderUpdate } from "./OrderTypes";
 
 export {
   ErrorType,
@@ -24,4 +24,5 @@ export {
   Validator,
   CustomerUpdate,
   OrderCreate,
+  OrderUpdate,
 };

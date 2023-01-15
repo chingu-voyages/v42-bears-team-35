@@ -2,7 +2,12 @@ import { Request, Response, Router } from "express";
 import { validateUUID } from "../middleware/validateUUID";
 import validateData from "../middleware/dataValidation";
 import { orderCreateValidator } from "../validators";
-import { createOrder, getAllOrders, getOneOrder } from "../controller/order";
+import {
+  createOrder,
+  getAllOrders,
+  getOneOrder,
+  updateOneOrder,
+} from "../controller/order";
 
 const router: Router = Router();
 
@@ -43,7 +48,9 @@ router.put("/:uuid", validateUUID, async (req: Request, res: Response) => {
       .status(404)
       .json({ errorKey: "uuid", errorDescription: "Unable to find order" });
 
-  return res.sendStatus(204);
+  const updatedOrder = await updateOneOrder(req.body, data);
+
+  return res.sendStatus(200).json({ data: updatedOrder });
 });
 
 export default router;

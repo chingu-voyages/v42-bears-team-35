@@ -1,6 +1,6 @@
 import { QueryRunner } from "typeorm";
 import { Order } from "../model";
-import { ErrorType, OrderCreate, SuccessType } from "../types";
+import { ErrorType, OrderCreate, OrderUpdate, SuccessType } from "../types";
 import AppDataSource from "../db";
 
 const queryRunner: QueryRunner = AppDataSource.createQueryRunner();
@@ -68,4 +68,43 @@ export async function getOneOrder(uuid: string): Promise<Order | null> {
     .getOne();
 
   return data;
+}
+
+export async function updateOneOrder(
+  body: OrderUpdate,
+  order: Order,
+): Promise<SuccessType | ErrorType> {
+  const orderToUpdate = order;
+
+  orderToUpdate.email = body.email ? body.email : order.email;
+  orderToUpdate.tracking_number = body.tracking
+    ? body.tracking
+    : orderToUpdate.tracking_number;
+
+  try {
+    await queryRunner.startTransaction();
+
+    await queryRunner.manager.save(orderToUpdate);
+
+    await queryRunner.commitTransaction();
+    return {
+      data: {
+        id: orderToUpdate.id,
+        customer: orderToUpdate.customer,
+        email: orderToUpdate.email,
+        date: orderToUpdate.date,
+        total: orderToUpdate.total,
+      },
+    };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    await queryRunner.rollbackTransaction();
+    // eslint-disable-next-line no-console
+    console.error(error);
+    return {
+      errorCode: 500,
+      errorKey: "unknown",
+      errorDescription: error.message,
+    };
+  }
 }

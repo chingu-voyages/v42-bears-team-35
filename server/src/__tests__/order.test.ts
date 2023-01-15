@@ -3,8 +3,9 @@ import connection from "../db/connection";
 import app from "../app";
 
 const HOME_ROUTE = "/orders";
-const INVALID_UUID = "thisisan-inva-lidu-uidv-aluesoerror";
-const NON_EXISTENT_UUID = "12345678-1234-1234-1234-1234567890AB";
+let validOrderId: string;
+// const INVALID_UUID = "thisisan-inva-lidu-uidv-aluesoerror";
+// const NON_EXISTENT_UUID = "12345678-1234-1234-1234-1234567890AB";
 
 describe("Order route tests", () => {
   beforeAll(async () => {
@@ -72,13 +73,37 @@ describe("Order route tests", () => {
         expect(res.body.errorDescription).toBe("email is required");
       });
 
-      it.todo("Should return 400 if the user sends an ivalid email");
+      it("Should return 400 if the user sends an ivalid email", async () => {
+        const res = await request(app).post(HOME_ROUTE).send({
+          date: "2023-01-30",
+          email: "a",
+        });
+
+        expect(res.statusCode).toBe(400);
+        expect(res.body).toHaveProperty("errorKey");
+        expect(res.body).toHaveProperty("errorDescription");
+        expect(res.body.errorKey).toBe("email");
+        expect(res.body.errorDescription).toBe("email should be a valid email");
+      });
     });
 
     describe("When the informations ent by the user is valid", () => {
-      it.todo(
-        "Should return 201 when the order is succesfully created with a non logged in user",
-      );
+      it("Should return 201 when the order is succesfully created with a non logged in user", async () => {
+        const res = await request(app).post(HOME_ROUTE).send({
+          date: "2022-01-14",
+          email: "a@b.c",
+        });
+
+        expect(res.statusCode).toBe(201);
+        expect(res.body.data).toHaveProperty("id");
+        expect(res.body.data).toHaveProperty("date");
+        expect(res.body.data).toHaveProperty("email");
+        expect(res.body.data).toHaveProperty("total");
+        expect(res.body.data).toHaveProperty("customer");
+        expect(res.body.data.customer).toBe(null);
+        expect(res.body.data.total).toBe(0);
+        expect(res.body.data.email).toBe("a@b.c");
+      });
       it.todo(
         "Should return 201 when the order is succesfully created with a logged in user",
       );
@@ -86,7 +111,14 @@ describe("Order route tests", () => {
   });
 
   describe("Get the orders", () => {
-    it.todo("Should return 200 when retrieving all of the orders");
+    it("Should return 200 when retrieving all of the orders", async () => {
+      const res = await request(app).get(HOME_ROUTE);
+
+      expect(res.statusCode).toBe(200);
+      expect(res.body).toHaveProperty("data");
+      expect(Array.isArray(res.body.data)).toBe(true);
+      validOrderId = res.body.data[0].id;
+    });
 
     describe("When retreiving a specifc order", () => {
       it.todo("Should return 400 if the user sends an invalid uuid");

@@ -10,7 +10,7 @@ import {
   JoinTable,
 } from "typeorm";
 // eslint-disable-next-line import/no-cycle
-import { Comment, Item, Rating } from ".";
+import { Comment, Item, Rating, Order } from ".";
 
 @Entity()
 @Unique(["name"])
@@ -68,4 +68,7 @@ export default class Customer extends BaseEntity {
     },
   })
   items: Item[];
+
+  @OneToMany(() => Order, (order: Order) => order.customer)
+  orders: Order[];
 }

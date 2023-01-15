@@ -27,6 +27,7 @@ export async function createOrder(
         date: order.date,
         customer: order.customer ? order.customer : null,
         total: order.total,
+        tracking: order.tracking_number,
       },
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -50,6 +51,7 @@ export async function getAllOrders(): Promise<Order[]> {
     .addSelect("order.email")
     .addSelect("order.date")
     .addSelect("order.total")
+    .addSelect("order.tracking_number")
     .getMany();
 
   return data;
@@ -63,6 +65,7 @@ export async function getOneOrder(uuid: string): Promise<Order | null> {
     .addSelect("order.email")
     .addSelect("order.date")
     .addSelect("order.total")
+    .addSelect("order.tracking_number")
     .andWhere("order.id = :id")
     .setParameter("id", uuid)
     .getOne();
@@ -94,6 +97,7 @@ export async function updateOneOrder(
         email: orderToUpdate.email,
         date: orderToUpdate.date,
         total: orderToUpdate.total,
+        tracking: orderToUpdate.tracking_number,
       },
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

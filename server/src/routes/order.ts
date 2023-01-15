@@ -50,7 +50,7 @@ router.put("/:uuid", validateUUID, async (req: Request, res: Response) => {
 
   const updatedOrder = await updateOneOrder(req.body, data);
 
-  return res.sendStatus(200).json({ data: updatedOrder });
+  return res.status(200).json(updatedOrder);
 });
 
 export default router;

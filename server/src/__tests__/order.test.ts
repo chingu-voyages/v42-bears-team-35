@@ -7,6 +7,8 @@ let validOrderId: string;
 const INVALID_UUID = "thisisan-inva-lidu-uidv-aluesoerror";
 const NON_EXISTENT_UUID = "12345678-1234-1234-1234-1234567890AB";
 
+// TODO add a login method
+
 describe("Order route tests", () => {
   beforeAll(async () => {
     await connection.create();
@@ -177,8 +179,33 @@ describe("Order route tests", () => {
       expect(res.body.errorDescription).toBe("Unable to find order");
     });
 
-    it.todo("Should not be able to update the order date");
-    it.todo("Should not be able to update the order total");
-    it.todo("Can modify the tracking number");
+    it("Should not be able to update the order date", async () => {
+      const res = await request(app).put(`${HOME_ROUTE}/${validOrderId}`).send({
+        date: "2023-04-23",
+      });
+
+      expect(res.status).toBe(200);
+      expect(res.body).toHaveProperty("data");
+      expect(res.body.data.id).toBe(validOrderId);
+      expect(res.body.data.date.toLocaleString("en-us")).toBe("2022-01-13");
+    });
+    it("Should not be able to update the order total", async () => {
+      const res = await request(app).put(`${HOME_ROUTE}/${validOrderId}`).send({
+        total: 200,
+      });
+
+      expect(res.status).toBe(200);
+      expect(res.body).toHaveProperty("data");
+      expect(res.body.data.total).toBe(0);
+    });
+    it("Can modify the tracking number", async () => {
+      const res = await request(app).put(`${HOME_ROUTE}/${validOrderId}`).send({
+        tracking: "updated1234",
+      });
+
+      expect(res.status).toBe(200);
+      expect(res.body).toHaveProperty("data");
+      expect(res.body.data.tracking).toBe("updated1234");
+    });
   });
 });

@@ -20,7 +20,7 @@ const Login = ({ navigation }) => {
           <TextInput
             style={styles.input}
             onChangeText={onChangeEmail}
-            placeholder="Email"
+            placeholder="Enter your email"
             value={email}
           />
         </View>
@@ -31,7 +31,7 @@ const Login = ({ navigation }) => {
             onChangeText={onChangePassword}
             value={password}
             secureTextEntry={true}
-            placeholder="password"
+            placeholder="Enter your password"
           />
         </View>
         <View style={styles.flexDiv}>

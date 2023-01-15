@@ -1,6 +1,14 @@
 import React from "react";
-import { Pressable, Text } from "react-native";
+import {
+  ImageBackground,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { ROUTES } from "../constants";
+
+const image = { uri: "https://reactjs.org/logo-og.png" };
 
 const ItemCards = ({ navigation }) => {
   const onGoBack = () => {
@@ -12,16 +20,32 @@ const ItemCards = ({ navigation }) => {
   };
 
   return (
-    <>
-      <Text>ItemCards</Text>
-      <Pressable onPressOut={() => onGoBack()}>
-        <Text>Go Back</Text>
-      </Pressable>
-      <Pressable onPressOut={() => onGoToItemDescript()}>
-        <Text>Go to Item Descript</Text>
-      </Pressable>
-    </>
+    <View style={styles.container}>
+      <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+        <Pressable onPressOut={onGoBack}>
+          <Text style={styles.text}>Go Back</Text>
+        </Pressable>
+      </ImageBackground>
+    </View>
   );
 };
 
 export default ItemCards;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    // width: "100%",
+    // height: "100%",
+
+    // border: "1px solid red",
+  },
+  image: {
+    flex: 1,
+  },
+  text: {
+    color: "white",
+    fontSize: 24,
+    fontWeight: "bold",
+  },
+});

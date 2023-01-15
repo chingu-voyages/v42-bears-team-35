@@ -1,3 +1,4 @@
+import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 import { Text } from "react-native";
@@ -9,33 +10,27 @@ import ItemDescription from "../pages/ItemDescription";
 
 const Front = () => {
   const Drawer = createDrawerNavigator();
+  const Stack = createStackNavigator();
 
   return (
     <>
+  
       <SafeAreaView>
-        <Navbar />
+        <Navbar  />
       </SafeAreaView>
-        <Drawer.Navigator
-              screenOptions={{
-              headerShown: false,
-              drawerActiveBackgroundColor: "#346633",
-              drawerActiveTintColor: "white",
-              drawerLabelStyle: {
-                marginLeft: 0,
-              },
-            }}
+        <Stack.Navigator
         >
-        <Drawer.Screen
+        <Stack.Screen
           name={ROUTES.ITEM_CARDS}
           component={ItemCards}
           options={{ headerShown: false }}
         />
-        <Drawer.Screen
+        <Stack.Screen
           name={ROUTES.ITEM_DESCRIPTION}
           component={ItemDescription}
           options={{ headerShown: false }}
         />
-      </Drawer.Navigator>
+      </Stack.Navigator>
     </>
   );
 };

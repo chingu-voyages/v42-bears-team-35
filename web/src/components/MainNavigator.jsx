@@ -3,6 +3,7 @@ import React from "react";
 import { ROUTES } from "../constants";
 import Front from "./Front";
 import Login from "./Login";
+import SearchResults from "./SearchResults";
 
 const Stack = createStackNavigator();
 
@@ -20,9 +21,17 @@ const MainNavigator = () => {
           component={Front}
           options={{ headerShown: false }}
         />
+        <Stack.Screen
+          name={ROUTES.SEARCH_RESULTS}
+          component={SearchResults}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </>
   );
 };
 
 export default MainNavigator;
+
+
+

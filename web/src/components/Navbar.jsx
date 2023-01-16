@@ -1,8 +1,11 @@
-import { useState} from "react";
+import { useState } from "react";
 import { StyleSheet, Text, TextInput, View, useWindowDimensions, Button } from "react-native";
+import { UserSelector, useDispatch, useSelector } from "react-redux";
+import { updateSearch } from "../constants/searchSlice";
 
 const Navbar = ({navigation}) => {
   const { height, width } = useWindowDimensions()
+  const dispatch = useDispatch()
 
   const style = StyleSheet.create({
     header: {
@@ -28,19 +31,21 @@ const Navbar = ({navigation}) => {
     }
   })
 
-  const [searchTerm, setSearch] = useState('')
-  function realtimeSearchDB() {
-    //call db for every letter??
+  const search = useSelector(state => state.searchTerm.value)
+  function realtimeSearchDB(text) {
+    
   }
+  
   return ( 
     <View style={style.header}>
       <Button title="Menu" style={style.headerText} onPress={() => navigation.toggleDrawer()}/>
       <TextInput
           style={style.searchBar}
-          onChangeText={() => realtimeSearchDB()}
-          value={searchTerm}
-          secureTextEntry={true}
-          placeholder=""
+            onChangeText={text => dispatch(updateSearch(text))}
+            value={search}
+            secureTextEntry={false}
+            placeholder="Search"
+
         />
         <Text style={style.headerText}>Cart</Text>
     </View>

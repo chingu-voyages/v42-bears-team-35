@@ -3,8 +3,8 @@ import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ROUTES } from "../constants";
 import ItemCards from "./ItemCards";
+import ItemDescript from "./ItemDescript";
 import Navbar from "./Navbar";
-import ItemDescription from "../pages/ItemDescription";
 
 const Front = () => {
   const Stack = createStackNavigator();
@@ -22,7 +22,7 @@ const Front = () => {
         />
         <Stack.Screen
           name={ROUTES.ITEM_DESCRIPTION}
-          component={ItemDescription}
+          component={ItemDescript}
           options={{ headerShown: false }}
         />
       

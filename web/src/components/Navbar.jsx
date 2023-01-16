@@ -1,9 +1,7 @@
 import { useState} from "react";
 import { StyleSheet, Text, TextInput, View, useWindowDimensions, Button } from "react-native";
-import { useNavigation } from '@react-navigation/native';
 
-const Navbar = () => {
-  const nav = useNavigation();
+const Navbar = ({navigation}) => {
   const { height, width } = useWindowDimensions()
 
   const style = StyleSheet.create({
@@ -36,7 +34,7 @@ const Navbar = () => {
   }
   return ( 
     <View style={style.header}>
-      <Button title="Menu" style={style.headerText} onPress={() => nav.toggleDrawer()}/>
+      <Button title="Menu" style={style.headerText} onPress={() => navigation.toggleDrawer()}/>
       <TextInput
           style={style.searchBar}
           onChangeText={() => realtimeSearchDB()}

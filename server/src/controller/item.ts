@@ -1,11 +1,5 @@
 import { QueryRunner } from "typeorm";
-import {
-  ErrorType,
-  SuccessType,
-  ItemCreate,
-  // ItemResponse,
-  // ItemUpdate,
-} from "../types";
+import { ErrorType, SuccessType, ItemCreate, ItemUpdate } from "../types";
 import AppDataSource from "../db";
 import { Item } from "../model";
 
@@ -82,4 +76,43 @@ export async function getOneItem(uuid: string): Promise<Item | null> {
     .getOne();
 
   return data;
+}
+
+export async function updateOneItem(
+  body: ItemUpdate,
+  item: Item,
+): Promise<SuccessType | ErrorType> {
+  const itemToUpdate = item;
+
+  itemToUpdate.description = body.description;
+  itemToUpdate.height = body.height;
+  itemToUpdate.length = body.length;
+  itemToUpdate.width = body.width;
+  itemToUpdate.price = body.price;
+
+  try {
+    await queryRunner.startTransaction();
+
+    await queryRunner.manager.save(itemToUpdate);
+    await queryRunner.commitTransaction();
+    return {
+      data: {
+        id: itemToUpdate.id,
+        description: itemToUpdate.description,
+        supplier: itemToUpdate.supplier,
+        length: itemToUpdate.length,
+        width: itemToUpdate.width,
+        height: itemToUpdate.height,
+        price: itemToUpdate.price,
+      },
+    };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    await queryRunner.rollbackTransaction();
+    return {
+      errorCode: 500,
+      errorKey: "unknown",
+      errorDescription: error.message,
+    };
+  }
 }

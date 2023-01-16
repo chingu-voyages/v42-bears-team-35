@@ -4,6 +4,7 @@ export type ItemCreate = {
   length: number;
   width: number;
   height: number;
+  supplier: string;
 };
 
 export type ItemResponse = {
@@ -13,11 +14,12 @@ export type ItemResponse = {
   length: number;
   width: number;
   height: number;
+  supplier: string;
 };
 
 export type ItemUpdate = {
   id: string;
-  descrition: string;
+  description: string;
   price: number;
   length: number;
   width: number;

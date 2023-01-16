@@ -36,8 +36,8 @@ const Drawer = createDrawerNavigator();
             }}
         />
         <Drawer.Screen
-          name={ROUTES.ITEM_CARDS}
-          component={ItemCards}
+          name={ROUTES.FRONT}
+          component={Front}
           options={{ headerShown: false }}
         />
       </Drawer.Navigator>

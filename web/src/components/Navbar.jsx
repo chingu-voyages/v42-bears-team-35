@@ -31,9 +31,27 @@ const Navbar = ({navigation}) => {
     }
   })
 
+  const MOCK_DATA = [
+  {
+    id: 1,
+    url: { uri: "https://img.makeupalley.com/3/9/7/8/3630182.jpg" },
+    title: "Lancome",
+  },
+  {
+    id: 2,
+    url: { uri: "https://img.makeupalley.com/3/9/7/8/3630182.jpg" },
+    title: "Lancome2",
+  },
+  {
+    id: 3,
+    url: { uri: "https://img.makeupalley.com/3/9/7/8/3630182.jpg" },
+    title: "Lancome3",
+  },
+];
+
   const search = useSelector(state => state.searchTerm.value)
   function realtimeSearchDB(text) {
-    
+    dispatch(updateSearch(text))
   }
   
   return ( 
@@ -41,7 +59,7 @@ const Navbar = ({navigation}) => {
       <Button title="Menu" style={style.headerText} onPress={() => navigation.toggleDrawer()}/>
       <TextInput
           style={style.searchBar}
-            onChangeText={text => dispatch(updateSearch(text))}
+            onChangeText={text => realtimeSearchDB(text)}
             value={search}
             secureTextEntry={false}
             placeholder="Search"

@@ -10,11 +10,11 @@ import AppDataSource from "../db";
 import { Item } from "../model";
 
 const queryRunner: QueryRunner = AppDataSource.createQueryRunner();
-// const itemRepository: Repository<Item> = AppDataSource.getRepository(Item);
+const itemRepository = AppDataSource.getRepository(Item);
 
-const createItem = async (
+export async function createItem(
   body: ItemCreate,
-): Promise<ErrorType | SuccessType> => {
+): Promise<ErrorType | SuccessType> {
   try {
     await queryRunner.startTransaction();
     const item = new Item();
@@ -50,6 +50,36 @@ const createItem = async (
       errorCode: 500,
     };
   }
-};
+}
 
-export default createItem;
+export async function getAllItems(): Promise<Item[]> {
+  const data: Item[] = await itemRepository
+    .createQueryBuilder("item")
+    .select("item.id")
+    .addSelect("item.supplier")
+    .addSelect("item.description")
+    .addSelect("item.price")
+    .addSelect("item.length")
+    .addSelect("item.width")
+    .addSelect("item.height")
+    .getMany();
+
+  return data;
+}
+
+export async function getOneItem(uuid: string): Promise<Item | null> {
+  const data: Item | null = await itemRepository
+    .createQueryBuilder("item")
+    .select("item.id")
+    .addSelect("item.description")
+    .addSelect("item.supplier")
+    .addSelect("item.price")
+    .addSelect("item.length")
+    .addSelect("item.width")
+    .addSelect("item.height")
+    .andWhere("item.id = :id")
+    .setParameter("id", uuid)
+    .getOne();
+
+  return data;
+}

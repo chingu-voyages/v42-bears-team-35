@@ -7,18 +7,18 @@ const ItemCards = ({ navigation }) => {
     navigation.goBack();
   };
 
-  const onGoToItemDescript = () => {
-    navigation.navigate(ROUTES.ITEM_DESCRIPTION);
-  };
 
   return (
     <>
       <Text>ItemCards</Text>
-      <Pressable onPressOut={() => onGoBack()}>
+      <Pressable onPressOut={() => navigation.goBack()}>
         <Text>Go Back</Text>
       </Pressable>
-      <Pressable onPressOut={() => onGoToItemDescript()}>
+      <Pressable onPressOut={() => navigation.navigate(ROUTES.ITEM_DESCRIPTION)}>
         <Text>Go to Item Descript</Text>
+      </Pressable>
+      <Pressable onPressOut={() => navigation.navigate(ROUTES.REGISTER)}>
+        <Text>Create account</Text>
       </Pressable>
     </>
   );

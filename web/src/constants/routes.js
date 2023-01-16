@@ -1,6 +1,6 @@
 export default {
   LOGIN: "Login",
-  SIGNUP: "Signup",
+  REGISTER: "Register",
   FORGOT_PASSWORD: "Forgot-Password",
 
   FRONT: "Front",

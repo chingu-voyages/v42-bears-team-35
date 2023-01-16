@@ -25,6 +25,7 @@ const Front = () => {
           component={ItemDescription}
           options={{ headerShown: false }}
         />
+      
       </Stack.Navigator>
     </>
   );

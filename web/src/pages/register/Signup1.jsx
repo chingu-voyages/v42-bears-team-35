@@ -1,16 +1,21 @@
 import React, { useState } from "react";
 import { Text, TextInput, View, Pressable, StyleSheet, useWindowDimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ROUTES } from "../constants";
-import Navbar from "./Navbar";
+import { ROUTES } from "../../constants/";
 
 const Login = ({ navigation }) => {
   const {width} = useWindowDimensions()
   const [email, onChangeEmail] = useState("");
   const [password, onChangePassword] = useState("");
+  const [state, setIt] = useState("ok")
 
   function conditionalNavigation() {
     navigation.navigate(ROUTES.FRONT);
+  }
+
+  function login() {
+    navigation.navigate(ROUTES.LOGIN)
+    setIt("DONE")
   }
 
   const styles = StyleSheet.create({
@@ -86,10 +91,8 @@ const Login = ({ navigation }) => {
   
   return (
     <SafeAreaView>
-      <Navbar />
       <View style={styles.container}>
         <View style={styles.flexDiv}>
-          <Text style={styles.h1}>Login</Text>
           <Text style={styles.label}>Email</Text>
           <TextInput
             style={styles.input}
@@ -127,9 +130,10 @@ const Login = ({ navigation }) => {
           </Pressable>
         </View>
         <View style={styles.flexDiv}>
-          <Text style={styles.bold}>create new account</Text>
+j          <Pressable onPressOut={() => navigation.navigate(ROUTES.FRONT)}><Text>HAH</Text></Pressable>
+
         </View>
-        <Text style={styles.bottom}>continue as guest</Text>
+        <Text style={styles.bottom}>{state}</Text>
       </View>
     </SafeAreaView>
   );

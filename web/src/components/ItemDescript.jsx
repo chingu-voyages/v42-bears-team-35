@@ -13,6 +13,7 @@ import Review from "../components/Review";
 
 const ItemDescript = ({ navigation }) => {
   const [orderQuantity, setOrderQuantity] = useState(1);
+  
   const { height, width } = useWindowDimensions();
 
   const style = StyleSheet.create({

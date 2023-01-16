@@ -3,7 +3,7 @@ import { Text, TextInput, View, Pressable, StyleSheet, useWindowDimensions } fro
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ROUTES } from "../../constants/";
 
-const Login = ({ navigation }) => {
+const Signup1 = ({ navigation }) => {
   const {width} = useWindowDimensions()
   const [email, onChangeEmail] = useState("");
   const [password, onChangePassword] = useState("");
@@ -131,7 +131,6 @@ const Login = ({ navigation }) => {
         </View>
         <View style={styles.flexDiv}>
 j          <Pressable onPressOut={() => navigation.navigate(ROUTES.FRONT)}><Text>HAH</Text></Pressable>
-
         </View>
         <Text style={styles.bottom}>{state}</Text>
       </View>
@@ -139,4 +138,4 @@ j          <Pressable onPressOut={() => navigation.navigate(ROUTES.FRONT)}><Text
   );
 };
 
-export default Login;
+export default Signup1;

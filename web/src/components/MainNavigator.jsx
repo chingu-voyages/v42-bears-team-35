@@ -3,7 +3,7 @@ import React from "react";
 import { ROUTES } from "../constants";
 import Front from "./Front";
 import Login from "./Login";
-import Register from "../pages/register/Register";
+import Signup1 from "../pages/register/Signup1";
 
 const Stack = createStackNavigator();
 
@@ -24,7 +24,7 @@ const MainNavigator = () => {
         />
         <Stack.Screen
           name={ROUTES.REGISTER}
-          component={Register}
+          component={Signup1}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

@@ -8,15 +8,13 @@ import ItemCards from "./ItemCards";
 import ItemDescript from "./ItemDescript";
 import Navbar from "./Navbar";
 
-const Front = () => {
-  const Drawer = createDrawerNavigator();
+const Front = ({navigation}) => {
   const Stack = createStackNavigator();
 
   return (
     <>
-  
       <SafeAreaView>
-        <Navbar  />
+        <Navbar navigation={navigation}/>
       </SafeAreaView>
         <Stack.Navigator
         >

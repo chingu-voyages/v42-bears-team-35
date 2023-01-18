@@ -1,12 +1,53 @@
-import { useState} from "react";
-import { StyleSheet, Text, TextInput, View, useWindowDimensions } from "react-native";
+import { useEffect, useState } from "react";
+import { StyleSheet, Text, TextInput, View, Button } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { updateSearch } from "../constants/searchSlice";
+import { ROUTES } from "../constants";
+import { useNavigation } from '@react-navigation/native';
 
-const Navbar = () => {
-  const { height, width } = useWindowDimensions()
+//delete soon
+const MOCK_DATA = [
+  {
+    id: 1,
+    url: { uri: "https://img.makeupalley.com/3/9/7/8/3630182.jpg" },
+    title: "Lancome",
+  },
+  {
+    id: 2,
+    url: { uri: "https://img.makeupalley.com/3/9/7/8/3630182.jpg" },
+    title: "Lancome2",
+  },
+  {
+    id: 3,
+    url: { uri: "https://img.makeupalley.com/3/9/7/8/3630182.jpg" },
+    title: "Lancome3",
+  },
+];
+
+export default Navbar = () => {
+  const navigation = useNavigation()
+  const [searchTerm, setSearchTerm] = useState('')
+
+  const dispatch = useDispatch()
+  const search = useSelector(state => state.search.value)
+
+
+  useEffect(() => {
+     realtimeSearchDB()
+  }, [searchTerm])
+
+
+  function realtimeSearchDB() {
+    // query DB and update dispatch with it
+    const searchResult = MOCK_DATA.filter((item) => item.title.includes(searchTerm))
+    const db = {searchTerm, searchResult}
+    dispatch(updateSearch(db))
+    //navigation.navigate(ROUTES.SEARCH_RESULTS)
+  }
 
   const style = StyleSheet.create({
     header: {
-      width: width,
+      width: "100%",
       backgroundColor: "#000",
       padding: 12,
       display: "flex",
@@ -21,26 +62,23 @@ const Navbar = () => {
     searchBar: {
       backgroundColor: "#fff",
       borderRadius: 6,
-      width: width * .66,
+      width: "65%",
       height: 36,
       fontSize: 20,
       padding: 4
     }
   })
 
-  const [searchTerm, setSearch] = useState('')
-  function realtimeSearchDB() {
-    //call db for every letter??
-  }
   return ( 
     <View style={style.header}>
-      <Text style={style.headerText}>Menu</Text>
+      <Button title="Menu" style={style.headerText} onPress={() => navigation.toggleDrawer()}/>
       <TextInput
           style={style.searchBar}
-          onChangeText={() => realtimeSearchDB()}
-          value={searchTerm}
-          secureTextEntry={true}
-          placeholder=""
+            onChangeText={setSearchTerm}
+            value={searchTerm}
+            secureTextEntry={false}
+            placeholder="Search"
+
         />
         <Text style={style.headerText}>Cart</Text>
     </View>
@@ -48,6 +86,3 @@ const Navbar = () => {
   
 };
 
-
-
-export default Navbar;

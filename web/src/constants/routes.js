@@ -4,8 +4,9 @@ export default {
   FORGOT_PASSWORD: "Forgot-Password",
 
   FRONT: "Front",
-  ITEM_CARDS: "Item-Cards",
+  SLIDES: "Slides",
   ITEM_DESCRIPTION: "Item-Description",
   Cart_Drawer: "Cart-Drawer",
   NAV_DRAWER: "Nav-Drawer",
+  SEARCH_RESULTS: "Search-Results"
 };

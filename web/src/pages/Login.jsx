@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { Text, TextInput, View, Pressable, StyleSheet, useWindowDimensions } from "react-native";
+import { Text, TextInput, View, Pressable, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "../../styles";
 import { ROUTES } from "../constants";
-import Navbar from "./Navbar";
+import Navbar from "../components/Navbar";
 
 const Login = ({ navigation }) => {
-  const {width} = useWindowDimensions()
   const [email, onChangeEmail] = useState("");
   const [password, onChangePassword] = useState("");
 
@@ -16,14 +15,14 @@ const Login = ({ navigation }) => {
 
   const styles = StyleSheet.create({
     container: {
-      width: width,
+      width: "100%",
       backgroundColor: "#fff",
       minHeight: "100%",
     },
     flexDiv: {
       alignItems: "center",
       justifyContent: "center",
-      width: width
+      width: "100%"
     },
     bold: {
       fontSize: 20,
@@ -32,9 +31,8 @@ const Login = ({ navigation }) => {
     },
     input: {
       height: 48,
-      borderWidth: 1,
       padding: 10,
-      width: width * .9,
+      width: "90%",
       borderRadius: 6,
       borderWidth: 2,
       fontSize: 20,
@@ -44,7 +42,7 @@ const Login = ({ navigation }) => {
     label: {
       alignSelf: "flex-start",
       margin: 16,
-      marginLeft: width * .05,
+      marginLeft: "5%",
       fontSize: 20,
       marginBottom: 4,
     },
@@ -52,14 +50,14 @@ const Login = ({ navigation }) => {
       fontSize: 20,
       margin: 16,
       marginTop: 32,
-      marginLeft: width * .05,
+      marginLeft: "5%",
       fontWeight: "800",
       alignSelf: "flex-start",
     },
     greenButton: {
       backgroundColor: "#57D491",
       color: "#000",
-      width: 220,
+      width: "80%",
       height: 48,
       fontSize: 20,
       textAlign: "center",
@@ -95,7 +93,7 @@ const Login = ({ navigation }) => {
           <TextInput
             style={styles.input}
             onChangeText={onChangeEmail}
-            placeholder="Email"
+            placeholder="Enter your email"
             value={email}
           />
         </View>
@@ -106,7 +104,7 @@ const Login = ({ navigation }) => {
             onChangeText={onChangePassword}
             value={password}
             secureTextEntry={true}
-            placeholder="password"
+            placeholder="Enter your password"
           />
         </View>
         <View style={styles.flexDiv}>

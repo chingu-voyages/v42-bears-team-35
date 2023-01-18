@@ -2,12 +2,13 @@ import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 import { ROUTES } from "../constants";
 import Front from "./Front";
-import Login from "./Login";
-import Signup1 from "../pages/register/Signup1";
+import Login from "../pages/Login";
+import SearchResults from "./SearchResults";
+import ItemDescription from "../pages/ItemDescription";
 
 const Stack = createStackNavigator();
 
-const MainNavigator = () => {
+export default MainNavigator = () => {
   return (
     <>
       <Stack.Navigator initialRouteName={ROUTES.FRONT}>
@@ -23,8 +24,13 @@ const MainNavigator = () => {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name={ROUTES.REGISTER}
-          component={Signup1}
+          name={ROUTES.SEARCH_RESULTS}
+          component={SearchResults}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name={ROUTES.ITEM_DESCRIPTION}
+          component={ItemDescription}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
@@ -32,4 +38,6 @@ const MainNavigator = () => {
   );
 };
 
-export default MainNavigator;
+
+
+

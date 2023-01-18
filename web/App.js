@@ -1,7 +1,6 @@
 import "react-native-gesture-handler";
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { StyleSheet } from "react-native";
 import MainNavigator from "./src/components/MainNavigator";
 import { store } from "./src/constants/store";
 import { Provider } from 'react-redux';

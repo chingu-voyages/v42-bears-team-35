@@ -18,6 +18,7 @@ export async function createItem(
     item.height = body.height;
     item.width = body.width;
     item.price = body.price;
+    item.tag = body.tag;
 
     await queryRunner.manager.save(item);
 
@@ -32,6 +33,7 @@ export async function createItem(
         length: item.length ? item.length : null,
         height: item.height,
         width: item.width,
+        tag: item.tag,
       },
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -56,6 +58,7 @@ export async function getAllItems(): Promise<Item[]> {
     .addSelect("item.length")
     .addSelect("item.width")
     .addSelect("item.height")
+    .addSelect("item.tag")
     .getMany();
 
   return data;
@@ -71,6 +74,7 @@ export async function getOneItem(uuid: string): Promise<Item | null> {
     .addSelect("item.length")
     .addSelect("item.width")
     .addSelect("item.height")
+    .addSelect("item.tag")
     .andWhere("item.id = :id")
     .setParameter("id", uuid)
     .getOne();
@@ -89,6 +93,7 @@ export async function updateOneItem(
   itemToUpdate.length = body.length;
   itemToUpdate.width = body.width;
   itemToUpdate.price = body.price;
+  itemToUpdate.tag = body.tag;
 
   try {
     await queryRunner.startTransaction();
@@ -104,6 +109,7 @@ export async function updateOneItem(
         width: itemToUpdate.width,
         height: itemToUpdate.height,
         price: itemToUpdate.price,
+        tag: itemToUpdate.tag,
       },
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

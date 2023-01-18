@@ -17,6 +17,11 @@ const MOCK_DATA = [
     url: { uri: "https://img.makeupalley.com/3/9/7/8/3630182.jpg" },
     title: "Lancome2",
   },
+  {
+    id: 3,
+    url: { uri: "https://img.makeupalley.com/3/9/7/8/3630182.jpg" },
+    title: "Lancome3",
+  },
 ];
 
 const renderItem = ({ item, _ }) => {

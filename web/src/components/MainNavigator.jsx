@@ -2,47 +2,36 @@ import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 import { ROUTES } from "../constants";
 import Front from "./Front";
-import ItemCards from "./ItemCards";
 import Login from "./Login";
+import SearchResults from "./SearchResults";
 
-import {
-  createDrawerNavigator,
-  DrawerComponent,
-} from '@react-navigation/drawer';
+const Stack = createStackNavigator();
 
 const MainNavigator = () => {
-
-const Drawer = createDrawerNavigator();
   return (
     <>
-      <Drawer.Navigator 
-      initialRouteName={ROUTES.LOGIN}
-      screenOptions={{
-              headerShown: false,
-              drawerActiveBackgroundColor: "#346633",
-              drawerActiveTintColor: "white",
-              drawerLabelStyle: {
-                marginLeft: 0,
-              },
-            }}
-      options={{ drawerItemStyle: { height: 0, }}}
-      >
-        <Drawer.Screen
+      <Stack.Navigator initialRouteName={ROUTES.LOGIN}>
+        <Stack.Screen
           name={ROUTES.LOGIN}
           component={Login}
-          options={{
-            headerShown: false,
-             drawerItemStyle: { display: 'none' }
-            }}
+          options={{ headerShown: false }}
         />
-        <Drawer.Screen
+        <Stack.Screen
           name={ROUTES.FRONT}
           component={Front}
           options={{ headerShown: false }}
         />
-      </Drawer.Navigator>
+        <Stack.Screen
+          name={ROUTES.SEARCH_RESULTS}
+          component={SearchResults}
+          options={{ headerShown: false }}
+        />
+      </Stack.Navigator>
     </>
   );
 };
 
 export default MainNavigator;
+
+
+

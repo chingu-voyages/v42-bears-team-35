@@ -1,22 +1,20 @@
-import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createStackNavigator } from "@react-navigation/stack";
-import React from "react";
+import { useState } from "react";
 import { Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ROUTES } from "../constants";
 import ItemCards from "./ItemCards";
 import ItemDescript from "./ItemDescript";
 
-const Front = ({navigation}) => {
+const Front = () => {
   const Stack = createStackNavigator();
 
   return (
     <>
       <SafeAreaView>
-        <Navbar navigation={navigation}/>
+        <Navbar />
       </SafeAreaView>
-        <Stack.Navigator
-        >
+      <Stack.Navigator>
         <Stack.Screen
           name={ROUTES.ITEM_CARDS}
           component={ItemCards}

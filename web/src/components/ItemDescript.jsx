@@ -2,6 +2,8 @@ import React from "react";
 import { Pressable, Text } from "react-native";
 
 const ItemDescript = ({ navigation }) => {
+  const onGoBack = () => {
+    navigation.goBack();
   const [orderQuantity, setOrderQuantity] = useState(1);
   
   const { height, width } = useWindowDimensions();

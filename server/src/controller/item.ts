@@ -78,16 +78,8 @@ export async function createItem(
 export async function getAllItems(): Promise<Item[]> {
   const data: Item[] = await itemRepository
     .createQueryBuilder("item")
-    .select("item.id")
-    .addSelect("item.supplier")
-    .addSelect("item.description")
-    .addSelect("item.price")
-    .addSelect("item.length")
-    .addSelect("item.width")
-    .addSelect("item.height")
-    .leftJoin("item.itemTag", "itemTag")
+    .leftJoinAndSelect("item.itemTag", "itemTag")
     .leftJoinAndSelect("itemTag.tag", "tag")
-    .addSelect("tag.name")
     .getMany();
 
   return data;

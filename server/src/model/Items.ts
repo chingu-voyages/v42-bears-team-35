@@ -47,10 +47,10 @@ export default class Item extends BaseEntity {
   })
   length: number;
 
-  @Column({
-    nullable: false,
-  })
-  tag: string;
+  // @Column({
+  //   nullable: false,
+  // })
+  // tag: string;
 
   @ManyToOne(() => Supplier, (supplier) => supplier.items)
   supplier: Relation<Supplier>;
@@ -64,6 +64,6 @@ export default class Item extends BaseEntity {
   @OneToOne(() => OrderItem, (orderItem: OrderItem) => orderItem.item)
   orderItems: OrderItem[];
 
-  @OneToMany(() => ItemTag, (itemTag: ItemTag) => itemTag.items)
+  @OneToMany(() => ItemTag, (itemTag: ItemTag) => itemTag.item)
   itemTag: ItemTag[];
 }

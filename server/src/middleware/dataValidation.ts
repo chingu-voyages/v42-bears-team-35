@@ -49,8 +49,21 @@ export default function validateData(dataValidator: Validator[]) {
         !validateDate(req.body[key])
       )
         return res.status(400).json({
-          errorKey: "date",
+          errorKey: key,
           errorDescription: `${key} is not a valid date`,
+          errorStatus: 400,
+        });
+
+      if (
+        type === "array" &&
+        toValidate.minArrayLength !== undefined &&
+        req.body[key] !== undefined &&
+        req.body[key] !== null &&
+        req.body[key].length < toValidate.minArrayLength
+      )
+        return res.status(400).json({
+          errorKey: key,
+          errorDescription: `${key} are required`,
           errorStatus: 400,
         });
     }

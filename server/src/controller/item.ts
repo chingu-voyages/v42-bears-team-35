@@ -1,7 +1,8 @@
 import { QueryRunner } from "typeorm";
 import { ErrorType, SuccessType, ItemCreate, ItemUpdate } from "../types";
 import AppDataSource from "../db";
-import { Item } from "../model";
+import { Item, ItemTag, Tag } from "../model";
+import { insertTag } from "./tag";
 
 const queryRunner: QueryRunner = AppDataSource.createQueryRunner();
 const itemRepository = AppDataSource.getRepository(Item);
@@ -11,6 +12,14 @@ export async function createItem(
 ): Promise<ErrorType | SuccessType> {
   try {
     await queryRunner.startTransaction();
+    const tagsArray: Tag[] = [];
+
+    body.tags.forEach(async (tag: string) => {
+      const newTag = await insertTag(tag);
+
+      tagsArray.push(newTag);
+    });
+
     const item = new Item();
 
     item.description = body.description;
@@ -18,9 +27,17 @@ export async function createItem(
     item.height = body.height;
     item.width = body.width;
     item.price = body.price;
-    item.tag = body.tag;
 
     await queryRunner.manager.save(item);
+
+    tagsArray.forEach(async (tag: Tag) => {
+      const itemTag = new ItemTag();
+
+      itemTag.item = item;
+      itemTag.tag = tag;
+
+      await queryRunner.manager.save(itemTag);
+    });
 
     await queryRunner.commitTransaction();
 
@@ -33,7 +50,7 @@ export async function createItem(
         length: item.length ? item.length : null,
         height: item.height,
         width: item.width,
-        tag: item.tag,
+        tags: tagsArray,
       },
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -58,7 +75,9 @@ export async function getAllItems(): Promise<Item[]> {
     .addSelect("item.length")
     .addSelect("item.width")
     .addSelect("item.height")
-    .addSelect("item.tag")
+    .leftJoin("item.itemTag", "itemTag")
+    .leftJoinAndSelect("itemTag.tag", "tag")
+    .addSelect("tag.name")
     .getMany();
 
   return data;
@@ -93,7 +112,7 @@ export async function updateOneItem(
   itemToUpdate.length = body.length;
   itemToUpdate.width = body.width;
   itemToUpdate.price = body.price;
-  itemToUpdate.tag = body.tag;
+  // itemToUpdate.tag = body.tag;
 
   try {
     await queryRunner.startTransaction();
@@ -109,7 +128,7 @@ export async function updateOneItem(
         width: itemToUpdate.width,
         height: itemToUpdate.height,
         price: itemToUpdate.price,
-        tag: itemToUpdate.tag,
+        // tag: itemToUpdate.tag,
       },
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

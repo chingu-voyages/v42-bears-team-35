@@ -11,14 +11,11 @@ import { Item, Tag } from ".";
 @Entity()
 export default class ItemTag extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
-  tagsId: string;
+  id: string;
 
   @ManyToOne(() => Tag, (tag: Tag) => tag.itemTag)
-  tags: Relation<Tag>;
-
-  @PrimaryGeneratedColumn("uuid")
-  itemsId: string;
+  tag: Relation<Tag>;
 
   @ManyToOne(() => Item, (item: Item) => item.itemTag)
-  items: Relation<Item>;
+  item: Relation<Item>;
 }

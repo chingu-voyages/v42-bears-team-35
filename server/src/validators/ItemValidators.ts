@@ -26,32 +26,44 @@ export const itemCreateValidator: Validator[] = [
     required: true,
     type: "float",
   },
+  {
+    key: "tags",
+    required: true,
+    type: "array",
+    minArrayLength: 1,
+  },
 ];
 
 export const itemUpdateValidator: Validator[] = [
   {
     key: "description",
-    required: true,
+    required: false,
     type: "string",
   },
   {
     key: "price",
-    required: true,
+    required: false,
     type: "float",
   },
   {
     key: "length",
-    required: true,
+    required: false,
     type: "float",
   },
   {
     key: "width",
-    required: true,
+    required: false,
     type: "float",
   },
   {
     key: "height",
-    required: true,
+    required: false,
     type: "float",
+  },
+  {
+    key: "tags",
+    required: false,
+    type: "array",
+    minArrayLength: 1,
   },
 ];

@@ -18,6 +18,6 @@ export default class Tag extends BaseEntity {
   })
   name: string;
 
-  @OneToMany(() => ItemTag, (itemTag: ItemTag) => itemTag.tags)
+  @OneToMany(() => ItemTag, (itemTag: ItemTag) => itemTag.tag)
   itemTag: ItemTag[];
 }

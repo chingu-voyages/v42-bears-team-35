@@ -5,7 +5,7 @@ export type ItemCreate = {
   width: number;
   height: number;
   supplier: string;
-  tag: string;
+  tags: string[];
 };
 
 export type ItemUpdate = {
@@ -15,5 +15,5 @@ export type ItemUpdate = {
   length: number;
   width: number;
   height: number;
-  tag: string;
+  tags: string[];
 };

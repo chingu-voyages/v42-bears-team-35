@@ -12,13 +12,18 @@ export async function createItem(
 ): Promise<ErrorType | SuccessType> {
   try {
     await queryRunner.startTransaction();
-    const tagsArray: Tag[] = [];
 
     body.tags.forEach(async (tag: string) => {
-      const newTag = await insertTag(tag);
-
-      tagsArray.push(newTag);
+      await insertTag(tag);
     });
+
+    const tagsArray: Tag[] = [];
+
+    for (let i = 0; i < body.tags.length; i += 1) {
+      // eslint-disable-next-line no-await-in-loop
+      const createdTag = await insertTag(body.tags[i]);
+      tagsArray.push(createdTag);
+    }
 
     const item = new Item();
 
@@ -30,14 +35,14 @@ export async function createItem(
 
     await queryRunner.manager.save(item);
 
-    tagsArray.forEach(async (tag: Tag) => {
+    for (let i = 0; i < tagsArray.length; i += 1) {
       const itemTag = new ItemTag();
-
       itemTag.item = item;
-      itemTag.tag = tag;
+      itemTag.tag = tagsArray[i];
 
+      // eslint-disable-next-line no-await-in-loop
       await queryRunner.manager.save(itemTag);
-    });
+    }
 
     await queryRunner.commitTransaction();
 
@@ -64,6 +69,11 @@ export async function createItem(
     };
   }
 }
+
+// TODO 1 Get all of the items
+// TODO 2 For each item get all of the item_tag
+// TODO 3 For each item_tag get the tag
+// TODO 4 Return the response with the tags as an array
 
 export async function getAllItems(): Promise<Item[]> {
   const data: Item[] = await itemRepository

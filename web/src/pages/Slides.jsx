@@ -1,7 +1,7 @@
 // makes ItemCard swipable 
 
 import React from "react";
-import { FlatList, ImageBackground, SafeAreaView, Text } from "react-native";
+import { FlatList, SafeAreaView } from "react-native";
 import ItemCard from '../components/ItemCard'
 import { styles } from "../styles/ItemCard";
 

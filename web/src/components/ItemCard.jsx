@@ -6,7 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 import { styles } from "../styles/ItemCard";
 import { ROUTES } from "../constants";
 
-export default itemCard = ({ item }) => {
+export default ItemCard = ({ item }) => {
     const { url, title } = item;
     
     return (

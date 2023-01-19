@@ -2,6 +2,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ROUTES } from "../constants";
 import Navbar from "./Navbar";
+import Slides from "../pages/Slides"
 
 const Stack = createStackNavigator();
 

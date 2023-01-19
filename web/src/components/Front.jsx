@@ -1,10 +1,8 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ROUTES } from "../constants";
 import ItemCards from "./ItemCards";
 import ItemDescript from "./ItemDescript";
-import Navbar from "./Navbar";
 
 const Front = () => {
   const Stack = createStackNavigator();

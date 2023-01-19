@@ -1,18 +1,11 @@
-import {
-  Image,
-  Text,
-  View,
-  StyleSheet,
-  useWindowDimensions,
-  Pressable,
-  ScrollView,
-  TextInput,
-} from "react-native";
-import { useState } from "react";
-import Review from "../components/Review";
+import React from "react";
+import { Pressable, Text } from "react-native";
 
 const ItemDescript = ({ navigation }) => {
+  const onGoBack = () => {
+    navigation.goBack();
   const [orderQuantity, setOrderQuantity] = useState(1);
+  
   const { height, width } = useWindowDimensions();
 
   const style = StyleSheet.create({
@@ -266,169 +259,14 @@ const ItemDescript = ({ navigation }) => {
       },
     ],
   };
-  function conditionalNavigation() {
-    navigation.navigate("Main");
-  }
+
   return (
-    <ScrollView bounces={true}>
-      <View style={style.container}>
-        <Image
-          source={require("../assets/red-hat.jpg")}
-          style={style.mainImage}
-        />
-        <View style={style.right}>
-          <View style={style.row}>
-            <Text style={style.h2}>{prop.productName.join(" ")}</Text>
-            <Text style={style.smallRed}>NEW</Text>
-          </View>
-          <View style={style.rowBottom}>
-            <View style={style.stars}>
-              <Text style={style.fullStar}>★</Text>
-              <Text style={style.fullStar}>★</Text>
-              <Text style={style.fullStar}>★</Text>
-              <Text style={style.emptyStar}>☆</Text>
-              <Text style={style.emptyStar}>☆</Text>
-              <Text style={style.reviewCount}>5 reviews</Text>
-            </View>
-            <View style={style.prices}>
-              <Text style={style.grey}>
-                {(prop.discount && prop.price).toLocaleString("us-EN", {
-                  style: "currency",
-                  currency: "USD",
-                })}
-              </Text>
-              <Text style={style.price}>
-                {(
-                  prop.price - parseFloat(prop.price * (prop.discount / 100))
-                ).toLocaleString("us-EN", {
-                  style: "currency",
-                  currency: "USD",
-                })}
-              </Text>
-            </View>
-          </View>
-        </View>
-      </View>
-      <View style={style.imageSelector}>
-        <Image
-          source={require("../assets/red-hat.jpg")}
-          style={style.secondaryImage}
-        />
-        <Image
-          source={require("../assets/red-hat.jpg")}
-          style={style.secondaryImage}
-        />
-        <Image
-          source={require("../assets/red-hat.jpg")}
-          style={style.secondaryImage}
-        />
-      </View>
-      <View style={style.text}>
-        <Text style={style.p}>{prop.productDescription}</Text>
-      </View>
-      <View style={style.imageSelector}>
-        <Pressable
-          style={style.signButton}
-          onPress={() =>
-            setOrderQuantity((quantity) => (quantity == 0 ? 0 : quantity - 1))
-          }
-        >
-          <Text style={style.buttonText}>-</Text>
-        </Pressable>
-        <TextInput
-          style={style.numberInput}
-          keyboardType="numeric"
-          value={orderQuantity.toString()}
-          onChangeText={setOrderQuantity}
-        />
-        <Pressable
-          style={style.signButton}
-          onPress={() => setOrderQuantity((quantity) => quantity + 1)}
-        >
-          <Text style={style.buttonText}>+</Text>
-        </Pressable>
-        <Pressable style={style.greenButton}>
-          <Text style={style.p}>Put in cart</Text>
-        </Pressable>
-      </View>
-      <View style={style.reviews}>
-        <Text style={style.h3}>Reviews</Text>
-        <View style={style.starsNoPadding}>
-          <Text style={style.fullStar}>★</Text>
-          <Text style={style.fullStar}>★</Text>
-          <Text style={style.fullStar}>★</Text>
-          <Text style={style.fullStar}>★</Text>
-          <Text style={style.fullStar}>★</Text>
-          <Text style={style.reviewCount}>5 reviews</Text>
-        </View>
-        <Pressable style={style.starsNoPadding}>
-          <View style={style.starsMinWidth}>
-            <Text style={style.fullStar}>★</Text>
-          </View>
-          <View style={style.starsNoPadding}>
-            <View style={style.barWidth0}></View>
-            <Text>0% </Text>
-          </View>
-        </Pressable>
-        <Pressable style={style.starsNoPadding}>
-          <View style={style.starsMinWidth}>
-            <Text style={style.fullStar}>★</Text>
-            <Text style={style.fullStar}>★</Text>
-          </View>
-          <View style={style.starsNoPadding}>
-            <View style={style.barWidth100}></View>
-            <Text>100% </Text>
-          </View>
-        </Pressable>
-        <Pressable style={style.starsNoPadding}>
-          <View style={style.starsMinWidth}>
-            <Text style={style.fullStar}>★</Text>
-            <Text style={style.fullStar}>★</Text>
-            <Text style={style.fullStar}>★</Text>
-          </View>
-          <View style={style.starsNoPadding}>
-            <View style={style.barWidth90}></View>
-            <Text>90% </Text>
-          </View>
-        </Pressable>
-        <Pressable style={style.starsNoPadding}>
-          <View style={style.starsMinWidth}>
-            <Text style={style.fullStar}>★</Text>
-            <Text style={style.fullStar}>★</Text>
-            <Text style={style.fullStar}>★</Text>
-            <Text style={style.fullStar}>★</Text>
-          </View>
-          <View style={style.starsNoPadding}>
-            <View style={style.barWidth10}></View>
-            <Text>10% </Text>
-          </View>
-        </Pressable>
-        <Pressable style={style.starsNoPadding}>
-          <View style={style.starsMinWidth}>
-            <Text style={style.fullStar}>★</Text>
-            <Text style={style.fullStar}>★</Text>
-            <Text style={style.fullStar}>★</Text>
-            <Text style={style.fullStar}>★</Text>
-            <Text style={style.fullStar}>★</Text>
-          </View>
-          <View style={style.starsNoPadding}>
-            <View style={style.barWidth50}></View>
-            <Text>50% </Text>
-          </View>
-        </Pressable>
-      </View>
-      <View>
-        {prop.reviews.map((r) => (
-          <Review
-            name={r.name}
-            date={r.date}
-            rating={r.rating}
-            review={r.review}
-            key={r.name + "-" + r.date.valueOf()}
-          />
-        ))}
-      </View>
-    </ScrollView>
+    <>
+      <Text>ItemDescript</Text>
+      <Pressable onPressOut={() => onGoBack()}>
+        <Text>Go Back</Text>
+      </Pressable>
+    </>
   );
 };
 

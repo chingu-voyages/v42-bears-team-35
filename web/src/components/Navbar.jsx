@@ -1,18 +1,36 @@
 import { useEffect, useState } from "react";
-import { StyleSheet, Text, TextInput, View, useWindowDimensions, Button } from "react-native";
+import { StyleSheet, Text, TextInput, View, Button } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { updateSearchResults } from "../constants/searchSlice";
+import { updateSearch } from "../constants/searchSlice";
 import { ROUTES } from "../constants";
 import { useNavigation } from '@react-navigation/native';
 
+//delete soon
+const MOCK_DATA = [
+  {
+    id: 1,
+    url: { uri: "https://img.makeupalley.com/3/9/7/8/3630182.jpg" },
+    title: "Lancome",
+  },
+  {
+    id: 2,
+    url: { uri: "https://img.makeupalley.com/3/9/7/8/3630182.jpg" },
+    title: "Lancome2",
+  },
+  {
+    id: 3,
+    url: { uri: "https://img.makeupalley.com/3/9/7/8/3630182.jpg" },
+    title: "Lancome3",
+  },
+];
 
-const Navbar = () => {
+export default Navbar = () => {
   const navigation = useNavigation()
   const [searchTerm, setSearchTerm] = useState('')
 
-  const { height, width } = useWindowDimensions()
   const dispatch = useDispatch()
-  const searchResults = useSelector(state => state.searchResults.value)
+  const search = useSelector(state => state.search.value)
+
 
 
   useEffect(() => {
@@ -21,34 +39,16 @@ const Navbar = () => {
 
 
   function realtimeSearchDB() {
-    const MOCK_DATA = [
-      {
-        id: 1,
-        url: { uri: "https://img.makeupalley.com/3/9/7/8/3630182.jpg" },
-        title: "Lancome",
-      },
-      {
-        id: 2,
-        url: { uri: "https://img.makeupalley.com/3/9/7/8/3630182.jpg" },
-        title: "Lancome2",
-      },
-      {
-        id: 3,
-        url: { uri: "https://img.makeupalley.com/3/9/7/8/3630182.jpg" },
-        title: "Lancome3",
-      },
-    ];
     // query DB and update dispatch with it
-    const db = MOCK_DATA.filter((item) => item.title.includes(searchTerm))
-
-    dispatch(updateSearchResults(db))
-    navigation.navigate(ROUTES.SEARCH_RESULTS)
-
+    const searchResult = MOCK_DATA.filter((item) => item.title.includes(searchTerm))
+    const db = {searchTerm, searchResult}
+    dispatch(updateSearch(db))
+    //navigation.navigate(ROUTES.SEARCH_RESULTS)
   }
 
   const style = StyleSheet.create({
     header: {
-      width: width,
+      width: "100%",
       backgroundColor: "#000",
       padding: 12,
       display: "flex",
@@ -63,15 +63,13 @@ const Navbar = () => {
     searchBar: {
       backgroundColor: "#fff",
       borderRadius: 6,
-      width: width * .66,
+      width: "65%",
       height: 36,
       fontSize: 20,
       padding: 4
     }
   })
 
-  
-  
   return ( 
     <View style={style.header}>
       <Button title="Menu" style={style.headerText} onPress={() => navigation.toggleDrawer()}/>
@@ -89,6 +87,3 @@ const Navbar = () => {
   
 };
 
-
-
-export default Navbar;

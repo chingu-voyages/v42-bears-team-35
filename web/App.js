@@ -8,9 +8,9 @@ import { Provider } from 'react-redux';
 export default function App() {
   return (
     <NavigationContainer >
-    <Provider store={store}>
-        <MainNavigator />
-    </Provider>
+      <Provider store={store}>
+          <MainNavigator />
+      </Provider>
     </NavigationContainer>
   );
 }

@@ -1,10 +1,10 @@
 export default {
   LOGIN: "Login",
-  SIGNUP: "Signup",
+  REGISTER: "Register",
   FORGOT_PASSWORD: "Forgot-Password",
 
   FRONT: "Front",
-  ITEM_CARDS: "Item-Cards",
+  SLIDES: "Slides",
   ITEM_DESCRIPTION: "Item-Description",
   Cart_Drawer: "Cart-Drawer",
   NAV_DRAWER: "Nav-Drawer",

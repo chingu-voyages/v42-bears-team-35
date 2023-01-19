@@ -32,6 +32,7 @@ export default Navbar = () => {
   const search = useSelector(state => state.search.value)
 
 
+
   useEffect(() => {
      realtimeSearchDB()
   }, [searchTerm])

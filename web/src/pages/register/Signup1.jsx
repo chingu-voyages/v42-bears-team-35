@@ -3,7 +3,7 @@ import { Text, TextInput, View, Pressable, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ROUTES } from "../../constants/";
 
-const Signup1 = ({ navigation }) => {
+export default Signup1 = ({ navigation }) => {
   const [email, onChangeEmail] = useState("");
   const [password, onChangePassword] = useState("");
   const [state, setIt] = useState("ok")
@@ -136,4 +136,4 @@ j          <Pressable onPressOut={() => navigation.navigate(ROUTES.FRONT)}><Text
   );
 };
 
-export default Signup1;
+

@@ -7,6 +7,7 @@ export default SearchResults = ({ navigation}) => {
     const [searchResults, searchTerm] = useSelector(state => state.searchResults.value)
 
     if (searchTerm.length == 0) navigation.navigate(ROUTES.FRONT)
+
     if (searchResults.length == 0) return (
         <SafeAreaView>
         <Navbar />
@@ -22,6 +23,7 @@ export default SearchResults = ({ navigation}) => {
             <Pressable onPress={() => navigation.navigate(ROUTES.SLIDES)}>
               <Text>Go to item</Text>
             </Pressable>
+
       </SafeAreaView>
             
     )

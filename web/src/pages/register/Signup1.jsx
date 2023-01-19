@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { Text, TextInput, View, Pressable, StyleSheet, useWindowDimensions } from "react-native";
+import { Text, TextInput, View, Pressable, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ROUTES } from "../../constants/";
 
-const Signup1 = ({ navigation }) => {
-  const {width} = useWindowDimensions()
+export default Signup1 = ({ navigation }) => {
   const [email, onChangeEmail] = useState("");
   const [password, onChangePassword] = useState("");
   const [state, setIt] = useState("ok")
@@ -20,14 +19,14 @@ const Signup1 = ({ navigation }) => {
 
   const styles = StyleSheet.create({
     container: {
-      width: width,
+      width: "100%",
       backgroundColor: "#fff",
       minHeight: "100%",
     },
     flexDiv: {
       alignItems: "center",
       justifyContent: "center",
-      width: width
+      width: "100%"
     },
     bold: {
       fontSize: 20,
@@ -36,9 +35,8 @@ const Signup1 = ({ navigation }) => {
     },
     input: {
       height: 48,
-      borderWidth: 1,
       padding: 10,
-      width: width * .9,
+      width: "90%",
       borderRadius: 6,
       borderWidth: 2,
       fontSize: 20,
@@ -48,7 +46,7 @@ const Signup1 = ({ navigation }) => {
     label: {
       alignSelf: "flex-start",
       margin: 16,
-      marginLeft: width * .05,
+      marginLeft: "5%",
       fontSize: 20,
       marginBottom: 4,
     },
@@ -56,14 +54,14 @@ const Signup1 = ({ navigation }) => {
       fontSize: 20,
       margin: 16,
       marginTop: 32,
-      marginLeft: width * .05,
+      marginLeft: "5%",
       fontWeight: "800",
       alignSelf: "flex-start",
     },
     greenButton: {
       backgroundColor: "#57D491",
       color: "#000",
-      width: 220,
+      width: "80%",
       height: 48,
       fontSize: 20,
       textAlign: "center",
@@ -138,4 +136,4 @@ j          <Pressable onPressOut={() => navigation.navigate(ROUTES.FRONT)}><Text
   );
 };
 
-export default Signup1;
+

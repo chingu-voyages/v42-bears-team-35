@@ -8,6 +8,8 @@ import { insertTag } from "./tag";
 const queryRunner: QueryRunner = AppDataSource.createQueryRunner();
 const itemRepository = AppDataSource.getRepository(Item);
 
+// TODO when creating the item pass a pictures url array to add the pictures to the item
+
 export async function createItem(
   body: ItemCreate,
 ): Promise<ErrorType | SuccessType> {
@@ -76,11 +78,6 @@ export async function createItem(
     };
   }
 }
-
-// TODO 1 Get all of the items
-// TODO 2 For each item get all of the item_tag
-// TODO 3 For each item_tag get the tag
-// TODO 4 Return the response with the tags as an array
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function getAllItems(queryParams: any): Promise<Item[]> {

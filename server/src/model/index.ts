@@ -9,6 +9,7 @@ import Picture from "./Picture";
 import PictureMetadata from "./PictureMetadata";
 import Order from "./Order";
 import OrderItem from "./OrderItem";
+import ItemTag from "./ItemTags";
 
 export {
   Supplier,
@@ -21,4 +22,5 @@ export {
   PictureMetadata,
   Order,
   OrderItem,
+  ItemTag,
 };

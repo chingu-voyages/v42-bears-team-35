@@ -10,6 +10,7 @@ import {
   SupplierResponse,
   SupplierUpdate,
 } from "./SupplierTypes";
+import { ItemCreate, ItemUpdate } from "./ItemTypes";
 import { Validator } from "./ValidatorType";
 import { OrderCreate, OrderUpdate } from "./OrderTypes";
 
@@ -25,4 +26,6 @@ export {
   CustomerUpdate,
   OrderCreate,
   OrderUpdate,
+  ItemCreate,
+  ItemUpdate,
 };

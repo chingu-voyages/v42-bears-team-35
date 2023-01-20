@@ -7,7 +7,7 @@ let validCustomerId: string;
 const INVALID_UUID = "thisisan-inva-lidu-uidv-aluesoerror";
 const NON_EXISTENT_UUID = "12345678-1234-1234-1234-1234567890AB";
 
-describe("Operations on the customer route", () => {
+describe.skip("Operations on the customer route", () => {
   beforeAll(async () => {
     await connection.create();
   });

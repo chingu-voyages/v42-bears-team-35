@@ -8,7 +8,11 @@ import {
 } from "./supplierValidator";
 import { orderCreateValidator } from "./orderValidator";
 
+import { itemCreateValidator, itemUpdateValidator } from "./ItemValidators";
+
 export {
+  itemCreateValidator,
+  itemUpdateValidator,
   customerCreateValidator,
   customerUpdateValidator,
   supplierCreateValidator,

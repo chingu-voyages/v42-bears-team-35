@@ -2,8 +2,9 @@ import { QueryRunner, SelectQueryBuilder } from "typeorm";
 import { getOneSupplier } from "./supplier";
 import { ErrorType, SuccessType, ItemCreate, ItemUpdate } from "../types";
 import AppDataSource from "../db";
-import { Item, ItemTag, Tag } from "../model";
+import { Item, ItemTag, Tag, Picture, ItemPicture } from "../model";
 import { insertTag } from "./tag";
+import { insertPicture } from "./picture";
 
 const queryRunner: QueryRunner = AppDataSource.createQueryRunner();
 const itemRepository = AppDataSource.getRepository(Item);
@@ -26,6 +27,18 @@ export async function createItem(
       // eslint-disable-next-line no-await-in-loop
       const createdTag = await insertTag(body.tags[i]);
       tagsArray.push(createdTag);
+    }
+
+    body.pictures.forEach(async (picture: string) => {
+      await insertPicture(picture);
+    });
+
+    const picturesArray: Picture[] = [];
+
+    for (let i = 0; i < body.pictures.length; i += 1) {
+      // eslint-disable-next-line no-await-in-loop
+      const createdPicture = await insertPicture(body.pictures[i]);
+      picturesArray.push(createdPicture);
     }
 
     const item = new Item();
@@ -53,6 +66,15 @@ export async function createItem(
       await queryRunner.manager.save(itemTag);
     }
 
+    for (let i = 0; i < picturesArray.length; i += 1) {
+      const itemPicture = new ItemPicture();
+      itemPicture.item = item;
+      itemPicture.picture = picturesArray[i];
+
+      // eslint-disable-next-line no-await-in-loop
+      await queryRunner.manager.save(itemPicture);
+    }
+
     await queryRunner.commitTransaction();
 
     return {
@@ -65,6 +87,7 @@ export async function createItem(
         height: item.height,
         width: item.width,
         tags: tagsArray,
+        pictures: picturesArray,
       },
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

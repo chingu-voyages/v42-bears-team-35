@@ -3,13 +3,12 @@ import {
   BaseEntity,
   Column,
   Entity,
-  JoinTable,
-  ManyToMany,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import PictureMetadata from "./PictureMetadata";
-import { Item } from ".";
+import { Item, ItemPicture } from ".";
 
 @Entity()
 export default class Picture extends BaseEntity {
@@ -22,17 +21,8 @@ export default class Picture extends BaseEntity {
   @OneToOne(() => PictureMetadata, (metadata) => metadata.picture)
   metadata: PictureMetadata;
 
-  @ManyToMany(() => Item)
-  @JoinTable({
-    name: "picture_item", // table name for the junction table of this relation
-    joinColumn: {
-      name: "picture",
-      referencedColumnName: "id",
-    },
-    inverseJoinColumn: {
-      name: "item",
-      referencedColumnName: "id",
-    },
-  })
+  @OneToMany(() => ItemPicture, (itemPicture: ItemPicture) => itemPicture.item)
+  itemPicture: ItemPicture[];
+
   items: Item[];
 }

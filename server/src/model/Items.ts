@@ -10,7 +10,7 @@ import {
   Unique,
 } from "typeorm";
 // eslint-disable-next-line import/no-cycle
-import { Supplier, Comment, Rating, OrderItem, ItemTag } from ".";
+import { Supplier, Comment, Rating, OrderItem, ItemTag, ItemPicture } from ".";
 
 @Entity()
 @Unique(["supplier", "name"])
@@ -66,4 +66,7 @@ export default class Item extends BaseEntity {
 
   @OneToMany(() => ItemTag, (itemTag: ItemTag) => itemTag.item)
   itemTag: ItemTag[];
+
+  @OneToMany(() => ItemPicture, (itemPicture: ItemPicture) => itemPicture.item)
+  itemPicture: ItemPicture[];
 }

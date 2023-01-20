@@ -23,7 +23,7 @@ router.post(
   },
 );
 router.get("/", async (req: Request, res: Response) => {
-  const data = await getAllItems();
+  const data = await getAllItems(req.query);
 
   return res.status(200).json({ data });
 });

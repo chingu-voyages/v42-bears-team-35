@@ -2,7 +2,7 @@ import { Validator } from "../types";
 
 export const itemCreateValidator: Validator[] = [
   {
-    key: "description",
+    key: "name",
     required: true,
     type: "string",
   },

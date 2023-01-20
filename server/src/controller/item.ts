@@ -1,4 +1,5 @@
-import { QueryRunner } from "typeorm";
+import { QueryRunner, SelectQueryBuilder } from "typeorm";
+import { getOneSupplier } from "./supplier";
 import { ErrorType, SuccessType, ItemCreate, ItemUpdate } from "../types";
 import AppDataSource from "../db";
 import { Item, ItemTag, Tag } from "../model";
@@ -27,11 +28,17 @@ export async function createItem(
 
     const item = new Item();
 
-    item.description = body.description;
+    item.name = body.name;
     item.length = body.length;
     item.height = body.height;
     item.width = body.width;
     item.price = body.price;
+
+    if (body.supplier) {
+      const supplier = await getOneSupplier(body.supplier);
+
+      if (supplier) item.supplier = supplier;
+    }
 
     await queryRunner.manager.save(item);
 
@@ -50,7 +57,7 @@ export async function createItem(
       data: {
         id: item.id,
         supplier: item.supplier ? item.supplier : null,
-        description: item.description,
+        description: item.name,
         price: item.price,
         length: item.length ? item.length : null,
         height: item.height,
@@ -75,14 +82,45 @@ export async function createItem(
 // TODO 3 For each item_tag get the tag
 // TODO 4 Return the response with the tags as an array
 
-export async function getAllItems(): Promise<Item[]> {
-  const data: Item[] = await itemRepository
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function getAllItems(queryParams: any): Promise<Item[]> {
+  let data: SelectQueryBuilder<Item> = await itemRepository
     .createQueryBuilder("item")
     .leftJoinAndSelect("item.itemTag", "itemTag")
     .leftJoinAndSelect("itemTag.tag", "tag")
-    .getMany();
+    .leftJoinAndSelect("item.supplier", "supplier");
 
-  return data;
+  // { name: 'Name', tag: 'tag', seller: 'name'}
+  const { name, tag, seller, page, limit, sort, direction } = queryParams;
+
+  const pageToQuery: number = page ? parseInt(page, 10) : -1;
+  const limitToQuery: number = limit ? parseInt(limit, 10) : -1;
+
+  const sortToQuery: "name" | "price" =
+    sort.toLowerCase() === "price" ? "price" : "name";
+
+  const directionToQuery: "ASC" | "DESC" | undefined =
+    direction.toUpperCase() === "DESC" ? "DESC" : "ASC";
+
+  if (name !== undefined && name !== null)
+    data = data
+      .andWhere("item.description like :name")
+      .setParameter("name", `%${name}%`);
+
+  if (tag !== undefined && tag !== null)
+    data = data.andWhere("tag.name = :tag").setParameter("tag", tag);
+
+  if (seller !== undefined && seller !== null)
+    data = data
+      .andWhere("supplier.name = :supplier")
+      .setParameter("supplier", seller);
+
+  if (pageToQuery > 0 && limitToQuery > 0)
+    data = data.limit(limitToQuery).skip(pageToQuery);
+
+  data = data.addOrderBy(`item.${sortToQuery}`, directionToQuery);
+
+  return data.getMany();
 }
 
 export async function getOneItem(uuid: string): Promise<Item | null> {
@@ -109,7 +147,7 @@ export async function updateOneItem(
 ): Promise<SuccessType | ErrorType> {
   const itemToUpdate = item;
 
-  itemToUpdate.description = body.description;
+  itemToUpdate.name = body.name;
   itemToUpdate.height = body.height;
   itemToUpdate.length = body.length;
   itemToUpdate.width = body.width;
@@ -124,7 +162,7 @@ export async function updateOneItem(
     return {
       data: {
         id: itemToUpdate.id,
-        description: itemToUpdate.description,
+        description: itemToUpdate.name,
         supplier: itemToUpdate.supplier,
         length: itemToUpdate.length,
         width: itemToUpdate.width,

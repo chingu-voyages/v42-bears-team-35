@@ -1,5 +1,5 @@
 export type ItemCreate = {
-  description: string;
+  name: string;
   price: number;
   length: number;
   width: number;
@@ -10,7 +10,7 @@ export type ItemCreate = {
 
 export type ItemUpdate = {
   id: string;
-  description: string;
+  name: string;
   price: number;
   length: number;
   width: number;

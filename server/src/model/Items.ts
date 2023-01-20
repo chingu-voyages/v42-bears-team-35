@@ -13,7 +13,7 @@ import {
 import { Supplier, Comment, Rating, OrderItem, ItemTag } from ".";
 
 @Entity()
-@Unique(["supplier", "description"])
+@Unique(["supplier", "name"])
 export default class Item extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
@@ -21,7 +21,7 @@ export default class Item extends BaseEntity {
   @Column({
     nullable: false,
   })
-  description: string;
+  name: string;
 
   @Column({
     type: "float",

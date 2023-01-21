@@ -79,25 +79,45 @@ export async function createItem(
   }
 }
 
+interface QueryParamsInterface {
+  name?: string;
+  tag?: string;
+  seller?: string;
+  page?: string;
+  limit?: string;
+  sort?: string;
+  direction?: string;
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function getAllItems(queryParams: any): Promise<Item[]> {
+  const {
+    name,
+    tag,
+    seller,
+    page,
+    limit,
+    sort,
+    direction,
+  }: QueryParamsInterface = queryParams;
+
+  let sortToQuery: "name" | "price" = "name";
+  let directionToQuery: "ASC" | "DESC" | undefined = "ASC";
+
   let data: SelectQueryBuilder<Item> = await itemRepository
     .createQueryBuilder("item")
     .leftJoinAndSelect("item.itemTag", "itemTag")
     .leftJoinAndSelect("itemTag.tag", "tag")
     .leftJoinAndSelect("item.supplier", "supplier");
 
-  // { name: 'Name', tag: 'tag', seller: 'name'}
-  const { name, tag, seller, page, limit, sort, direction } = queryParams;
-
   const pageToQuery: number = page ? parseInt(page, 10) : -1;
   const limitToQuery: number = limit ? parseInt(limit, 10) : -1;
 
-  const sortToQuery: "name" | "price" =
-    sort.toLowerCase() === "price" ? "price" : "name";
+  if (sort !== undefined && sort !== null)
+    sortToQuery = sort.toLocaleLowerCase() === "price" ? "price" : "name";
 
-  const directionToQuery: "ASC" | "DESC" | undefined =
-    direction.toUpperCase() === "DESC" ? "DESC" : "ASC";
+  if (direction !== undefined && direction !== null)
+    directionToQuery = direction.toUpperCase() === "DESC" ? "DESC" : "ASC";
 
   if (name !== undefined && name !== null)
     data = data

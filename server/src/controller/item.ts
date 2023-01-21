@@ -101,8 +101,8 @@ export async function getAllItems(queryParams: any): Promise<Item[]> {
     direction,
   }: QueryParamsInterface = queryParams;
 
-  let sortToQuery: "name" | "price";
-  let directionToQuery: "ASC" | "DESC" | undefined;
+  let sortToQuery: "name" | "price" = "name";
+  let directionToQuery: "ASC" | "DESC" | undefined = "ASC";
 
   let data: SelectQueryBuilder<Item> = await itemRepository
     .createQueryBuilder("item")
@@ -115,11 +115,9 @@ export async function getAllItems(queryParams: any): Promise<Item[]> {
 
   if (sort !== undefined && sort !== null)
     sortToQuery = sort.toLocaleLowerCase() === "price" ? "price" : "name";
-  else sortToQuery = "name";
 
   if (direction !== undefined && direction !== null)
     directionToQuery = direction.toUpperCase() === "DESC" ? "DESC" : "ASC";
-  else directionToQuery = "ASC";
 
   if (name !== undefined && name !== null)
     data = data

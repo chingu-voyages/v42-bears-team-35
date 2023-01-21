@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { StyleSheet, Text, TextInput, View, Button } from "react-native";
+import { Image, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { updateSearch } from "../constants/searchSlice";
-import { ROUTES } from "../constants";
 import { useNavigation } from '@react-navigation/native';
 
 //delete soon
@@ -31,17 +30,14 @@ export default Navbar = () => {
   const dispatch = useDispatch()
   const search = useSelector(state => state.search.value)
 
-
-
   useEffect(() => {
-     realtimeSearchDB()
+    realtimeSearchDB()
   }, [searchTerm])
-
 
   function realtimeSearchDB() {
     // query DB and update dispatch with it
     const searchResult = MOCK_DATA.filter((item) => item.title.includes(searchTerm))
-    const db = {searchTerm, searchResult}
+    const db = { searchTerm, searchResult }
     dispatch(updateSearch(db))
     //navigation.navigate(ROUTES.SEARCH_RESULTS)
   }
@@ -67,23 +63,43 @@ export default Navbar = () => {
       height: 36,
       fontSize: 20,
       padding: 4
+    },
+    menuContainer: {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center"
+    },
+    menu: {
+      marginLeft: 12,
+      height: 24,
+      width: 24,
+      marginRight: 12
     }
   })
 
-  return ( 
+  return (
     <View style={style.header}>
-      <Button title="Menu" style={style.headerText} onPress={() => navigation.toggleDrawer()}/>
-      <TextInput
-          style={style.searchBar}
-            onChangeText={setSearchTerm}
-            value={searchTerm}
-            secureTextEntry={false}
-            placeholder="Search"
-
+      <Pressable style={style.menuContainer} onPress={() => navigation.toggleDrawer()}>
+        <Image
+          source={require('../assets/menu.png')}
+          style={style.menu}
         />
-        <Text style={style.headerText}>Cart</Text>
+      </Pressable>
+      <TextInput
+        style={style.searchBar}
+        onChangeText={setSearchTerm}
+        value={searchTerm}
+        secureTextEntry={false}
+        placeholder="Search"
+      />
+      <Pressable style={style.menuContainer} onPress={() => navigation.toggleDrawer()}>
+        <Image
+          source={require('../assets/shopping-cart.png')}
+          style={style.menu}
+        />
+      </Pressable>
     </View>
   );
-  
+
 };
 

@@ -14,8 +14,11 @@ import {
   Rating,
   Comment,
   Tag,
+  ItemTag,
   Picture,
   PictureMetadata,
+  Order,
+  OrderItem,
 } from "../model";
 
 const AppDataSource = new DataSource({
@@ -33,8 +36,11 @@ const AppDataSource = new DataSource({
     Rating,
     Comment,
     Tag,
+    ItemTag,
     Picture,
     PictureMetadata,
+    Order,
+    OrderItem,
   ],
 });
 

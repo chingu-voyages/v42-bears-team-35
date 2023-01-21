@@ -11,11 +11,18 @@ const connection = {
 
   async clear() {
     const clearConnection = getConnection();
-    const entities = clearConnection.entityMetadatas;
+    const entities: string[] = [
+      "item_tag",
+      "tag",
+      '"order"',
+      "customer",
+      "item",
+      "supplier",
+    ];
 
     entities.forEach(async (entity) => {
-      const repository = clearConnection.getRepository(entity.name);
-      await repository.query(`DELETE FROM ${entity.tableName}`);
+      const repository = clearConnection.getRepository(entity);
+      await repository.query(`DELETE FROM ${entity}`);
     });
   },
 };

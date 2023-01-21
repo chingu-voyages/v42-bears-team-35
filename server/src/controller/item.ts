@@ -79,6 +79,16 @@ export async function createItem(
   }
 }
 
+interface QueryParamsInterface {
+  name?: string;
+  tag?: string;
+  seller?: string;
+  page?: string;
+  limit?: string;
+  sort?: string;
+  direction?: string;
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function getAllItems(queryParams: any): Promise<Item[]> {
   const {
@@ -89,15 +99,7 @@ export async function getAllItems(queryParams: any): Promise<Item[]> {
     limit,
     sort,
     direction,
-  }: {
-    name?: string;
-    tag?: string;
-    seller?: string;
-    page?: string;
-    limit?: string;
-    sort?: string;
-    direction?: string;
-  } = queryParams;
+  }: QueryParamsInterface = queryParams;
 
   let sortToQuery: "name" | "price";
   let directionToQuery: "ASC" | "DESC" | undefined;

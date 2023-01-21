@@ -155,7 +155,7 @@ export async function getOneItem(uuid: string): Promise<Item | null> {
     .addSelect("item.length")
     .addSelect("item.width")
     .addSelect("item.height")
-    .addSelect("item.tag")
+    // .addSelect("item.tag")
     .andWhere("item.id = :id")
     .setParameter("id", uuid)
     .getOne();

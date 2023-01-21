@@ -14,7 +14,6 @@ export default function generateJwtToken(loggedInCustomer: Customer): Token {
 
   const signOptions: SignOptions = {
     expiresIn: "2 days",
-    algorithm: "RS256",
   };
 
   const token = jwt.sign(payload, SECRET, signOptions);

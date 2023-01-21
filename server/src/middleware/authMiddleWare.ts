@@ -10,9 +10,7 @@ const errorResponse: ErrorType = {
 };
 
 export function validateToken(token: string, secret: Secret): TokenPayload {
-  const verifyOptions: VerifyOptions = {
-    algorithms: ["RS256"],
-  };
+  const verifyOptions: VerifyOptions = {};
 
   try {
     const jwtPayload = <TokenPayload>verify(token, secret, verifyOptions);

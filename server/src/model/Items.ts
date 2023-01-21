@@ -2,19 +2,18 @@ import {
   BaseEntity,
   Column,
   Entity,
-  JoinTable,
-  ManyToMany,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   Relation,
   Unique,
 } from "typeorm";
 // eslint-disable-next-line import/no-cycle
-import { Supplier, Comment, Rating, Tag } from ".";
+import { Supplier, Comment, Rating, OrderItem, ItemTag } from ".";
 
 @Entity()
-@Unique(["supplier", "description"])
+@Unique(["supplier", "name"])
 export default class Item extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
@@ -22,7 +21,7 @@ export default class Item extends BaseEntity {
   @Column({
     nullable: false,
   })
-  description: string;
+  name: string;
 
   @Column({
     type: "float",
@@ -48,6 +47,11 @@ export default class Item extends BaseEntity {
   })
   length: number;
 
+  // @Column({
+  //   nullable: false,
+  // })
+  // tag: string;
+
   @ManyToOne(() => Supplier, (supplier) => supplier.items)
   supplier: Relation<Supplier>;
 
@@ -57,7 +61,9 @@ export default class Item extends BaseEntity {
   @OneToMany(() => Rating, (rating) => rating.item)
   ratings: Rating[];
 
-  @ManyToMany(() => Tag)
-  @JoinTable()
-  tags: Tag[];
+  @OneToOne(() => OrderItem, (orderItem: OrderItem) => orderItem.item)
+  orderItems: OrderItem[];
+
+  @OneToMany(() => ItemTag, (itemTag: ItemTag) => itemTag.item)
+  itemTag: ItemTag[];
 }

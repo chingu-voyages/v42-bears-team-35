@@ -13,8 +13,8 @@ export default class ItemPicture extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @ManyToOne(() => Picture, (picture: Picture) => picture.itemPicture)
-  picture: Relation<Picture>;
+  @ManyToOne(() => Picture, (pictures) => pictures.itemPicture)
+  pictures: Relation<Picture>;
 
   @ManyToOne(() => Item, (item: Item) => item.itemPicture)
   item: Relation<Item>;

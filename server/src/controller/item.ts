@@ -69,7 +69,7 @@ export async function createItem(
     for (let i = 0; i < picturesArray.length; i += 1) {
       const itemPicture = new ItemPicture();
       itemPicture.item = item;
-      itemPicture.picture = picturesArray[i];
+      itemPicture.pictures = picturesArray[i];
 
       // eslint-disable-next-line no-await-in-loop
       await queryRunner.manager.save(itemPicture);
@@ -81,7 +81,7 @@ export async function createItem(
       data: {
         id: item.id,
         supplier: item.supplier ? item.supplier : null,
-        description: item.name,
+        name: item.name,
         price: item.price,
         length: item.length ? item.length : null,
         height: item.height,
@@ -108,7 +108,9 @@ export async function getAllItems(queryParams: any): Promise<Item[]> {
     .createQueryBuilder("item")
     .leftJoinAndSelect("item.itemTag", "itemTag")
     .leftJoinAndSelect("itemTag.tag", "tag")
-    .leftJoinAndSelect("item.supplier", "supplier");
+    .leftJoinAndSelect("item.supplier", "supplier")
+    .leftJoinAndSelect("item.picture", "pictures")
+    .leftJoinAndSelect("pictures.itemPicture", "pictures");
 
   // { name: 'Name', tag: 'tag', seller: 'name'}
   const { name, tag, seller, page, limit, sort, direction } = queryParams;
@@ -124,7 +126,7 @@ export async function getAllItems(queryParams: any): Promise<Item[]> {
 
   if (name !== undefined && name !== null)
     data = data
-      .andWhere("item.description like :name")
+      .andWhere("item.name like :name")
       .setParameter("name", `%${name}%`);
 
   if (tag !== undefined && tag !== null)
@@ -147,7 +149,7 @@ export async function getOneItem(uuid: string): Promise<Item | null> {
   const data: Item | null = await itemRepository
     .createQueryBuilder("item")
     .select("item.id")
-    .addSelect("item.description")
+    .addSelect("item.name")
     .addSelect("item.supplier")
     .addSelect("item.price")
     .addSelect("item.length")
@@ -182,7 +184,7 @@ export async function updateOneItem(
     return {
       data: {
         id: itemToUpdate.id,
-        description: itemToUpdate.name,
+        name: itemToUpdate.name,
         supplier: itemToUpdate.supplier,
         length: itemToUpdate.length,
         width: itemToUpdate.width,

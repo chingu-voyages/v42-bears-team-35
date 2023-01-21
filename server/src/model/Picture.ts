@@ -18,11 +18,12 @@ export default class Picture extends BaseEntity {
   @Column()
   url: string;
 
-  @OneToOne(() => PictureMetadata, (metadata) => metadata.picture)
-  metadata: PictureMetadata;
+  @OneToOne(() => PictureMetadata, (metadata) => metadata.pictures)
+  metadata: PictureMetadata[];
 
-  @OneToMany(() => ItemPicture, (itemPicture: ItemPicture) => itemPicture.item)
+  @OneToMany(() => ItemPicture, (itemPicture) => itemPicture.pictures)
   itemPicture: ItemPicture[];
 
-  items: Item[];
+  @OneToMany(() => Item, (item) => item.picture)
+  pictures: Item[];
 }

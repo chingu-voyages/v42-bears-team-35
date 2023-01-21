@@ -14,9 +14,9 @@ export default class PictureMetadata extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @OneToOne(() => Picture, (picture) => picture.metadata)
+  @OneToOne(() => Picture, (pictures) => pictures.metadata)
   @JoinColumn()
-  picture: Picture;
+  pictures: Picture;
 
   @Column()
   name: string;

@@ -110,7 +110,7 @@ export async function getAllItems(queryParams: any): Promise<Item[]> {
     .leftJoinAndSelect("itemTag.tag", "tag")
     .leftJoinAndSelect("item.supplier", "supplier")
     .leftJoinAndSelect("item.picture", "pictures")
-    .leftJoinAndSelect("pictures.itemPicture", "pictures");
+    .leftJoinAndSelect("pictures.itemPicture", "picture");
 
   // { name: 'Name', tag: 'tag', seller: 'name'}
   const { name, tag, seller, page, limit, sort, direction } = queryParams;

@@ -1,5 +1,7 @@
-import React from "react";
-import { Pressable, Text } from "react-native";
+import { useState } from "react";
+import { Image, Pressable, Text, TextInput, ScrollView, StyleSheet, View, } from "react-native";
+import Review from "../components/Review"
+import { useSelector } from "react-redux";
 
 const prop = {
   imageUrl: "./red-hat.jpg",
@@ -33,9 +35,9 @@ const prop = {
 };
 
 export default ItemDescription = ({ navigation }) => {
+  const {height, width } = useSelector(state => state.size.value)
 
   const [orderQuantity, setOrderQuantity] = useState(1);
-  
   const style = StyleSheet.create({
     container: {
       width: "100%",
@@ -47,9 +49,11 @@ export default ItemDescription = ({ navigation }) => {
     right: {
       display: "flex",
       flexDirection: "column",
-      width:  "55%",
-      paddingTop: 0,
-      paddingLeft: 0,
+      width:  "58%",
+      padding: 0,
+      borderColor: "#666",
+      borderWidth: 2,
+      marginLeft: "5%",
     },
     prices: {
       display: "flex",
@@ -60,7 +64,6 @@ export default ItemDescription = ({ navigation }) => {
       flexDirection: "row",
       justifyContent: "space-around",
       alignItems: "flex-start",
-      width: "55%",
     },
     rowBottom: {
       display: "flex",
@@ -82,8 +85,8 @@ export default ItemDescription = ({ navigation }) => {
       flexDirection: "row",
     },
     mainImage: {
-      width: "40%",
-      height: "40%",
+      width: width * .34,
+      height: width * .34,
       borderRadius: 9,
     },
     smallRed: {
@@ -93,6 +96,7 @@ export default ItemDescription = ({ navigation }) => {
     },
     h2: {
       fontSize: 32,
+      margin: 0
     },
     grey: {
       fontSize: 20,
@@ -260,14 +264,12 @@ export default ItemDescription = ({ navigation }) => {
   return (
     <>
       <ScrollView bounces={true}>
-        <Navbar />
         <View style={style.container}>
             <Image 
                 source={require('../assets/red-hat.jpg')}
                 style={style.mainImage}
                 />
             <View style={style.right}>
-            
                     <View style={style.row}>
                         <Text style={style.h2}>{prop.productName.join(' ')}</Text>
                         <Text style={style.smallRed}>NEW</Text>

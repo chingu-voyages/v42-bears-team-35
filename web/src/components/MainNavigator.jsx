@@ -33,11 +33,7 @@ export default MainNavigator = () => {
           component={ItemDescription}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
-          name={ROUTES.SEARCH_RESULTS}
-          component={SearchResults}
-          options={{ headerShown: false }}
-        />
+        
       </Stack.Navigator>
     </>
   );

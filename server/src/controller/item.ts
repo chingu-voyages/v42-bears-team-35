@@ -80,12 +80,12 @@ export async function createItem(
     return {
       data: {
         id: item.id,
-        supplier: item.supplier ? item.supplier : null,
         name: item.name,
         price: item.price,
         length: item.length ? item.length : null,
         height: item.height,
         width: item.width,
+        supplier: item.supplier ? item.supplier : null,
         tags: tagsArray,
         pictures: picturesArray,
       },

@@ -18,7 +18,7 @@ export default class Item extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column({ unique: true })
+  @Column({ nullable: false })
   name: string;
 
   @Column({
@@ -45,11 +45,6 @@ export default class Item extends BaseEntity {
   })
   length: number;
 
-  // @Column({
-  //   nullable: false,
-  // })
-  // tag: string;
-
   @ManyToOne(() => Supplier, (supplier) => supplier.items)
   supplier: Relation<Supplier>;
 
@@ -67,7 +62,4 @@ export default class Item extends BaseEntity {
 
   @OneToMany(() => ItemPicture, (itemPicture) => itemPicture.item)
   itemPicture: ItemPicture[];
-
-  @ManyToOne(() => Item, (item) => item.picture)
-  picture: Relation<Item>;
 }

@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import PictureMetadata from "./PictureMetadata";
-import { Item, ItemPicture } from ".";
+import { ItemPicture } from ".";
 
 @Entity()
 export default class Picture extends BaseEntity {
@@ -25,7 +25,4 @@ export default class Picture extends BaseEntity {
 
   @OneToMany(() => ItemPicture, (itemPicture) => itemPicture.pictures)
   itemPicture: ItemPicture[];
-
-  @OneToMany(() => Item, (item) => item.picture)
-  pictures: Item[];
 }

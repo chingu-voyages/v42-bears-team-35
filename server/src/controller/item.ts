@@ -9,8 +9,6 @@ import { insertPicture } from "./picture";
 const queryRunner: QueryRunner = AppDataSource.createQueryRunner();
 const itemRepository = AppDataSource.getRepository(Item);
 
-// TODO when creating the item pass a pictures url array to add the pictures to the item
-
 export async function createItem(
   body: ItemCreate,
 ): Promise<ErrorType | SuccessType> {
@@ -94,6 +92,13 @@ export async function createItem(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     await queryRunner.rollbackTransaction();
+    if (error.code === "23505") {
+      return {
+        errorKey: "name",
+        errorDescription: error.detail,
+        errorCode: 409,
+      };
+    }
     return {
       errorKey: "unknown",
       errorDescription: error.message,
@@ -148,19 +153,11 @@ export async function getAllItems(queryParams: any): Promise<Item[]> {
 export async function getOneItem(uuid: string): Promise<Item | null> {
   const data: Item | null = await itemRepository
     .createQueryBuilder("item")
-    .select("item.id")
-    .addSelect("item.name")
-    .addSelect("item.supplier")
-    .addSelect("item.price")
-    .addSelect("item.length")
-    .addSelect("item.width")
-    .addSelect("item.height")
     .leftJoinAndSelect("item.itemTag", "itemTag")
     .leftJoinAndSelect("itemTag.tag", "tag")
-    .leftJoinAndSelect("item.picture", "pictures")
     .leftJoinAndSelect("item.supplier", "supplier")
     .leftJoinAndSelect("item.itemPicture", "itemPicture")
-    // .addSelect("item.tag")
+    .leftJoinAndSelect("itemPicture.pictures", "pictures")
     .andWhere("item.id = :id")
     .setParameter("id", uuid)
     .getOne();

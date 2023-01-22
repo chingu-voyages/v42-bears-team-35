@@ -130,7 +130,7 @@ export async function updateOneCustomer(
 
     if (err.code !== undefined && err.code === "23505")
       return {
-        errorCode: 400,
+        errorCode: 409,
         errorKey: "email",
         errorDescription: "Customer with email already exists",
       };

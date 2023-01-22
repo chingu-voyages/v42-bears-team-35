@@ -26,6 +26,6 @@ export default class Picture extends BaseEntity {
   @OneToMany(() => ItemPicture, (itemPicture) => itemPicture.pictures)
   itemPicture: ItemPicture[];
 
-  @OneToMany(() => Item, (item) => item.picture)
-  pictures: Item[];
+  // @OneToMany(() => Item, (item) => item.picture)
+  // pictures: Item[];
 }

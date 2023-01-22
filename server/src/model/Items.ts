@@ -62,7 +62,4 @@ export default class Item extends BaseEntity {
 
   @OneToMany(() => ItemPicture, (itemPicture) => itemPicture.item)
   itemPicture: ItemPicture[];
-
-  // @ManyToOne(() => Item, (item) => item.picture)
-  // picture: Relation<Item>;
 }

@@ -155,19 +155,11 @@ export async function getAllItems(queryParams: any): Promise<Item[]> {
 export async function getOneItem(uuid: string): Promise<Item | null> {
   const data: Item | null = await itemRepository
     .createQueryBuilder("item")
-    .select("item.id")
-    .addSelect("item.name")
-    .addSelect("item.supplier")
-    .addSelect("item.price")
-    .addSelect("item.length")
-    .addSelect("item.width")
-    .addSelect("item.height")
     .leftJoinAndSelect("item.itemTag", "itemTag")
     .leftJoinAndSelect("itemTag.tag", "tag")
-    .leftJoinAndSelect("item.picture", "pictures")
     .leftJoinAndSelect("item.supplier", "supplier")
     .leftJoinAndSelect("item.itemPicture", "itemPicture")
-    // .addSelect("item.tag")
+    .leftJoinAndSelect("itemPicture.pictures", "pictures")
     .andWhere("item.id = :id")
     .setParameter("id", uuid)
     .getOne();

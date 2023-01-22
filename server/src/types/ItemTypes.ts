@@ -1,3 +1,7 @@
+/* eslint-disable import/no-cycle */
+import { SupplierResponse } from ".";
+import { PicturesResponse, TagResponse } from "./FormattedItemResponse";
+
 export type ItemCreate = {
   name: string;
   price: number;
@@ -19,3 +23,15 @@ export type ItemUpdate = {
   tags: string[];
   pictures: string[];
 };
+
+export interface FormattedItemResponse {
+  id: string;
+  name: string;
+  price: number;
+  height: number;
+  width: number;
+  length: number;
+  supplier: SupplierResponse;
+  tags: TagResponse[];
+  pictures: PicturesResponse[];
+}

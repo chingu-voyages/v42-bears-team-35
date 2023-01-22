@@ -94,15 +94,6 @@ export async function createItem(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     await queryRunner.rollbackTransaction();
-
-    if (error.code === "23505") {
-      return {
-        errorKey: "unknown",
-        errorDescription: error.detail,
-        errorCode: 409,
-      };
-    }
-
     return {
       errorKey: "unknown",
       errorDescription: error.message,

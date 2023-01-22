@@ -5,12 +5,10 @@ export const styles = StyleSheet.create({
     flex: 1,
     display: "flex",
     flexDirection: "column",
-    justifyContent: "space-evenly",
-    height: "100%"
+    alignContent: "stretch"
   },
   imageBackground: {
     flex: 1,
-    resizeMode: "cover"
 
   },
   itemText: {
@@ -19,7 +17,8 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   renderItemContainer: {
-    backgroundColor: "#FFF",
     flex: 1,
+    backgroundColor: "#FFF",
+
   },
 });

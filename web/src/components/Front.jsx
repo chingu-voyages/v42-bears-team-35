@@ -19,16 +19,17 @@ export default Front = () => {
     <SafeAreaView style={{ flex: 1, marginTop: 36 }}>
       <Navbar />
       <Stack.Navigator>
-      <Stack.Screen
+        <Stack.Screen
+            name={ROUTES.SLIDES}
+            component={Slides}
+            options={{ headerShown: false }}
+          />
+        <Stack.Screen
           name={ROUTES.ITEM_DESCRIPTION}
           component={ItemDescription}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
-          name={ROUTES.SLIDES}
-          component={Slides}
-          options={{ headerShown: false }}
-        />
+        
         
       </Stack.Navigator>
     </SafeAreaView>

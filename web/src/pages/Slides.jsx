@@ -1,9 +1,10 @@
 // makes ItemCard swipable 
 
-import React from "react";
-import { FlatList, SafeAreaView } from "react-native";
-import ItemCard from '../components/ItemCard'
+import { FlatList, SafeAreaView, ImageBackground, Text, useWindowDimensions, View, Pressable } from "react-native";
+import { useState } from "react";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { styles } from "../styles/ItemCard";
+import { ROUTES } from "../constants";
 
 const MOCK_DATA = [
   {
@@ -24,17 +25,43 @@ const MOCK_DATA = [
 ];
 
 export default Slides = ({ navigation }) => {
-
+  const { height, width } = useWindowDimensions()
+  const ItemCard = ({ item }) => {
+    const { url, title } = item
+    return (
+      
+        <View style={{height: height, borderWidth: 2, borderColor: '#832', flex: 1}}>
+          <Pressable>
+            <ImageBackground
+              source={url}
+              imageStyle={{height: height }}
+            //style={{ height: height, width: width}}
+            >
+              <View style={{width: width, height: height * .5, }}><Text style={{position: "absolute", left: 15, top: height * .45}}>{title}</Text>
+    </View>
+            </ImageBackground>
+        </Pressable>
+        </View>
+    )
+  }
 
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
-        data={MOCK_DATA}
-        renderItem={ItemCard}
-        pagingEnabled
-        keyExtractor={(item) => 'item-' + item.id}
-        decelerationRate="fast"
-      />
+          data={MOCK_DATA}
+          decelerationRate="fast"
+          keyExtractor={item => item.id.toString()}
+          onViewableItemsChanged={this.onViewableItemsChanged}
+          removeClippedSubviews={false}
+          renderItem={ItemCard}
+          showsVerticalScrollIndicator={false}
+          snapToAlignment="start"
+          snapToInterval={height + 5}
+          viewabilityConfig={{
+            waitForInteraction: true,
+            viewAreaCoveragePercentThreshold: 100,
+          }}
+        />
     </SafeAreaView>
   );
 };

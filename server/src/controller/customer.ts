@@ -9,14 +9,11 @@ import {
 } from "../types";
 import AppDataSource from "../db";
 import { Customer } from "../model";
+import { hashPassword } from "../authentication";
 
 const queryRunner: QueryRunner = AppDataSource.createQueryRunner();
 const customerRepositry: Repository<Customer> =
   AppDataSource.getRepository(Customer);
-
-const hashPassword = async (password: string): Promise<string> => {
-  return password;
-};
 
 export const createCustomer = async (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -142,3 +139,15 @@ export async function updateOneCustomer(
     };
   }
 }
+
+export const getCustomerByEmail = async (
+  email: string,
+): Promise<Customer | null> => {
+  const customer: Customer | null = await customerRepositry
+    .createQueryBuilder("customer")
+    .andWhere("customer.email = :email")
+    .setParameter("email", email)
+    .getOne();
+
+  return customer;
+};

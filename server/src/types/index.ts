@@ -14,6 +14,7 @@ import {
 import { ItemCreate, ItemUpdate, FormattedItemResponse } from "./ItemTypes";
 import { Validator } from "./ValidatorType";
 import { OrderCreate, OrderUpdate } from "./OrderTypes";
+import { Token, TokenPayload } from "./Token";
 
 export {
   ErrorType,
@@ -29,5 +30,7 @@ export {
   OrderUpdate,
   ItemCreate,
   ItemUpdate,
+  Token,
+  TokenPayload,
   FormattedItemResponse,
 };

@@ -90,9 +90,18 @@ export async function createItem(
         pictures: picturesArray,
       },
     };
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     await queryRunner.rollbackTransaction();
+
+    if (error.code === "23505") {
+      return {
+        errorKey: "unknown",
+        errorDescription: error.detail,
+        errorCode: 409,
+      };
+    }
 
     return {
       errorKey: "unknown",
@@ -110,7 +119,7 @@ export async function getAllItems(queryParams: any): Promise<Item[]> {
     .leftJoinAndSelect("itemTag.tag", "tag")
     .leftJoinAndSelect("item.supplier", "supplier")
     .leftJoinAndSelect("item.picture", "pictures")
-    .leftJoinAndSelect("pictures.itemPicture", "picture");
+    .leftJoinAndSelect("item.itemPicture", "itemPicture");
 
   // { name: 'Name', tag: 'tag', seller: 'name'}
   const { name, tag, seller, page, limit, sort, direction } = queryParams;
@@ -155,6 +164,11 @@ export async function getOneItem(uuid: string): Promise<Item | null> {
     .addSelect("item.length")
     .addSelect("item.width")
     .addSelect("item.height")
+    .leftJoinAndSelect("item.itemTag", "itemTag")
+    .leftJoinAndSelect("itemTag.tag", "tag")
+    .leftJoinAndSelect("item.picture", "pictures")
+    .leftJoinAndSelect("item.supplier", "supplier")
+    .leftJoinAndSelect("item.itemPicture", "itemPicture")
     // .addSelect("item.tag")
     .andWhere("item.id = :id")
     .setParameter("id", uuid)

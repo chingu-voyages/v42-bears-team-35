@@ -31,10 +31,10 @@ export default Slides = ({ navigation }) => {
     return (
       
         <View style={{height: height, borderWidth: 2, borderColor: '#832', flex: 1}}>
-          <Pressable>
+          <Pressable onPress={() => navigation.navigate(ROUTES.ITEM_DESCRIPTION)}>
             <ImageBackground
               source={url}
-              imageStyle={{height: height }}
+              imageStyle={{height: height - 80}}
             //style={{ height: height, width: width}}
             >
               <View style={{width: width, height: height * .5, }}><Text style={{position: "absolute", left: 15, top: height * .45}}>{title}</Text>

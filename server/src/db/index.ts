@@ -19,6 +19,7 @@ import {
   PictureMetadata,
   Order,
   OrderItem,
+  ItemPicture,
 } from "../model";
 
 const AppDataSource = new DataSource({
@@ -41,6 +42,7 @@ const AppDataSource = new DataSource({
     PictureMetadata,
     Order,
     OrderItem,
+    ItemPicture,
   ],
 });
 

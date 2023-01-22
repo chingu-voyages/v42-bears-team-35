@@ -2,13 +2,12 @@ import { QueryRunner, SelectQueryBuilder } from "typeorm";
 import { getOneSupplier } from "./supplier";
 import { ErrorType, SuccessType, ItemCreate, ItemUpdate } from "../types";
 import AppDataSource from "../db";
-import { Item, ItemTag, Tag } from "../model";
+import { Item, ItemTag, Tag, Picture, ItemPicture } from "../model";
 import { insertTag } from "./tag";
+import { insertPicture } from "./picture";
 
 const queryRunner: QueryRunner = AppDataSource.createQueryRunner();
 const itemRepository = AppDataSource.getRepository(Item);
-
-// TODO when creating the item pass a pictures url array to add the pictures to the item
 
 export async function createItem(
   body: ItemCreate,
@@ -26,6 +25,18 @@ export async function createItem(
       // eslint-disable-next-line no-await-in-loop
       const createdTag = await insertTag(body.tags[i]);
       tagsArray.push(createdTag);
+    }
+
+    body.pictures.forEach(async (picture: string) => {
+      await insertPicture(picture);
+    });
+
+    const picturesArray: Picture[] = [];
+
+    for (let i = 0; i < body.pictures.length; i += 1) {
+      // eslint-disable-next-line no-await-in-loop
+      const createdPicture = await insertPicture(body.pictures[i]);
+      picturesArray.push(createdPicture);
     }
 
     const item = new Item();
@@ -53,24 +64,41 @@ export async function createItem(
       await queryRunner.manager.save(itemTag);
     }
 
+    for (let i = 0; i < picturesArray.length; i += 1) {
+      const itemPicture = new ItemPicture();
+      itemPicture.item = item;
+      itemPicture.pictures = picturesArray[i];
+
+      // eslint-disable-next-line no-await-in-loop
+      await queryRunner.manager.save(itemPicture);
+    }
+
     await queryRunner.commitTransaction();
 
     return {
       data: {
         id: item.id,
-        supplier: item.supplier ? item.supplier : null,
-        description: item.name,
+        name: item.name,
         price: item.price,
         length: item.length ? item.length : null,
         height: item.height,
         width: item.width,
+        supplier: item.supplier ? item.supplier : null,
         tags: tagsArray,
+        pictures: picturesArray,
       },
     };
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     await queryRunner.rollbackTransaction();
-
+    if (error.code === "23505") {
+      return {
+        errorKey: "name",
+        errorDescription: error.detail,
+        errorCode: 409,
+      };
+    }
     return {
       errorKey: "unknown",
       errorDescription: error.message,
@@ -108,7 +136,9 @@ export async function getAllItems(queryParams: any): Promise<Item[]> {
     .createQueryBuilder("item")
     .leftJoinAndSelect("item.itemTag", "itemTag")
     .leftJoinAndSelect("itemTag.tag", "tag")
-    .leftJoinAndSelect("item.supplier", "supplier");
+    .leftJoinAndSelect("item.supplier", "supplier")
+    .leftJoinAndSelect("item.itemPicture", "itemPicture")
+    .leftJoinAndSelect("itemPicture.pictures", "pictures");
 
   const pageToQuery: number = page ? parseInt(page, 10) : -1;
   const limitToQuery: number = limit ? parseInt(limit, 10) : -1;
@@ -121,7 +151,7 @@ export async function getAllItems(queryParams: any): Promise<Item[]> {
 
   if (name !== undefined && name !== null)
     data = data
-      .andWhere("item.description like :name")
+      .andWhere("item.name like :name")
       .setParameter("name", `%${name}%`);
 
   if (tag !== undefined && tag !== null)
@@ -143,14 +173,11 @@ export async function getAllItems(queryParams: any): Promise<Item[]> {
 export async function getOneItem(uuid: string): Promise<Item | null> {
   const data: Item | null = await itemRepository
     .createQueryBuilder("item")
-    .select("item.id")
-    .addSelect("item.description")
-    .addSelect("item.supplier")
-    .addSelect("item.price")
-    .addSelect("item.length")
-    .addSelect("item.width")
-    .addSelect("item.height")
-    .addSelect("item.tag")
+    .leftJoinAndSelect("item.itemTag", "itemTag")
+    .leftJoinAndSelect("itemTag.tag", "tag")
+    .leftJoinAndSelect("item.supplier", "supplier")
+    .leftJoinAndSelect("item.itemPicture", "itemPicture")
+    .leftJoinAndSelect("itemPicture.pictures", "pictures")
     .andWhere("item.id = :id")
     .setParameter("id", uuid)
     .getOne();
@@ -179,7 +206,7 @@ export async function updateOneItem(
     return {
       data: {
         id: itemToUpdate.id,
-        description: itemToUpdate.name,
+        name: itemToUpdate.name,
         supplier: itemToUpdate.supplier,
         length: itemToUpdate.length,
         width: itemToUpdate.width,

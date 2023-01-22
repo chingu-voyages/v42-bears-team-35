@@ -10,7 +10,7 @@ import {
   Unique,
 } from "typeorm";
 // eslint-disable-next-line import/no-cycle
-import { Supplier, Comment, Rating, OrderItem, ItemTag } from ".";
+import { Supplier, Comment, Rating, OrderItem, ItemTag, ItemPicture } from ".";
 
 @Entity()
 @Unique(["supplier", "name"])
@@ -18,9 +18,7 @@ export default class Item extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column({
-    nullable: false,
-  })
+  @Column({ nullable: false })
   name: string;
 
   @Column({
@@ -47,11 +45,6 @@ export default class Item extends BaseEntity {
   })
   length: number;
 
-  // @Column({
-  //   nullable: false,
-  // })
-  // tag: string;
-
   @ManyToOne(() => Supplier, (supplier) => supplier.items)
   supplier: Relation<Supplier>;
 
@@ -66,4 +59,7 @@ export default class Item extends BaseEntity {
 
   @OneToMany(() => ItemTag, (itemTag: ItemTag) => itemTag.item)
   itemTag: ItemTag[];
+
+  @OneToMany(() => ItemPicture, (itemPicture) => itemPicture.item)
+  itemPicture: ItemPicture[];
 }

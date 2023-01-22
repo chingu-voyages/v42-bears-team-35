@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import { ErrorType } from "./ErrorType";
 import { SuccessType } from "./SuccessType";
 import {
@@ -10,7 +11,7 @@ import {
   SupplierResponse,
   SupplierUpdate,
 } from "./SupplierTypes";
-import { ItemCreate, ItemUpdate } from "./ItemTypes";
+import { ItemCreate, ItemUpdate, FormattedItemResponse } from "./ItemTypes";
 import { Validator } from "./ValidatorType";
 import { OrderCreate, OrderUpdate } from "./OrderTypes";
 import { Token, TokenPayload } from "./Token";
@@ -31,4 +32,5 @@ export {
   ItemUpdate,
   Token,
   TokenPayload,
+  FormattedItemResponse,
 };

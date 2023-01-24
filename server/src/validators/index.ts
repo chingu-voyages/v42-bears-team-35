@@ -7,7 +7,7 @@ import {
   supplierUpdateValidator,
 } from "./supplierValidator";
 import { orderCreateValidator } from "./orderValidator";
-
+import orderItemValidator from "./orderItemValidator";
 import { itemCreateValidator, itemUpdateValidator } from "./ItemValidators";
 
 export {
@@ -18,4 +18,5 @@ export {
   supplierCreateValidator,
   supplierUpdateValidator,
   orderCreateValidator,
+  orderItemValidator,
 };

@@ -16,10 +16,10 @@ const connection = {
       "tag",
       '"order"',
       "customer",
-      "item",
       "supplier",
-      "picture",
       "item_picture",
+      "picture",
+      "item",
     ];
 
     entities.forEach(async (entity) => {

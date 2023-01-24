@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import { isEmailValid } from "./validateEmail";
 import { Validator } from "../types";
 import validateDate from "./validateDate";
+import { isValidUUID } from "./validateUUID";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function validateData(dataValidator: Validator[]) {
@@ -17,6 +18,28 @@ export default function validateData(dataValidator: Validator[]) {
         return res.status(400).json({
           errorKey: key,
           errorDescription: `${key} is required`,
+        });
+
+      if (
+        type === "uuid" &&
+        req.body[key] !== undefined &&
+        req.body[key] !== null &&
+        !isValidUUID(req.body[key])
+      )
+        return res.status(400).json({
+          errorKey: key,
+          errorDescription: `${key} should be a valid uuid`,
+        });
+
+      if (
+        type === "float" &&
+        req.body[key] !== undefined &&
+        req.body[key] !== null &&
+        Number.isNaN(parseFloat(req.body[key]))
+      )
+        return res.status(400).json({
+          errorKey: key,
+          errorDescription: `${key} should be a valid number`,
         });
 
       // If the key is email we will use the email validator

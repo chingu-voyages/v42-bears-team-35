@@ -6,6 +6,7 @@ import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { styles } from "../styles/ItemCard";
 import { ROUTES } from "../constants";
 import axios from "axios";
+import {getItems} from "../constants/axios"
 
 const MOCK_DATA = [
   {

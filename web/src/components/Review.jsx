@@ -40,6 +40,7 @@ const style = StyleSheet.create({
         padding: 4
     }
 })
+//                 <Text style={style.date}> {Intl.DateTimeFormat('en-US').format(new Date(date))}</Text>
 
 export default Review = ({ name, date, rating, review }) => {
 
@@ -55,7 +56,7 @@ export default Review = ({ name, date, rating, review }) => {
             <View style={style.row}>
                 <Text style={style.name}>{name}</Text>
                 <Text style={style.space}>on</Text>
-                <Text style={style.date}> {Intl.DateTimeFormat('en-US').format(date)}</Text>
+                <Text>{date}</Text>
             </View>
             <View style={style.stars}>
                 <Text style={style.star}>{stars}</Text>

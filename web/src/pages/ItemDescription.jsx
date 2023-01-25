@@ -1,76 +1,27 @@
 import { useState } from "react";
 import { Image, Pressable, Text, TextInput, ScrollView, SafeAreaView, StyleSheet, View, useWindowDimensions } from "react-native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { updateCart } from '../constants/cartSlice'
 import Navbar from "../components/Navbar";
 import Review from "../components/Review"
 
-
-const prop = {
-  imageUrl: "../assets/red-hat.jpg",
-  productName: ["reddest", "barrette"],
-  productDescription:
-    "A fabulous red barret designed and made in France. Channel your inner french girl aesthetic with this hat",
-  price: 30.99,
-  discount: 5,
-  dateAdded: new Date(),
-  productRating: 4,
-  reviews: [
-    {
-      name: "S",
-      date: new Date(),
-      rating: 5,
-      review: "It's good",
-    },
-    {
-      name: "Anonymous",
-      date: new Date(),
-      rating: 2,
-      review: "It's garbage",
-    },
-    {
-      name: "Tim",
-      date: new Date(),
-      rating: 4,
-      review: "It's maroon, not red. Still pretty cute though.",
-    },
-  ],
-};
-
-const prop2 = {
-  imageUrl: "./blue-vase.jpg",
-  productName: ["bluest", "vase"],
-  productDescription:
-    "A fabulous blue vase",
-  price: 20.99,
-  discount: 5,
-  dateAdded: new Date(),
-  productRating: 4,
-  reviews: [
-    {
-      name: "S",
-      date: new Date(),
-      rating: 5,
-      review: "It's good",
-    },
-    {
-      name: "Anonymous",
-      date: new Date(),
-      rating: 2,
-      review: "It's garbage",
-    },
-    {
-      name: "Tim",
-      date: new Date(),
-      rating: 4,
-      review: "It's maroon, not red. Still pretty cute though.",
-    },
-  ],
-};
-
-export default ItemDescription = ({ navigation }) => {
+export default ItemDescription = ({ navigation, route } ) => {
+  const item = route.params
   const { width } = useWindowDimensions()
 
-  const [orderQuantity, setOrderQuantity] = useState(1);
+  const cart = useSelector(state => state.cart.value)
+  const numberInCart = cart.find(itemInCart => itemInCart.id === item.id )
+
+  const [orderQuantity, setOrderQuantity] = useState(numberInCart ? numberInCart.quantity : 1);
+  
+  const dispatch = useDispatch()
+  function update() {
+      const newItem = {...item}
+      newItem.quantity = orderQuantity
+      const newCart = cart.filter(cartItem => cartItem.id != newItem.id)      
+      dispatch(updateCart([...newCart, newItem]))
+  }
+  
   const style = StyleSheet.create({
     container: {
       width: "100%",
@@ -306,7 +257,7 @@ export default ItemDescription = ({ navigation }) => {
                 />
             <View style={style.right}>
                     <View style={style.row}>
-                        <Text style={style.h2}>{prop.productName.join(' ')}</Text>
+                        <Text style={style.h2}>{item.productName.join(' ')}</Text>
                         <Text style={style.smallRed}>New</Text>
                     </View>
                     <View style={style.rowBottom}>
@@ -319,8 +270,8 @@ export default ItemDescription = ({ navigation }) => {
                             <Text style={style.reviewCount}>5 reviews</Text>
                         </View>
                         <View style={style.prices}>
-                            <Text style={style.grey}>{(prop.discount && prop.price).toLocaleString("us-EN", {style: "currency", currency: "USD"})}</Text>
-                            <Text style={style.price}>{(prop.price - parseFloat(prop.price * (prop.discount / 100))).toLocaleString("us-EN", {style: "currency", currency: "USD"})}</Text>
+                            <Text style={style.grey}>{(item.discount && item.price).toLocaleString("us-EN", {style: "currency", currency: "USD"})}</Text>
+                            <Text style={style.price}>{(item.price - parseFloat(item.price * (item.discount / 100))).toLocaleString("us-EN", {style: "currency", currency: "USD"})}</Text>
                         </View>
                 </View>
             </View>
@@ -341,7 +292,7 @@ export default ItemDescription = ({ navigation }) => {
             
         </View>
         <View style={style.text}>
-            <Text style={style.p}>{prop.productDescription}</Text>
+            <Text style={style.p}>{item.productDescription}</Text>
         </View>
         <View style={style.imageSelector }>
             <Pressable 
@@ -364,6 +315,7 @@ export default ItemDescription = ({ navigation }) => {
             </Pressable>
             <Pressable 
                 style={style.greenButton}
+                onPress={update}
             >
                 <Text style={style.p}>Put in cart</Text>
             </Pressable>
@@ -436,11 +388,9 @@ export default ItemDescription = ({ navigation }) => {
             </Pressable>
         </View>
         <View>
-            {prop.reviews.map(r => <Review name={r.name} date={r.date} rating={r.rating} review={r.review} key={r.name + '-' + r.date.valueOf()}/>)}
+            {item.reviews.map(r => <Review name={r.name} date={r.date} rating={r.rating} review={r.review} key={r.name + '-' + r.date.valueOf()}/>)}
         </View>
     </ScrollView>
     </SafeAreaView>
   );
 };
-
-

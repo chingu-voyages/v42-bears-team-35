@@ -1,31 +1,12 @@
 // makes ItemCard swipable 
 
 import { FlatList, SafeAreaView, ImageBackground, Text, useWindowDimensions, View, Pressable, Button } from "react-native";
-import { useState } from "react";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import { useSelector } from "react-redux";
 import { styles } from "../styles/ItemCard";
 import { ROUTES } from "../constants";
 import axios from "axios";
 import {getItems} from "../constants/axios"
 import Navbar from "../components/Navbar";
-
-const MOCK_DATA = [
-  {
-    id: 1,
-    url: { uri: "https://img.makeupalley.com/3/9/7/8/3630182.jpg" },
-    title: "Lancome",
-  },
-  {
-    id: 2,
-    url: { uri: "https://img.makeupalley.com/3/9/7/8/3630182.jpg" },
-    title: "Lancome2",
-  },
-  {
-    id: 3,
-    url: { uri: "https://img.makeupalley.com/3/9/7/8/3630182.jpg" },
-    title: "Lancome3",
-  },
-];
 
 const callItems = () => {
   axios 
@@ -40,19 +21,22 @@ const callItems = () => {
 
 export default Slides = ({ navigation }) => {
   const { height, width } = useWindowDimensions()
+  const products = useSelector(state => state.product.value)
+
   const ItemCard = ({ item }) => {
-    const { url, title } = item
+    const { url, productName } = item
+    const name = productName.join(' ')
     return (
       
         <View style={{height: height - 60, flex: 1}}>
-          <Pressable onPress={() => navigation.navigate(ROUTES.ITEM_DESCRIPTION)}>
+          <Pressable onPress={() => navigation.navigate(ROUTES.ITEM_DESCRIPTION, item)}>
             <ImageBackground
               source={url}
               imageStyle={{height: height - 80}}
             //style={{ height: height, width: width}}
             >
-              <View style={{width: width, height: height * .5, }}><Text style={{position: "absolute", left: 15, top: height * .45}}>{title}</Text>
-    </View>
+              <View style={{width: width, height: height * .5, }}><Text style={{position: "absolute", left: 15, top: height * .45}}>{name}</Text>
+              </View>
             </ImageBackground>
         </Pressable>
         </View>
@@ -69,7 +53,7 @@ export default Slides = ({ navigation }) => {
         }}
       />
       <FlatList
-          data={MOCK_DATA}
+          data={products}
           decelerationRate="fast"
           keyExtractor={item => item.id.toString()}
           onViewableItemsChanged={this.onViewableItemsChanged}

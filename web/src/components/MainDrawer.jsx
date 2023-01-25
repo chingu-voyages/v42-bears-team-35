@@ -75,6 +75,7 @@ export default MainDrawer = () => {
             }}
           component={Cart}
         />
+        
     </Drawer.Navigator>
   );
 };

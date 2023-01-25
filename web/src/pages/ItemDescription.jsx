@@ -51,9 +51,7 @@ export default ItemDescription = ({ navigation }) => {
       flexDirection: "column",
       width:  "58%",
       padding: 0,
-      borderColor: "#666",
-      borderWidth: 2,
-      marginLeft: "5%",
+      marginLeft: "5%"
     },
     prices: {
       display: "flex",
@@ -62,15 +60,16 @@ export default ItemDescription = ({ navigation }) => {
     row: {
       display: "flex",
       flexDirection: "row",
-      justifyContent: "space-around",
+      justifyContent: "space-between",
       alignItems: "flex-start",
+          
     },
     rowBottom: {
       display: "flex",
       flexDirection: "row",
       justifyContent: "space-around",
       alignItems: "flex-end",
-      width: "55%",
+      width: "100%",
       marginTop: 12,
     },
     stars: {
@@ -78,7 +77,6 @@ export default ItemDescription = ({ navigation }) => {
       flexDirection: "row",
       justifyContent: "flex-start",
       height: 84,
-      paddingLeft: 24,
     },
     imageHeading: {
       display: "flex",
@@ -91,8 +89,11 @@ export default ItemDescription = ({ navigation }) => {
     },
     smallRed: {
       color: "#f40",
-      alignSelf: "flex-start",
-      marginLeft: 12,
+      position: "absolute",
+      top: -12,
+      right: -16,
+      backgroundColor: "white",
+      padding: 4
     },
     h2: {
       fontSize: 32,
@@ -154,7 +155,7 @@ export default ItemDescription = ({ navigation }) => {
     },
     greenButton: {
       backgroundColor: "#57D491",
-      width: "40%",
+      width: "50%",
       paddingTop: 16,
       paddingBottom: 16,
       borderRadius: 9,

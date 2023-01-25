@@ -5,6 +5,7 @@ import MainNavigator from "./src/components/MainNavigator";
 import { store } from "./src/constants/store";
 import { Provider } from 'react-redux';
 import Front from "./src/components/Front";
+import MainDrawer from "./src/components/MainDrawer";
 
 
 
@@ -12,7 +13,7 @@ export default function App() {
   return (
     <NavigationContainer >
       <Provider store={store}>
-          <Front />
+          <MainDrawer />
       </Provider>
     </NavigationContainer>
   );

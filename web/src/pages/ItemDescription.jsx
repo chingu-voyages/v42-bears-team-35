@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { Image, Pressable, Text, TextInput, ScrollView, StyleSheet, View, } from "react-native";
-import Review from "../components/Review"
+import { Image, Pressable, Text, TextInput, ScrollView, SafeAreaView, StyleSheet, View, useWindowDimensions } from "react-native";
 import { useSelector } from "react-redux";
+import Navbar from "../components/Navbar";
+import Review from "../components/Review"
+
 
 const prop = {
-  imageUrl: "./red-hat.jpg",
+  imageUrl: "../assets/red-hat.jpg",
   productName: ["reddest", "barrette"],
   productDescription:
     "A fabulous red barret designed and made in France. Channel your inner french girl aesthetic with this hat",
@@ -66,7 +68,7 @@ const prop2 = {
 };
 
 export default ItemDescription = ({ navigation }) => {
-  const {height, width } = useSelector(state => state.size.value)
+  const { width } = useWindowDimensions()
 
   const [orderQuantity, setOrderQuantity] = useState(1);
   const style = StyleSheet.create({
@@ -82,9 +84,7 @@ export default ItemDescription = ({ navigation }) => {
       flexDirection: "column",
       width:  "58%",
       padding: 0,
-      borderColor: "#666",
-      borderWidth: 2,
-      marginLeft: "5%",
+      marginLeft: "5%"
     },
     prices: {
       display: "flex",
@@ -93,15 +93,16 @@ export default ItemDescription = ({ navigation }) => {
     row: {
       display: "flex",
       flexDirection: "row",
-      justifyContent: "space-around",
+      justifyContent: "space-between",
       alignItems: "flex-start",
+          
     },
     rowBottom: {
       display: "flex",
       flexDirection: "row",
       justifyContent: "space-around",
       alignItems: "flex-end",
-      width: "55%",
+      width: "100%",
       marginTop: 12,
     },
     stars: {
@@ -109,7 +110,6 @@ export default ItemDescription = ({ navigation }) => {
       flexDirection: "row",
       justifyContent: "flex-start",
       height: 84,
-      paddingLeft: 24,
     },
     imageHeading: {
       display: "flex",
@@ -122,8 +122,11 @@ export default ItemDescription = ({ navigation }) => {
     },
     smallRed: {
       color: "#f40",
-      alignSelf: "flex-start",
-      marginLeft: 12,
+      position: "absolute",
+      top: -12,
+      right: -16,
+      backgroundColor: "white",
+      padding: 4
     },
     h2: {
       fontSize: 32,
@@ -185,7 +188,7 @@ export default ItemDescription = ({ navigation }) => {
     },
     greenButton: {
       backgroundColor: "#57D491",
-      width: "40%",
+      padding: width * .075,
       paddingTop: 16,
       paddingBottom: 16,
       borderRadius: 9,
@@ -293,8 +296,9 @@ export default ItemDescription = ({ navigation }) => {
     },
   });
   return (
-    <>
+    <SafeAreaView>
       <ScrollView bounces={true}>
+        <Navbar />
         <View style={style.container}>
             <Image 
                 source={require('../assets/red-hat.jpg')}
@@ -303,7 +307,7 @@ export default ItemDescription = ({ navigation }) => {
             <View style={style.right}>
                     <View style={style.row}>
                         <Text style={style.h2}>{prop.productName.join(' ')}</Text>
-                        <Text style={style.smallRed}>NEW</Text>
+                        <Text style={style.smallRed}>New</Text>
                     </View>
                     <View style={style.rowBottom}>
                         <View style={style.stars}>
@@ -435,7 +439,7 @@ export default ItemDescription = ({ navigation }) => {
             {prop.reviews.map(r => <Review name={r.name} date={r.date} rating={r.rating} review={r.review} key={r.name + '-' + r.date.valueOf()}/>)}
         </View>
     </ScrollView>
-    </>
+    </SafeAreaView>
   );
 };
 

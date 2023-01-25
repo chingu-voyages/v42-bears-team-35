@@ -6,6 +6,7 @@ import MainDrawer from "./src/components/MainDrawer";
 import { store } from "./src/constants/store";
 import { Provider } from 'react-redux';
 import Front from "./src/components/Front";
+import MainDrawer from "./src/components/MainDrawer";
 
 
 

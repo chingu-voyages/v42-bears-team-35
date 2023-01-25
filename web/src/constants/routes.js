@@ -6,7 +6,7 @@ export default {
   FRONT: "Front",
   SLIDES: "Slides",
   ITEM_DESCRIPTION: "Item-Description",
-  Cart_Drawer: "Cart-Drawer",
+  CART: "Cart",
   NAV_DRAWER: "Nav-Drawer",
   SEARCH_RESULTS: "Search-Results"
 };

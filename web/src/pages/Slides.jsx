@@ -7,6 +7,7 @@ import { styles } from "../styles/ItemCard";
 import { ROUTES } from "../constants";
 import axios from "axios";
 import {getItems} from "../constants/axios"
+import Navbar from "../components/Navbar";
 
 const MOCK_DATA = [
   {
@@ -43,11 +44,11 @@ export default Slides = ({ navigation }) => {
     const { url, title } = item
     return (
       
-        <View style={{height: height, borderWidth: 2, borderColor: '#832', flex: 1}}>
-          <Pressable>
+        <View style={{height: height - 60, flex: 1}}>
+          <Pressable onPress={() => navigation.navigate(ROUTES.ITEM_DESCRIPTION)}>
             <ImageBackground
               source={url}
-              imageStyle={{height: height }}
+              imageStyle={{height: height - 80}}
             //style={{ height: height, width: width}}
             >
               <View style={{width: width, height: height * .5, }}><Text style={{position: "absolute", left: 15, top: height * .45}}>{title}</Text>
@@ -60,6 +61,7 @@ export default Slides = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Navbar />
       <Button 
         title={"fetch"}
         onPress={() => {
@@ -75,7 +77,7 @@ export default Slides = ({ navigation }) => {
           renderItem={ItemCard}
           showsVerticalScrollIndicator={false}
           snapToAlignment="start"
-          snapToInterval={height + 5}
+          snapToInterval={height - 60}
           viewabilityConfig={{
             waitForInteraction: true,
             viewAreaCoveragePercentThreshold: 100,

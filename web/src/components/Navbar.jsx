@@ -51,7 +51,7 @@ export default Navbar = () => {
       display: "flex",
       flexDirection: "row",
       justifyContent: "space-between",
-      alignContent: "center"
+      alignContent: "center",
     },
     headerText: {
       color: "#fff",

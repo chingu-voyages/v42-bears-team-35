@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { Image, Pressable, Text, TextInput, ScrollView, StyleSheet, View, } from "react-native";
-import Review from "../components/Review"
+import { Image, Pressable, Text, TextInput, ScrollView, SafeAreaView, StyleSheet, View, useWindowDimensions } from "react-native";
 import { useSelector } from "react-redux";
+import Navbar from "../components/Navbar";
+import Review from "../components/Review"
+
 
 const prop = {
-  imageUrl: "./red-hat.jpg",
+  imageUrl: "../assets/red-hat.jpg",
   productName: ["reddest", "barrette"],
   productDescription:
     "A fabulous red barret designed and made in France. Channel your inner french girl aesthetic with this hat",
@@ -35,7 +37,7 @@ const prop = {
 };
 
 export default ItemDescription = ({ navigation }) => {
-  const {height, width } = useSelector(state => state.size.value)
+  const { width } = useWindowDimensions()
 
   const [orderQuantity, setOrderQuantity] = useState(1);
   const style = StyleSheet.create({
@@ -155,7 +157,7 @@ export default ItemDescription = ({ navigation }) => {
     },
     greenButton: {
       backgroundColor: "#57D491",
-      width: "50%",
+      padding: width * .075,
       paddingTop: 16,
       paddingBottom: 16,
       borderRadius: 9,
@@ -263,8 +265,9 @@ export default ItemDescription = ({ navigation }) => {
     },
   });
   return (
-    <>
+    <SafeAreaView>
       <ScrollView bounces={true}>
+        <Navbar />
         <View style={style.container}>
             <Image 
                 source={require('../assets/red-hat.jpg')}
@@ -273,7 +276,7 @@ export default ItemDescription = ({ navigation }) => {
             <View style={style.right}>
                     <View style={style.row}>
                         <Text style={style.h2}>{prop.productName.join(' ')}</Text>
-                        <Text style={style.smallRed}>NEW</Text>
+                        <Text style={style.smallRed}>New</Text>
                     </View>
                     <View style={style.rowBottom}>
                         <View style={style.stars}>
@@ -405,7 +408,7 @@ export default ItemDescription = ({ navigation }) => {
             {prop.reviews.map(r => <Review name={r.name} date={r.date} rating={r.rating} review={r.review} key={r.name + '-' + r.date.valueOf()}/>)}
         </View>
     </ScrollView>
-    </>
+    </SafeAreaView>
   );
 };
 

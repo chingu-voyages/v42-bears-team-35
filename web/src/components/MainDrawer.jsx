@@ -5,8 +5,10 @@ import { ROUTES } from "../constants";
 import Front from "./Front";
 import Login from "../pages/Login";
 import Cart from '../pages/Cart'
-const Drawer = createDrawerNavigator();
+import Slides from "../pages/Slides";
+import ItemDescription from "../pages/ItemDescription";
 
+const Drawer = createDrawerNavigator();
 
 export default MainDrawer = () => {
   return (
@@ -33,7 +35,18 @@ export default MainDrawer = () => {
           component={Front}
           options={{ 
             headerShown: false,
-          drawerLabel: "Home" }}
+            drawerLabel: "Home",
+            drawerItemStyle: { display: "none" }
+          }}
+        />
+        <Drawer.Screen
+          name={ROUTES.SLIDES}
+          options={{
+            drawerLabel: "Home",
+            headerShown: false,
+             //drawerItemStyle: { display: "none" }
+            }}
+          component={Slides}
         />
         <Drawer.Screen
           name={ROUTES.LOGIN}
@@ -43,6 +56,15 @@ export default MainDrawer = () => {
              //drawerItemStyle: { display: "none" }
             }}
           component={Login}
+        />
+        <Drawer.Screen
+          name={ROUTES.ITEM_DESCRIPTION}
+          options={{
+            drawerLabel: "Item Description",
+            headerShown: false,
+            drawerItemStyle: { display: "none" }
+            }}
+          component={ItemDescription}
         />
         <Drawer.Screen
           name={ROUTES.CART}

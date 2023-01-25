@@ -3,6 +3,7 @@ import { Image, Pressable, StyleSheet, Text, TextInput, View } from "react-nativ
 import { useDispatch, useSelector } from "react-redux";
 import { updateSearch } from "../constants/searchSlice";
 import { useNavigation } from '@react-navigation/native';
+import { ROUTES } from "../constants";
 
 //delete soon
 const MOCK_DATA = [
@@ -50,7 +51,7 @@ export default Navbar = () => {
       display: "flex",
       flexDirection: "row",
       justifyContent: "space-between",
-      alignContent: "center"
+      alignContent: "center",
     },
     headerText: {
       color: "#fff",
@@ -92,7 +93,7 @@ export default Navbar = () => {
         secureTextEntry={false}
         placeholder="Search"
       />
-      <Pressable style={style.menuContainer} onPress={() => navigation.toggleDrawer()}>
+      <Pressable style={style.menuContainer} onPress={() => navigation.navigate(ROUTES.CART)}>
         <Image
           source={require('../assets/shopping-cart.png')}
           style={style.menu}

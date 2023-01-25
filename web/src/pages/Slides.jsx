@@ -5,6 +5,7 @@ import { useState } from "react";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { styles } from "../styles/ItemCard";
 import { ROUTES } from "../constants";
+import Navbar from "../components/Navbar";
 
 const MOCK_DATA = [
   {
@@ -30,7 +31,7 @@ export default Slides = ({ navigation }) => {
     const { url, title } = item
     return (
       
-        <View style={{height: height, borderWidth: 2, borderColor: '#832', flex: 1}}>
+        <View style={{height: height - 60, flex: 1}}>
           <Pressable onPress={() => navigation.navigate(ROUTES.ITEM_DESCRIPTION)}>
             <ImageBackground
               source={url}
@@ -47,6 +48,7 @@ export default Slides = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Navbar />
       <FlatList
           data={MOCK_DATA}
           decelerationRate="fast"
@@ -56,7 +58,7 @@ export default Slides = ({ navigation }) => {
           renderItem={ItemCard}
           showsVerticalScrollIndicator={false}
           snapToAlignment="start"
-          snapToInterval={height + 5}
+          snapToInterval={height - 60}
           viewabilityConfig={{
             waitForInteraction: true,
             viewAreaCoveragePercentThreshold: 100,

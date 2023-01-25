@@ -1,10 +1,11 @@
 // makes ItemCard swipable 
 
-import { FlatList, SafeAreaView, ImageBackground, Text, useWindowDimensions, View, Pressable } from "react-native";
+import { FlatList, SafeAreaView, ImageBackground, Text, useWindowDimensions, View, Pressable, Button } from "react-native";
 import { useState } from "react";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { styles } from "../styles/ItemCard";
 import { ROUTES } from "../constants";
+import axios from "axios";
 
 const MOCK_DATA = [
   {
@@ -23,6 +24,17 @@ const MOCK_DATA = [
     title: "Lancome3",
   },
 ];
+
+const callItems = () => {
+  axios 
+  .get (`https://v42-bears-team-35-production.up.railway.app/items`)
+  .then (response => {
+    console.log('Response:', response?.data);
+  })
+  .catch (error => {
+    console.log('Error:', error) 
+  })
+}
 
 export default Slides = ({ navigation }) => {
   const { height, width } = useWindowDimensions()
@@ -47,6 +59,12 @@ export default Slides = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Button 
+        title={"fetch"}
+        onPress={() => {
+          callItems()
+        }}
+      />
       <FlatList
           data={MOCK_DATA}
           decelerationRate="fast"

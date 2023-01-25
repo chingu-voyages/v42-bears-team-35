@@ -36,6 +36,37 @@ const prop = {
   ],
 };
 
+const prop2 = {
+  imageUrl: "./blue-vase.jpg",
+  productName: ["bluest", "vase"],
+  productDescription:
+    "A fabulous blue vase",
+  price: 20.99,
+  discount: 5,
+  dateAdded: new Date(),
+  productRating: 4,
+  reviews: [
+    {
+      name: "S",
+      date: new Date(),
+      rating: 5,
+      review: "It's good",
+    },
+    {
+      name: "Anonymous",
+      date: new Date(),
+      rating: 2,
+      review: "It's garbage",
+    },
+    {
+      name: "Tim",
+      date: new Date(),
+      rating: 4,
+      review: "It's maroon, not red. Still pretty cute though.",
+    },
+  ],
+};
+
 export default ItemDescription = ({ navigation }) => {
   const { width } = useWindowDimensions()
 

@@ -5,10 +5,33 @@ import app from "../app";
 let validSupplierUUID: string;
 let validItemUUID: string;
 let validOrderUUID: string;
+const itemIdArray: string[] = [];
 
 const INVALID_UUID = "thisisan-inva-lidu-uidv-aluesoerror";
 const NON_EXISTENT_UUID = "12345678-1234-1234-1234-1234567890AB";
 const HOME_ROUTE = "/orders";
+
+const NUMBER_OF_ITEMS = 2; // Math.floor(Math.random() * 10) + 1;
+
+async function createItems(iteration: number) {
+  const newItem = await request(app)
+    .post("/items")
+    .send({
+      name: `Product ${iteration}`,
+      supplier: validSupplierUUID,
+      price: Math.random() * 1000 + 100,
+      length: Math.random() * 100 + 1,
+      width: Math.random() * 100 + 1,
+      height: Math.random() * 100 + 1,
+      tags: ["tag1", "tag2"],
+      pictures: [`url1_${iteration}`, `url2_${iteration}`],
+    });
+
+  if ("data" in newItem.body && "id" in newItem.body.data)
+    itemIdArray.push(newItem.body.data.id);
+
+  if (iteration <= NUMBER_OF_ITEMS) createItems(iteration + 1);
+}
 
 describe("Order Items tests", () => {
   beforeAll(async () => {
@@ -29,7 +52,8 @@ describe("Order Items tests", () => {
       .post("/items")
       .send({
         name: "a very good product",
-        price: 200.0,
+        supplier: validSupplierUUID,
+        price: 200.78,
         length: 10.0,
         width: 10.0,
         height: 20.0,
@@ -38,6 +62,8 @@ describe("Order Items tests", () => {
       });
 
     validItemUUID = item.body.data.id;
+
+    await createItems(0);
 
     const order = await request(app).post("/orders").send({
       date: "2022-01-14",
@@ -145,11 +171,76 @@ describe("Order Items tests", () => {
         expect(res.body.errorDescription).toBe("Unable to find Item");
       });
     });
+
     describe("When sending the correct information", () => {
-      it.todo("Should return 201 when sending the propper information");
-      it.todo(
-        "Should return 409 when trying to add an item that already exists to the order",
+      it("Should return 201 when sending the propper information", async () => {
+        const res = await request(app)
+          .post(`${HOME_ROUTE}/${validOrderUUID}/items`)
+          .send({
+            item: validItemUUID,
+            quantity: 3,
+          });
+
+        expect(res.status).toBe(201);
+        expect(res.body).toHaveProperty("data");
+        expect(res.body.data.quantity).toBe(3);
+        expect(res.body.data.cost).toBe(200.78);
+
+        const resOrder = await request(app).get(
+          `${HOME_ROUTE}/${validOrderUUID}`,
+        );
+
+        expect(resOrder.status).toBe(200);
+        expect(resOrder.body.data.total).toBe(602.34);
+      });
+
+      it.skip("Should return 409 when trying to add an item that already exists to the order", async () => {
+        const res = await request(app)
+          .post(`${HOME_ROUTE}/${validOrderUUID}/items`)
+          .send({
+            item: validItemUUID,
+            quantity: 3,
+          });
+
+        expect(res.status).toBe(409);
+      });
+    });
+  });
+
+  describe("Retrieve data from the order items", () => {
+    beforeAll(async () => {
+      for (let i = 0; i < itemIdArray.length; i += 1) {
+        const itemId = itemIdArray[i];
+        // eslint-disable-next-line no-await-in-loop
+        await request(app)
+          .post(`${HOME_ROUTE}/${validOrderUUID}/items`)
+          .send({
+            item: itemId,
+            quantity: Math.floor(Math.random() * 10) + 1,
+          });
+      }
+    });
+
+    it("Should return 400 when sending an invalid order id", async () => {
+      const res = await request(app).get(`${HOME_ROUTE}/${INVALID_UUID}/items`);
+
+      expect(res.status).toBe(400);
+    });
+
+    it("Should return 404 when sending an non existent order id", async () => {
+      const res = await request(app).get(
+        `${HOME_ROUTE}/${NON_EXISTENT_UUID}/items`,
       );
+
+      expect(res.status).toBe(404);
+    });
+
+    it("Should return 200 when retrieving all the items on the order", async () => {
+      const res = await request(app).get(
+        `${HOME_ROUTE}/${validOrderUUID}/items`,
+      );
+
+      expect(res.status).toBe(200);
     });
   });
 });

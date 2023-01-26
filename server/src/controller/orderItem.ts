@@ -58,8 +58,15 @@ export async function createOrderItem(
 
 export async function getAllOrderItems(order: Order): Promise<OrderItem[]> {
   const allOrderItems = orderItemRepository
-    .createQueryBuilder("orderitems")
-    // .leftJoin("orderitem.")
+    .createQueryBuilder("orderitem")
+    .leftJoinAndSelect("orderitem.item", "item")
+    .leftJoinAndSelect("item.itemTag", "itemTag")
+    .leftJoinAndSelect("itemTag.tag", "tag")
+    .leftJoinAndSelect("item.supplier", "supplier")
+    .leftJoinAndSelect("item.itemPicture", "itemPicture")
+    .leftJoinAndSelect("itemPicture.pictures", "pictures")
+    .andWhere("orderitem.order = :orderUuid")
+    .setParameter("orderUuid", order.id)
     .getMany();
 
   return allOrderItems;

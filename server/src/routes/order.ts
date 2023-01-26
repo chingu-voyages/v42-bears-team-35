@@ -1,4 +1,5 @@
 import { Request, Response, Router } from "express";
+import { debug } from "console";
 import { validateUUID } from "../middleware/validateUUID";
 import validateData from "../middleware/dataValidation";
 import { orderCreateValidator, orderItemValidator } from "../validators";
@@ -10,6 +11,9 @@ import {
 } from "../controller/order";
 import validateOrderUUID from "../middleware/validateOrderUUID";
 import { getOneItem } from "../controller/item";
+import { createOrderItem, getAllOrderItems } from "../controller/orderItem";
+import { Order } from "../model";
+import { ErrorType, SuccessType } from "../types";
 
 const router: Router = Router();
 
@@ -64,6 +68,12 @@ router.post(
     const { item } = req.body;
 
     const itemObject = await getOneItem(item);
+    const { order } = res.locals;
+
+    if (!(order instanceof Order))
+      return res
+        .status(500)
+        .json({ errorKey: "uuid", errorDescription: "invalid order" });
 
     if (!itemObject)
       return res.status(404).json({
@@ -71,7 +81,31 @@ router.post(
         errorDescription: "Unable to find Item",
       });
 
-    return res.sendStatus(204);
+    const orderItemResponse: SuccessType | ErrorType = await createOrderItem(
+      itemObject,
+      order,
+      req.body.quantity,
+    );
+
+    if ("errorCode" in orderItemResponse)
+      return res.status(orderItemResponse.errorCode).json({
+        errorCode: orderItemResponse.errorCode,
+        errorKey: orderItemResponse.errorKey,
+        errorDescriptioin: orderItemResponse.errorDescription,
+      });
+
+    return res.status(201).json(orderItemResponse);
+  },
+);
+
+router.get(
+  "/:uuid/items",
+  validateUUID,
+  validateOrderUUID,
+  async (req: Request, res: Response) => {
+    const orderItems = await getAllOrderItems(res.locals.order);
+
+    return res.status(200).json({ data: orderItems });
   },
 );
 

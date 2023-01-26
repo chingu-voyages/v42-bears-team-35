@@ -13,7 +13,7 @@ export const orderCreateValidator: Validator[] = [
     required: true,
   },
   {
-    key: "traking",
+    key: "tracking",
     type: "string",
     required: false,
   },

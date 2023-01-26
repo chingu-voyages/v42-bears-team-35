@@ -53,7 +53,7 @@ export default class Customer extends BaseEntity {
   rating: Rating[];
 
   @OneToMany(() => Comment, (comment) => comment.customer)
-  comment: Comment[];
+  comments: Comment[];
 
   @ManyToMany(() => Item)
   @JoinTable({

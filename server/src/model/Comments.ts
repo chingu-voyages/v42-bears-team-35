@@ -1,6 +1,7 @@
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -17,11 +18,16 @@ export default class Comment extends BaseEntity {
   @Column({
     nullable: false,
   })
-  comment: string;
+  comments: string;
+
+  @CreateDateColumn({
+    type: "timestamptz",
+  })
+  created_at: Date;
 
   @ManyToOne(() => Item, (item) => item.comments)
   item: Relation<Item>;
 
-  @ManyToOne(() => Customer, (customer) => customer.comment)
-  customer: Relation<Comment>;
+  @ManyToOne(() => Customer, (customer) => customer.comments)
+  customer: Relation<Customer>;
 }

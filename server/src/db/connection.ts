@@ -20,6 +20,7 @@ const connection = {
       "supplier",
       "picture",
       "item_picture",
+      "comment",
     ];
 
     entities.forEach(async (entity) => {

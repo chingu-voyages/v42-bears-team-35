@@ -7,6 +7,7 @@ import { ROUTES } from "../constants";
 import axios from "axios";
 import {getItems} from "../constants/axios"
 import Navbar from "../components/Navbar";
+import { LinearGradient } from "expo-linear-gradient";
 
 const callItems = () => {
   axios 
@@ -24,18 +25,24 @@ export default Slides = ({ navigation }) => {
   const products = useSelector(state => state.product.value)
 
   const ItemCard = ({ item }) => {
-    const { url, productName } = item
+    const { imageUrl, productName } = item
     const name = productName.join(' ')
     return (
       
         <View style={{height: height - 60, flex: 1}}>
           <Pressable onPress={() => navigation.navigate(ROUTES.ITEM_DESCRIPTION, item)}>
             <ImageBackground
-              source={url}
+              source={{uri: imageUrl}}
               imageStyle={{height: height - 80}}
             //style={{ height: height, width: width}}
             >
-              <View style={{width: width, height: height * .5, }}><Text style={{position: "absolute", left: 15, top: height * .45}}>{name}</Text>
+              <View style={{width: width, height: height * .5, }}>
+                <LinearGradient 
+                  colors={["rgba(0,0,0,.6)", "transparent"]}
+                  style={{width: "100%", height: "100%", display: "flex", justifyContent: "flex-start", alignItems: "center"}}
+                >
+                  <Text style={{fontSize: 36, color: "white", marginTop: 36}}>{name}</Text>
+                </LinearGradient>
               </View>
             </ImageBackground>
         </Pressable>

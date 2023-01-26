@@ -1,16 +1,19 @@
-
-import React from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUser } from "../constants/userSlice";
 import { ROUTES } from "../constants";
 import Front from "./Front";
 import Login from "../pages/Login";
 import Cart from '../pages/Cart'
 import Slides from "../pages/Slides";
 import ItemDescription from "../pages/ItemDescription";
+import Logout from "../pages/Logout";
 
 const Drawer = createDrawerNavigator();
 
 export default MainDrawer = () => {
+  const user = useSelector(state => state.user.value)
+  const dispatch = useDispatch()
   return (
     <Drawer.Navigator 
       initialRouteName={ROUTES.LOGIN}
@@ -48,15 +51,7 @@ export default MainDrawer = () => {
             }}
           component={Slides}
         />
-        <Drawer.Screen
-          name={ROUTES.LOGIN}
-          options={{
-            drawerLabel: "Login",
-            headerShown: false,
-             //drawerItemStyle: { display: "none" }
-            }}
-          component={Login}
-        />
+        
         <Drawer.Screen
           name={ROUTES.ITEM_DESCRIPTION}
           options={{
@@ -74,6 +69,24 @@ export default MainDrawer = () => {
              //drawerItemStyle: { display: "none" }
             }}
           component={Cart}
+        />
+        <Drawer.Screen
+          name={ROUTES.LOGIN}
+          options={{
+            drawerLabel: "Login",
+            headerShown: false,
+             drawerItemStyle: { display: user && user.email ? "none" : "flex" }
+            }}
+          component={Login}
+        />
+        <Drawer.Screen
+          name={ROUTES.LOGOUT}
+          options={{
+            drawerLabel: "Logout",
+            headerShown: false,
+            drawerItemStyle: { display: user && user.email ? "flex" : "none" }
+            }}
+          component={Logout}
         />
         
     </Drawer.Navigator>

@@ -3,7 +3,6 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { store } from "./src/constants/store";
 import { Provider } from 'react-redux';
-import Front from "./src/components/Front";
 import MainDrawer from "./src/components/MainDrawer";
 
 

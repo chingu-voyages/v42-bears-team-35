@@ -10,7 +10,6 @@ import CartItem from "../components/CartItem";
 export default ItemDescription = ({ navigation }) => {
   const {height } = useWindowDimensions()
   const cart = useSelector(state => state.cart.value)
-  console.log("CART", cart)
   const style = StyleSheet.create({
     container: {
       backgroundColor: "#222020",
@@ -24,7 +23,7 @@ export default ItemDescription = ({ navigation }) => {
     <SafeAreaView>
       <Navbar />
       <ScrollView bounces={true} style={style.container}>
-       {cart.map(item => <CartItem image={item.image} name={item.productName} price={item.price} discount={item.discount} quantity={item.quantity} />)}
+       {cart.map(item => <CartItem image={item.image} name={item.productName} price={item.price} discount={item.discount} quantity={item.quantity} key={"cartItem-" + item.id} />)}
     </ScrollView>
     </SafeAreaView>
   );

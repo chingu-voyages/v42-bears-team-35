@@ -11,7 +11,6 @@ export default ItemDescription = ({ navigation, route } ) => {
 
   const cart = useSelector(state => state.cart.value)
   const numberInCart = cart.find(itemInCart => itemInCart.id === item.id )
-
   const [orderQuantity, setOrderQuantity] = useState(numberInCart ? numberInCart.quantity : 1);
   
   const dispatch = useDispatch()
@@ -252,7 +251,7 @@ export default ItemDescription = ({ navigation, route } ) => {
         <Navbar />
         <View style={style.container}>
             <Image 
-                source={require('../assets/red-hat.jpg')}
+                source={{uri: item.imageUrl}}
                 style={style.mainImage}
                 />
             <View style={style.right}>

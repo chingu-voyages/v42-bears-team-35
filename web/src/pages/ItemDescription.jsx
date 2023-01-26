@@ -5,6 +5,13 @@ import { updateCart } from '../constants/cartSlice'
 import Navbar from "../components/Navbar";
 import Review from "../components/Review"
 
+//still need review sort functionality
+//fix initial setOrderQuantity (I think it's undefined)
+//Actually calculate score based on reviews
+// if there are no reviews, display "no review... yet"
+// if logged in, add a button to allow to write review if item has been previously purchased
+// clean up barWidth "css"
+
 export default ItemDescription = ({ navigation, route } ) => {
   const item = route.params
   const { width } = useWindowDimensions()
@@ -22,12 +29,15 @@ export default ItemDescription = ({ navigation, route } ) => {
   }
   
   const style = StyleSheet.create({
+    dark: {
+      backgroundColor: "#222020"
+    },
     container: {
       width: "100%",
       padding: 20,
       display: "flex",
       flexDirection: "row",
-      paddingBottom: 0,
+      paddingBottom: 0
     },
     right: {
       display: "flex",
@@ -39,6 +49,7 @@ export default ItemDescription = ({ navigation, route } ) => {
     prices: {
       display: "flex",
       flexDirection: "column",
+      color: "#fff"
     },
     row: {
       display: "flex",
@@ -60,6 +71,8 @@ export default ItemDescription = ({ navigation, route } ) => {
       flexDirection: "row",
       justifyContent: "flex-start",
       height: 84,
+      color: "#fff"
+
     },
     imageHeading: {
       display: "flex",
@@ -75,12 +88,12 @@ export default ItemDescription = ({ navigation, route } ) => {
       position: "absolute",
       top: -12,
       right: -16,
-      backgroundColor: "white",
       padding: 4
     },
     h2: {
       fontSize: 32,
-      margin: 0
+      margin: 0,
+      color: "#fff"
     },
     grey: {
       fontSize: 20,
@@ -93,12 +106,16 @@ export default ItemDescription = ({ navigation, route } ) => {
       fontSize: 20,
       alignItems: "flex-end",
       padding: 0,
+      color: "#fff"
+
     },
     fullStar: {
       color: "#F1C644",
     },
     reviewCount: {
       marginLeft: 12,
+      color: "#fff"
+
     },
     imageSelector: {
       width: "100%",
@@ -121,6 +138,8 @@ export default ItemDescription = ({ navigation, route } ) => {
     },
     p: {
       fontSize: 20,
+      color: "#fff"
+
     },
     text: {
       width: "100%",
@@ -152,12 +171,12 @@ export default ItemDescription = ({ navigation, route } ) => {
     },
     numberInput: {
       fontSize: 20,
-      borderWidth: 2,
-      borderColor: "#000",
       borderRadius: 9,
       width: 56,
       marginRight: 8,
       textAlign: "center",
+      backgroundColor: "#fff"
+
     },
     reviews: {
       width: "100%",
@@ -166,6 +185,7 @@ export default ItemDescription = ({ navigation, route } ) => {
     h3: {
       fontSize: 24,
       marginBottom: 8,
+      color: "#fff"
     },
     starsNoPadding: {
       display: "flex",
@@ -247,7 +267,7 @@ export default ItemDescription = ({ navigation, route } ) => {
   });
   return (
     <SafeAreaView>
-      <ScrollView bounces={true}>
+      <ScrollView bounces={true} style={style.dark}>
         <Navbar />
         <View style={style.container}>
             <Image 
@@ -276,18 +296,7 @@ export default ItemDescription = ({ navigation, route } ) => {
             </View>
         </View>
         <View style={style.imageSelector}>
-            <Image 
-                source={require('../assets/red-hat.jpg')}
-                style={style.secondaryImage}
-            />
-            <Image 
-                source={require('../assets/red-hat.jpg')}
-                style={style.secondaryImage}
-            />
-            <Image 
-                source={require('../assets/red-hat.jpg')}
-                style={style.secondaryImage}
-            />
+            
             
         </View>
         <View style={style.text}>

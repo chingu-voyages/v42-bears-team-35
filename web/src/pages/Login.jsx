@@ -26,7 +26,7 @@ const Login = ({ navigation }) => {
   const styles = StyleSheet.create({
     container: {
       width: "100%",
-      backgroundColor: "#fff",
+      backgroundColor: "#222020",
       minHeight: "100%",
     },
     flexDiv: {
@@ -38,6 +38,7 @@ const Login = ({ navigation }) => {
       fontSize: 20,
       fontWeight: "800",
       margin: 16,
+      color: "#57D491"
     },
     input: {
       height: 48,
@@ -47,7 +48,8 @@ const Login = ({ navigation }) => {
       borderWidth: 2,
       fontSize: 20,
       marginTop: 16,
-      marginBottom: 16
+      marginBottom: 16,
+      backgroundColor: "#ddd"
     },
     label: {
       alignSelf: "flex-start",
@@ -55,6 +57,8 @@ const Login = ({ navigation }) => {
       marginLeft: "5%",
       fontSize: 20,
       marginBottom: 4,
+      color: "#fff"
+
     },
     h1: {
       fontSize: 20,
@@ -63,6 +67,8 @@ const Login = ({ navigation }) => {
       marginLeft: "5%",
       fontWeight: "800",
       alignSelf: "flex-start",
+      color: "#fff"
+
     },
     greenButton: {
       backgroundColor: "#57D491",
@@ -89,7 +95,7 @@ const Login = ({ navigation }) => {
       margin: 36,
       fontSize: 20,
       fontWeight: "600",
-      color: "#787",
+      color: "#fff",
     },
     error: {
       color: "#E44040",

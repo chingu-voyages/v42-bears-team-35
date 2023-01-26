@@ -13,6 +13,7 @@ import { getOneItem } from "../controller/item";
 import { createOrderItem, getAllOrderItems } from "../controller/orderItem";
 import { Order } from "../model";
 import { ErrorType, SuccessType } from "../types";
+import { formatManyOrders, formatOneOrder } from "../formatting/formatOrders";
 
 const router: Router = Router();
 
@@ -29,18 +30,22 @@ router.post(
 );
 
 router.get("/", async (req: Request, res: Response) => {
-  const data = await getAllOrders();
+  const rawData = await getAllOrders();
+
+  const data = formatManyOrders(rawData);
 
   return res.status(200).json({ data });
 });
 
 router.get("/:uuid", validateUUID, async (req: Request, res: Response) => {
-  const data = await getOneOrder(req.params.uuid);
+  const rawData = await getOneOrder(req.params.uuid);
 
-  if (data === null)
+  if (rawData === null)
     return res
       .status(404)
       .json({ errorKey: "uuid", errorDescription: "Unable to find order" });
+
+  const data = formatOneOrder(rawData);
 
   return res.status(200).json({ data });
 });

@@ -3,17 +3,11 @@ import { FormattedItemResponse } from "../types";
 
 export function formatOneItem(item: Item): FormattedItemResponse {
   const tags = item.itemTag.map((itemTag) => {
-    return {
-      id: itemTag.tag.id,
-      name: itemTag.tag.name,
-    };
+    return itemTag.tag.name;
   });
 
   const pictures = item.itemPicture.map((itemPicture) => {
-    return {
-      id: itemPicture.pictures.id,
-      url: itemPicture.pictures.url,
-    };
+    return itemPicture.pictures.url;
   });
 
   return {

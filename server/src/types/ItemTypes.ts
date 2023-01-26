@@ -1,6 +1,5 @@
 /* eslint-disable import/no-cycle */
 import { SupplierResponse } from ".";
-import { PicturesResponse, TagResponse } from "./FormattedItemResponse";
 
 export type ItemCreate = {
   name: string;
@@ -32,6 +31,6 @@ export interface FormattedItemResponse {
   width: number;
   length: number;
   supplier: SupplierResponse;
-  tags: TagResponse[];
-  pictures: PicturesResponse[];
+  tags: string[];
+  pictures: string[];
 }

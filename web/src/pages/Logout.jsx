@@ -17,6 +17,12 @@ export default Logout = ({ navigator }) => {
             backgroundColor: "#222020",
             width: "100%",
             height: "100%"
+        }, 
+        text: {
+            color: "#fff",
+            textAlign: "center",
+            fontSize: 20,
+            margin: 12
         }
     })
 
@@ -24,7 +30,7 @@ export default Logout = ({ navigator }) => {
         <SafeAreaView>
             <Navbar />
         <View style={style.box}>
-            <Text>Logged out</Text>
+            <Text style={style.text}>Logged out successfully</Text>
         </View>
         </SafeAreaView>
         

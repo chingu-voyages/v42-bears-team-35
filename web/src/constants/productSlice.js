@@ -333,6 +333,45 @@ export const productSlice = createSlice({
           },
         ],
       },
+      {
+        id: 11,
+        imageUrl: "https://abracadabra-app.s3.us-west-2.amazonaws.com/print-skirt.jpeg",
+        imageArray: [],
+        productName: ["print", "skirt"],
+        productDescription:
+          "A fabulous pair of pants designed and made in France. Channel your inner french girl aesthetic with this hat",
+        price: 30.99,
+        discount: 5,
+        dateAdded: '9-11-1990',
+        productRating: 4,
+        reviews: []
+      },
+      {
+        id: 12,
+        imageUrl: "https://abracadabra-app.s3.us-west-2.amazonaws.com/red-coat.jpeg",
+        imageArray: [],
+        productName: ["red", "coat"],
+        productDescription:
+          "A fabulous pair of pants designed and made in France. Channel your inner french girl aesthetic with this hat",
+        price: 30.99,
+        discount: 5,
+        dateAdded: '9-11-1990',
+        productRating: 4,
+        reviews: []
+      },
+      {
+        id: 13,
+        imageUrl: "https://abracadabra-app.s3.us-west-2.amazonaws.com/striped-blouse.jpeg",
+        imageArray: [],
+        productName: ["striped", "blouse"],
+        productDescription:
+          "A fabulous pair of pants designed and made in France. Channel your inner french girl aesthetic with this hat",
+        price: 30.99,
+        discount: 5,
+        dateAdded: '9-11-1990',
+        productRating: 4,
+        reviews: []
+      },
     ]
   },
   reducers: {

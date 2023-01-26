@@ -1,5 +1,4 @@
 import { Request, Response, Router } from "express";
-import { debug } from "console";
 import { validateUUID } from "../middleware/validateUUID";
 import validateData from "../middleware/dataValidation";
 import { orderCreateValidator, orderItemValidator } from "../validators";

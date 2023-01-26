@@ -9,7 +9,7 @@ const NON_EXISTENT_UUID = "12345678-1234-1234-1234-1234567890AB";
 
 // TODO add a login method
 
-describe.skip("Order route tests", () => {
+describe("Order route tests", () => {
   beforeAll(async () => {
     await connection.create();
     await connection.clear();
@@ -189,6 +189,7 @@ describe.skip("Order route tests", () => {
       expect(res.body.data.id).toBe(validOrderId);
       expect(res.body.data.date.toLocaleString("en-us")).toBe("2022-01-13");
     });
+
     it("Should not be able to update the order total", async () => {
       const res = await request(app).put(`${HOME_ROUTE}/${validOrderId}`).send({
         total: 200,

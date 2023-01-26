@@ -7,7 +7,7 @@ let supplierID: string;
 const INVALID_UUID = "thisisan-inva-lidu-uidv-aluesoerror";
 const FAKE_UUID = "51466a13-f404-4763-bd48-496f7926eeaa";
 
-describe.skip("Operations on the supplier route", () => {
+describe("Operations on the supplier route", () => {
   beforeAll(async () => {
     await connection.create();
   });
@@ -187,6 +187,7 @@ describe.skip("Operations on the supplier route", () => {
       expect(res.body.errorKey).toBe("uuid");
       expect(res.body.errorDescription).toBe("Uuid provided was invalid");
     });
+
     it("Should return 404 if the supplier with the provided id is not found", async () => {
       const res = await request(app).get(`${HOME_ROUTE}/${FAKE_UUID}`);
       expect(res.statusCode).toBe(404);

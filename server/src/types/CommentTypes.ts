@@ -1,5 +1,5 @@
 export type CommentCreate = {
   comments: string;
-  itemId: string;
-  customerId: string;
+  itemId: "uuid";
+  customerId: "uuid";
 };

@@ -4,6 +4,7 @@ import AppDataSource from "../db";
 import { Comment } from "../model";
 import { getOneCustomer } from "./customer";
 import { getOneItem } from "./item";
+// import { isValidUUID } from "../middleware/validateUUID";
 
 const queryRunner: QueryRunner = AppDataSource.createQueryRunner();
 const commentRepository = AppDataSource.getRepository(Comment);
@@ -20,17 +21,16 @@ export async function createComment({
     if (!customer) {
       return {
         errorCode: 404,
-        errorDescription: "Customer not found.",
+        errorDescription: "Customer with this id does not exist.",
         errorKey: "Customer",
       };
     }
 
     const item = await getOneItem(itemId);
-
     if (!item) {
       return {
         errorCode: 404,
-        errorDescription: "Item not found.",
+        errorDescription: "Item with this id does not exist.",
         errorKey: "Item",
       };
     }
@@ -49,7 +49,6 @@ export async function createComment({
         comments: comment.comments,
         customerId: comment.customer,
         itemId: comment.item,
-        createdAt: comment.created_at,
       },
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -58,7 +57,7 @@ export async function createComment({
     if (error.code === "23505") {
       return {
         errorKey: "comments",
-        errorDescription: error.detail,
+        errorDescription: "You can only comment once on this item.",
         errorCode: 409,
       };
     }
@@ -74,7 +73,6 @@ export const getAllComments = async (): Promise<Comment[]> => {
   const data: Comment[] = await commentRepository
     .createQueryBuilder("comment")
     .addSelect("comment.id")
-    .addSelect("comment.createdAt")
     .getMany();
 
   return data;

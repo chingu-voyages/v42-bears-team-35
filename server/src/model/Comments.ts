@@ -12,7 +12,6 @@ import {
 import { Item, Customer } from ".";
 
 @Entity()
-@Unique(["comments"])
 export default class Comment extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
@@ -27,9 +26,11 @@ export default class Comment extends BaseEntity {
   })
   created_at: Date;
 
+  @Unique(["Item"])
   @ManyToOne(() => Item, (item) => item.comments)
   item: Relation<Item>;
 
+  @Unique(["Customer"])
   @ManyToOne(() => Customer, (customer) => customer.comments)
   customer: Relation<Customer>;
 }

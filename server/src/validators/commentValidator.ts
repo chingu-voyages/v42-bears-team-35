@@ -9,12 +9,12 @@ const commentCreateValidator: Validator[] = [
   {
     key: "itemId",
     required: true,
-    type: "string",
+    type: "uuid",
   },
   {
     key: "customerId",
     required: true,
-    type: "string",
+    type: "uuid",
   },
 ];
 

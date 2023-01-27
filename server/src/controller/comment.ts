@@ -8,41 +8,37 @@ import { getOneItem } from "./item";
 const queryRunner: QueryRunner = AppDataSource.createQueryRunner();
 const commentRepository = AppDataSource.getRepository(Comment);
 
-export async function createComment(
-  body: CommentCreate,
-): Promise<ErrorType | SuccessType> {
+export async function createComment({
+  customerId,
+  itemId,
+  comments,
+}: CommentCreate): Promise<ErrorType | SuccessType> {
   try {
     await queryRunner.startTransaction();
-    // eslint-disable-next-line no-console
-    console.log(body);
+
+    const customer = await getOneCustomer(customerId);
+    if (!customer) {
+      return {
+        errorCode: 404,
+        errorDescription: "Customer not found.",
+        errorKey: "Customer",
+      };
+    }
+
+    const item = await getOneItem(itemId);
+
+    if (!item) {
+      return {
+        errorCode: 404,
+        errorDescription: "Item not found.",
+        errorKey: "Item",
+      };
+    }
 
     const comment = new Comment();
-
-    comment.comments = body.comments;
-
-    if (body.customerId) {
-      const customerId = await getOneCustomer(body.customerId);
-
-      if (customerId === null)
-        return {
-          errorCode: 404,
-          errorDescription: "Customer not found.",
-          errorKey: "Customer",
-        };
-      comment.customer = customerId;
-    }
-
-    if (body.itemId) {
-      const itemId = await getOneItem(body.itemId);
-
-      if (itemId === null)
-        return {
-          errorCode: 404,
-          errorDescription: "Item not found.",
-          errorKey: "Item",
-        };
-      comment.item = itemId;
-    }
+    comment.comments = comments;
+    comment.customer = customer;
+    comment.item = item;
 
     await queryRunner.manager.save(comment);
 
@@ -51,8 +47,8 @@ export async function createComment(
       data: {
         id: comment.id,
         comments: comment.comments,
-        customerId: comment.customer ? comment.customer : null,
-        itemId: comment.item ? comment.item : null,
+        customerId: comment.customer,
+        itemId: comment.item,
         createdAt: comment.created_at,
       },
     };
@@ -61,7 +57,7 @@ export async function createComment(
     await queryRunner.rollbackTransaction();
     if (error.code === "23505") {
       return {
-        errorKey: "comment",
+        errorKey: "comments",
         errorDescription: error.detail,
         errorCode: 409,
       };

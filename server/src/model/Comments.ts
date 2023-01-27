@@ -6,11 +6,13 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
   Relation,
+  Unique,
 } from "typeorm";
 // eslint-disable-next-line import/no-cycle
 import { Item, Customer } from ".";
 
 @Entity()
+@Unique(["comments"])
 export default class Comment extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;

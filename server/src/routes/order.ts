@@ -10,10 +10,15 @@ import {
 } from "../controller/order";
 import validateOrderUUID from "../middleware/validateOrderUUID";
 import { getOneItem } from "../controller/item";
-import { createOrderItem, getAllOrderItems } from "../controller/orderItem";
+import {
+  createOrderItem,
+  deleteOrderItem,
+  getAllOrderItems,
+} from "../controller/orderItem";
 import { Order } from "../model";
 import { ErrorType, SuccessType } from "../types";
 import { formatManyOrders, formatOneOrder } from "../formatting/formatOrders";
+import validateItemUUID from "../middleware/validateItemUUID";
 
 const router: Router = Router();
 
@@ -110,6 +115,23 @@ router.get(
     const orderItems = await getAllOrderItems(res.locals.order);
 
     return res.status(200).json({ data: orderItems });
+  },
+);
+
+router.delete(
+  "/:uuid/items/:itemUuid",
+  validateUUID,
+  validateOrderUUID,
+  validateItemUUID,
+  async (req: Request, res: Response) => {
+    const { order, item } = res.locals;
+
+    const deleteResponse = await deleteOrderItem(item, order);
+
+    if ("errorCode" in deleteResponse)
+      return res.status(deleteResponse.errorCode).json(deleteResponse);
+
+    return res.sendStatus(204);
   },
 );
 

@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-
 import { QueryFailedError } from "typeorm";
 import { DatabaseError } from "pg-protocol";
 import AppDataSource from "../db";
@@ -57,7 +56,7 @@ export async function createOrderItem(
 }
 
 export async function getAllOrderItems(order: Order): Promise<OrderItem[]> {
-  const allOrderItems = orderItemRepository
+  const allOrderItems = await orderItemRepository
     .createQueryBuilder("orderitem")
     .leftJoinAndSelect("orderitem.item", "item")
     .leftJoinAndSelect("item.itemTag", "itemTag")
@@ -72,6 +71,67 @@ export async function getAllOrderItems(order: Order): Promise<OrderItem[]> {
   return allOrderItems;
 }
 
+async function getOneOrderItemById(
+  orderId: string,
+  itemId: string,
+): Promise<OrderItem | null> {
+  const oneOrderItem = await orderItemRepository
+    .createQueryBuilder("orderitem")
+    .leftJoinAndSelect("orderitem.item", "item")
+    .leftJoinAndSelect("item.itemTag", "itemTag")
+    .leftJoinAndSelect("itemTag.tag", "tag")
+    .leftJoinAndSelect("item.supplier", "supplier")
+    .leftJoinAndSelect("item.itemPicture", "itemPicture")
+    .leftJoinAndSelect("itemPicture.pictures", "pictures")
+    .andWhere("orderitem.order = :orderUuid")
+    .andWhere("orderitem.item = :itemUuid")
+    .setParameter("orderUuid", orderId)
+    .setParameter("itemUuid", itemId)
+    .getOne();
+
+  return oneOrderItem;
+}
+
 export async function updateOrderItem(): Promise<void> {}
 
-export async function deleteOrderItem(): Promise<void> {}
+export async function deleteOrderItem(
+  item: Item,
+  order: Order,
+): Promise<ErrorType | SuccessType> {
+  const orderToUpdate = order;
+  const orderItem = await getOneOrderItemById(orderToUpdate.id, item.id);
+
+  if (orderItem === null)
+    return {
+      errorKey: "item",
+      errorCode: 404,
+      errorDescription: `Item not found in that order`,
+    };
+
+  const { total } = orderItem;
+
+  try {
+    await queryRunner.startTransaction();
+
+    await queryRunner.manager.delete(OrderItem, orderItem.id);
+
+    orderToUpdate.total -= total;
+
+    await queryRunner.manager.save(orderToUpdate);
+
+    await queryRunner.commitTransaction();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    await queryRunner.rollbackTransaction();
+
+    return {
+      errorCode: 500,
+      errorDescription: error.message,
+      errorKey: "item",
+    };
+  }
+
+  return {
+    data: "Item successfully deleted",
+  };
+}

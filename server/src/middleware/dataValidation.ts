@@ -86,7 +86,20 @@ export default function validateData(dataValidator: Validator[]) {
       )
         return res.status(400).json({
           errorKey: key,
-          errorDescription: `${key} are required`,
+          errorDescription: `at least ${toValidate.minArrayLength} ${key} are required`,
+          errorStatus: 400,
+        });
+
+      if (
+        type === "array" &&
+        toValidate.maxArrayLength !== undefined &&
+        req.body[key] !== undefined &&
+        req.body[key] !== null &&
+        req.body[key].length > toValidate.maxArrayLength
+      )
+        return res.status(400).json({
+          errorKey: key,
+          errorDescription: `you should have no more than ${toValidate.maxArrayLength} ${key}`,
           errorStatus: 400,
         });
     }

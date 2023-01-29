@@ -41,11 +41,11 @@ export async function createItem(
 
     const item = new Item();
 
-    item.name = body.name;
-    item.length = body.length;
-    item.height = body.height;
-    item.width = body.width;
-    item.price = body.price;
+    // item.name = body.name;
+    // item.length = body.length;
+    // item.height = body.height;
+    // item.width = body.width;
+    // item.price = body.price;
 
     if (body.supplier) {
       const supplier = await getOneSupplier(body.supplier);
@@ -78,11 +78,11 @@ export async function createItem(
     return {
       data: {
         id: item.id,
-        name: item.name,
-        price: item.price,
-        length: item.length ? item.length : null,
-        height: item.height,
-        width: item.width,
+        // name: item.name,
+        // price: item.price,
+        // length: item.length ? item.length : null,
+        // height: item.height,
+        // width: item.width,
         supplier: item.supplier ? item.supplier : null,
         tags: tagsArray,
         pictures: picturesArray,
@@ -191,11 +191,11 @@ export async function updateOneItem(
 ): Promise<SuccessType | ErrorType> {
   const itemToUpdate = item;
 
-  itemToUpdate.name = body.name;
-  itemToUpdate.height = body.height;
-  itemToUpdate.length = body.length;
-  itemToUpdate.width = body.width;
-  itemToUpdate.price = body.price;
+  // itemToUpdate.name = body.name;
+  // itemToUpdate.height = body.height;
+  // itemToUpdate.length = body.length;
+  // itemToUpdate.width = body.width;
+  // itemToUpdate.price = body.price;
   // itemToUpdate.tag = body.tag;
 
   try {
@@ -206,11 +206,11 @@ export async function updateOneItem(
     return {
       data: {
         id: itemToUpdate.id,
-        name: itemToUpdate.name,
-        supplier: itemToUpdate.supplier,
-        length: itemToUpdate.length,
-        width: itemToUpdate.width,
-        height: itemToUpdate.height,
+        // name: itemToUpdate.name,
+        // supplier: itemToUpdate.supplier,
+        // length: itemToUpdate.length,
+        // width: itemToUpdate.width,
+        // height: itemToUpdate.height,
         price: itemToUpdate.price,
         // tag: itemToUpdate.tag,
       },

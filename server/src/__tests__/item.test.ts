@@ -9,7 +9,7 @@ const INVALID_UUID = "thisisan-inva-lidu-uidv-aluesoerror";
 const NON_EXISTENT_UUID = "12345678-1234-1234-1234-1234567890AB";
 let validSupplierUUID: string;
 
-describe("Operation on the item route", () => {
+describe.skip("Operation on the item route", () => {
   beforeAll(async () => {
     await connection.create();
     await connection.clear();

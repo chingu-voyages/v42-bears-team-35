@@ -1,49 +1,33 @@
 import { Router, Request, Response } from "express";
 import validateData from "../middleware/dataValidation";
-import { Validator } from "../types";
+import { productCreateValidator } from "../validators";
+import { createNewProduct } from "../controller/product";
+import { getOneSupplier } from "../controller/supplier";
 
 const router: Router = Router();
-
-const productCreateValidator: Validator[] = [
-  {
-    key: "imageUrl",
-    required: true,
-    type: "string",
-  },
-  {
-    key: "tags",
-    required: true,
-    type: "array",
-    minArrayLength: 2,
-    maxArrayLength: 2,
-  },
-  {
-    key: "description",
-    required: true,
-    type: "string",
-    length: 5,
-  },
-  {
-    key: "price",
-    required: true,
-    type: "float",
-  },
-  {
-    key: "dateAdded",
-    required: true,
-    type: "date",
-  },
-  {
-    key: "discount",
-    required: false,
-    type: "float",
-  },
-];
 
 router.post(
   "/",
   validateData(productCreateValidator),
-  async (req: Request, res: Response) => res.sendStatus(204),
+  // eslint-disable-next-line consistent-return
+  async (req: Request, res: Response) => {
+    const supplier = await getOneSupplier(req.body.supplier);
+
+    if (!supplier)
+      return res.status(404).json({
+        errorKey: "supplier",
+        errorDescription: "no supplier with that id",
+      });
+
+    const createdProduct = await createNewProduct(req.body, supplier);
+
+    console.log(createdProduct);
+
+    if ("errorKey" in createdProduct)
+      return res.status(createdProduct.errorCode).json(createdProduct);
+
+    res.status(201).json(createdProduct);
+  },
 );
 
 export default router;

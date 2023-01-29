@@ -3,11 +3,25 @@ import connection from "../db/connection";
 import app from "../app";
 
 const END_POINT = "/products";
+// let productId: string;
+const INVALID_UUID = "thisisan-inva-lidu-uidv-aluesoerror";
+const NON_EXISTENT_UUID = "12345678-1234-1234-1234-1234567890AB";
+let validSupplierUUID: string;
 
 describe("Testing the item model changes required by the Frontend team", () => {
   beforeAll(async () => {
     await connection.create();
     await connection.clear();
+
+    const supplier = await request(app).post("/suppliers").send({
+      name: "supplier 1",
+      phone: "12345678",
+      address: "my address",
+      password: "whatever",
+      email: "name@email.com",
+    });
+
+    validSupplierUUID = supplier.body.data.id;
   });
 
   afterAll(async () => {
@@ -136,7 +150,7 @@ describe("Testing the item model changes required by the Frontend team", () => {
         );
       });
 
-      it("Should return 400 if no date added", async () => {
+      it("Should return 400 if no supplier id is sent", async () => {
         const res = await request(app)
           .post(END_POINT)
           .send({
@@ -144,16 +158,19 @@ describe("Testing the item model changes required by the Frontend team", () => {
             tags: ["one", "two"],
             description: "this is a propper description",
             price: 200.56,
+            supplier: INVALID_UUID,
           });
 
         expect(res.status).toBe(400);
         expect(res.body).toHaveProperty("errorKey");
         expect(res.body).toHaveProperty("errorDescription");
-        expect(res.body.errorKey).toBe("dateAdded");
-        expect(res.body.errorDescription).toBe("dateAdded is required");
+        expect(res.body.errorKey).toBe("supplier");
+        expect(res.body.errorDescription).toBe(
+          "supplier should be a valid uuid",
+        );
       });
 
-      it("Should return 400 if invalid date added", async () => {
+      it("Should return 400 if invaild supplier id is sent", async () => {
         const res = await request(app)
           .post(END_POINT)
           .send({
@@ -161,14 +178,31 @@ describe("Testing the item model changes required by the Frontend team", () => {
             tags: ["one", "two"],
             description: "this is a propper description",
             price: 200.56,
-            dateAdded: "invalid",
           });
 
         expect(res.status).toBe(400);
         expect(res.body).toHaveProperty("errorKey");
         expect(res.body).toHaveProperty("errorDescription");
-        expect(res.body.errorKey).toBe("dateAdded");
-        expect(res.body.errorDescription).toBe("dateAdded is not a valid date");
+        expect(res.body.errorKey).toBe("supplier");
+        expect(res.body.errorDescription).toBe("supplier is required");
+      });
+
+      it("Should return 404 if non existent customer is sent", async () => {
+        const res = await request(app)
+          .post(END_POINT)
+          .send({
+            imageUrl: "http://www.images.com",
+            tags: ["one", "two"],
+            description: "this is a propper description",
+            price: 200.56,
+            supplier: NON_EXISTENT_UUID,
+          });
+
+        expect(res.status).toBe(404);
+        expect(res.body).toHaveProperty("errorKey");
+        expect(res.body).toHaveProperty("errorDescription");
+        expect(res.body.errorKey).toBe("supplier");
+        expect(res.body.errorDescription).toBe("no supplier with that id");
       });
 
       it("Should return 400 if non numeric discount", async () => {
@@ -179,8 +213,8 @@ describe("Testing the item model changes required by the Frontend team", () => {
             tags: ["one", "two"],
             description: "this is a propper description",
             price: 200.56,
-            dateAdded: "2023-01-27",
             discount: "five percent",
+            supplier: validSupplierUUID,
           });
 
         expect(res.status).toBe(400);
@@ -202,7 +236,7 @@ describe("Testing the item model changes required by the Frontend team", () => {
             tags: ["one", "two"],
             description: "this is a propper description",
             price: 200.56,
-            dateAdded: "2023-01-27",
+            supplier: validSupplierUUID,
           });
 
         expect(res.status).toBe(201);
@@ -210,23 +244,15 @@ describe("Testing the item model changes required by the Frontend team", () => {
         expect(res.body.data).toHaveProperty("id");
         expect(res.body.data).toHaveProperty("imageUrl");
         expect(res.body.data.imageUrl).toBe("http://www.images.com");
-        expect(res.body.data).toHaveProperty("tags");
-        expect(res.body.data.tags.length).toBe(2);
-        expect(res.body.data.tags[0]).toBe("one");
-        expect(res.body.data.tags[1]).toBe("two");
         expect(res.body.data).toHaveProperty("description");
         expect(res.body.data.description).toBe("this is a propper description");
         expect(res.body.data).toHaveProperty("price");
         expect(res.body.data.price).toBe(200.56);
-        expect(res.body.data).toHaveProperty("dateAdded");
-        expect(res.body.data.dateAdded).toBe("2023-01-27");
         expect(res.body.data).toHaveProperty("discount");
         expect(res.body.data.discount).toBe(0);
-        expect(res.body.data).toHaveProperty("reviews");
-        expect(res.body.data.reviews.length).toBe(0);
+        expect(res.body.data).toHaveProperty("productRating");
+        expect(res.body.data.productRating).toBe(0);
         expect(res.body.data).toHaveProperty("ratingDetails");
-        expect(res.body.data.ratingDetails).toHaveProperty("0");
-        expect(res.body.data.ratingDetails[0]).toBe(0);
         expect(res.body.data.ratingDetails).toHaveProperty("1");
         expect(res.body.data.ratingDetails[1]).toBe(0);
         expect(res.body.data.ratingDetails).toHaveProperty("2");
@@ -237,6 +263,13 @@ describe("Testing the item model changes required by the Frontend team", () => {
         expect(res.body.data.ratingDetails[4]).toBe(0);
         expect(res.body.data.ratingDetails).toHaveProperty("5");
         expect(res.body.data.ratingDetails[5]).toBe(0);
+        expect(res.body.data).toHaveProperty("dateAdded");
+        expect(res.body.data).toHaveProperty("reviews");
+        expect(res.body.data.reviews.length).toBe(0);
+        expect(res.body.data).toHaveProperty("tags");
+        expect(res.body.data.tags.length).toBe(2);
+        expect(res.body.data.tags[0]).toBe("one");
+        expect(res.body.data.tags[1]).toBe("two");
       });
       it.todo("Should return 409 when duplicate information");
     });

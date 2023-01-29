@@ -112,5 +112,14 @@ export async function createNewProduct(
 }
 
 export async function getAllProducts() {
-  return true;
+  const data: Item[] = await itemRepository
+    .createQueryBuilder("item")
+    .leftJoinAndSelect("item.itemTag", "itemTag")
+    .leftJoinAndSelect("itemTag.tag", "tag")
+    .leftJoinAndSelect("item.supplier", "supplier")
+    .leftJoinAndSelect("item.itemPicture", "itemPicture")
+    .leftJoinAndSelect("itemPicture.pictures", "pictures")
+    .getMany();
+
+  return data;
 }

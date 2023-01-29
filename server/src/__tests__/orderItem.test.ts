@@ -11,20 +11,17 @@ const INVALID_UUID = "thisisan-inva-lidu-uidv-aluesoerror";
 const NON_EXISTENT_UUID = "12345678-1234-1234-1234-1234567890AB";
 const HOME_ROUTE = "/orders";
 
-const NUMBER_OF_ITEMS = 2; // Math.floor(Math.random() * 10) + 1;
+const NUMBER_OF_ITEMS = Math.floor(Math.random() * 10) + 1;
 
 async function createItems(iteration: number) {
   const newItem = await request(app)
-    .post("/items")
+    .post("/products")
     .send({
-      name: `Product ${iteration}`,
+      imageUrl: "http://www.images.com",
+      tags: ["one", "two"],
+      description: `this is a propper description ${iteration}`,
+      price: Math.random() * 1000 + 1,
       supplier: validSupplierUUID,
-      price: Math.random() * 1000 + 100,
-      length: Math.random() * 100 + 1,
-      width: Math.random() * 100 + 1,
-      height: Math.random() * 100 + 1,
-      tags: ["tag1", "tag2"],
-      pictures: [`url1_${iteration}`, `url2_${iteration}`],
     });
 
   if ("data" in newItem.body && "id" in newItem.body.data)
@@ -49,16 +46,14 @@ describe("Order Items tests", () => {
     validSupplierUUID = supplier.body.data.id;
 
     const item = await request(app)
-      .post("/items")
+      .post("/products")
       .send({
-        name: "a very good product",
+        imageUrl: "http://www.images.com",
+        tags: ["one", "two"],
+        description: "this is a propper description",
+        price: 200.56,
         supplier: validSupplierUUID,
-        price: 200.78,
-        length: 10.0,
-        width: 10.0,
-        height: 20.0,
-        tags: ["tag1", "tag2"],
-        pictures: ["url1", "url2"],
+        imageArray: ["url1", "url2"],
       });
 
     validItemUUID = item.body.data.id;
@@ -184,14 +179,14 @@ describe("Order Items tests", () => {
         expect(res.status).toBe(201);
         expect(res.body).toHaveProperty("data");
         expect(res.body.data.quantity).toBe(3);
-        expect(res.body.data.cost).toBe(200.78);
+        expect(res.body.data.cost).toBe(200.56);
 
         const resOrder = await request(app).get(
           `${HOME_ROUTE}/${validOrderUUID}`,
         );
 
         expect(resOrder.status).toBe(200);
-        expect(resOrder.body.data.total).toBe(602.34);
+        expect(resOrder.body.data.total).toBe(601.6800000000001);
       });
 
       it.skip("Should return 409 when trying to add an item that already exists to the order", async () => {

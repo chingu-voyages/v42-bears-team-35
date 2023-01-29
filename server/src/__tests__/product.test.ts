@@ -274,4 +274,46 @@ describe("Testing the item model changes required by the Frontend team", () => {
       it.todo("Should return 409 when duplicate information");
     });
   });
+
+  describe("Retrieve products", () => {
+    describe("Don't use any filters", () => {
+      it("Should return 200 when getting all the products", async () => {
+        const res = await request(app).get(END_POINT);
+
+        expect(res.status).toBe(200);
+        expect(res.body).toHaveProperty("data");
+        expect(Array.isArray(res.body.data)).toBe(true);
+        const product = res.body.data[0];
+        expect(product).toHaveProperty("id");
+        expect(product).toHaveProperty("imageUrl");
+        expect(product.imageUrl).toBe("http://www.images.com");
+        expect(product).toHaveProperty("description");
+        expect(product.description).toBe("this is a propper description");
+        expect(product).toHaveProperty("price");
+        expect(product.price).toBe(200.56);
+        expect(product).toHaveProperty("discount");
+        expect(product.discount).toBe(0);
+        expect(product).toHaveProperty("productRating");
+        expect(product.productRating).toBe(0);
+        expect(product).toHaveProperty("ratingDetails");
+        expect(product.ratingDetails).toHaveProperty("1");
+        expect(product.ratingDetails[1]).toBe(0);
+        expect(product.ratingDetails).toHaveProperty("2");
+        expect(product.ratingDetails[2]).toBe(0);
+        expect(product.ratingDetails).toHaveProperty("3");
+        expect(product.ratingDetails[3]).toBe(0);
+        expect(product.ratingDetails).toHaveProperty("4");
+        expect(product.ratingDetails[4]).toBe(0);
+        expect(product.ratingDetails).toHaveProperty("5");
+        expect(product.ratingDetails[5]).toBe(0);
+        expect(product).toHaveProperty("dateAdded");
+        expect(product).toHaveProperty("reviews");
+        expect(product.reviews.length).toBe(0);
+        expect(product).toHaveProperty("tags");
+        expect(product.tags.length).toBe(2);
+        expect(product.tags[0]).toBe("one");
+        expect(product.tags[1]).toBe("two");
+      });
+    });
+  });
 });

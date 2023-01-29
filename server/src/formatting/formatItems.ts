@@ -1,10 +1,11 @@
 import { Item } from "../model";
 import { FormattedItemResponse } from "../types";
+import { ReviewDetails } from "../types/ItemTypes";
 
-export function formatOneItem(item: Item) {
+export function formatOneItem(item: Item): FormattedItemResponse {
   let tags: string[] = [];
   let imageArray: string[] = [];
-  let reviews: string[] = [];
+  let reviews: ReviewDetails[] = [];
 
   if (item.itemTag !== undefined)
     tags = item.itemTag.map((itemTag) => {
@@ -18,7 +19,11 @@ export function formatOneItem(item: Item) {
 
   if (item.comments !== undefined)
     reviews = item.comments.map((comment) => {
-      return comment.comment;
+      return {
+        name: comment.customer.name,
+        date: comment.created_at,
+        review: comment.comment,
+      };
     });
 
   return {
@@ -49,7 +54,7 @@ export function formatOneItem(item: Item) {
   };
 }
 
-export function formatManyItems(items: Item[]) {
+export function formatManyItems(items: Item[]): FormattedItemResponse[] {
   const formattedItemArray = items.map((item) => formatOneItem(item));
 
   return formattedItemArray;

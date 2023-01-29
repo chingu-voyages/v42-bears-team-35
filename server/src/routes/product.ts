@@ -21,8 +21,6 @@ router.post(
 
     const createdProduct = await createNewProduct(req.body, supplier);
 
-    console.log(createdProduct);
-
     if ("errorKey" in createdProduct)
       return res.status(createdProduct.errorCode).json(createdProduct);
 

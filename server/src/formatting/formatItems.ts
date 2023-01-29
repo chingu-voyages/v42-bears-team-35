@@ -1,28 +1,38 @@
 import { Item } from "../model";
 import { FormattedItemResponse } from "../types";
+import { ReviewDetails } from "../types/ItemTypes";
 
 export function formatOneItem(item: Item): FormattedItemResponse {
-  const tags = item.itemTag.map((itemTag) => {
-    return {
-      id: itemTag.tag.id,
-      name: itemTag.tag.name,
-    };
-  });
+  let tags: string[] = [];
+  let imageArray: string[] = [];
+  let reviews: ReviewDetails[] = [];
 
-  const pictures = item.itemPicture.map((itemPicture) => {
-    return {
-      id: itemPicture.pictures.id,
-      url: itemPicture.pictures.url,
-    };
-  });
+  if (item.itemTag !== undefined)
+    tags = item.itemTag.map((itemTag) => {
+      return itemTag.tag.name;
+    });
+
+  if (item.itemPicture !== undefined)
+    imageArray = item.itemPicture.map((itemPicture) => {
+      return itemPicture.pictures.url;
+    });
+
+  if (item.comments !== undefined)
+    reviews = item.comments.map((comment) => {
+      return {
+        name: comment.customer.name,
+        date: comment.created_at,
+        review: comment.comment,
+      };
+    });
 
   return {
     id: item.id,
-    name: item.name,
+    imageUrl: item.imageUrl,
+    description: item.description,
     price: item.price,
-    height: item.height,
-    width: item.width,
-    length: item.length,
+    discount: item.discount,
+    dateAdded: item.created_at,
     supplier: {
       id: item.supplier.id,
       name: item.supplier.name,
@@ -30,8 +40,17 @@ export function formatOneItem(item: Item): FormattedItemResponse {
       address: item.supplier.address,
       email: item.supplier.email,
     },
+    productRating: item.productRating,
+    ratingDetails: {
+      1: item.oneStar,
+      2: item.twoStar,
+      3: item.threeStar,
+      4: item.fourStar,
+      5: item.fiveStar,
+    },
     tags,
-    pictures,
+    imageArray,
+    reviews,
   };
 }
 

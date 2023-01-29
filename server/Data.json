@@ -1,0 +1,21 @@
+{
+    "data": {
+    "id":"b943661f-19e0-44ec-b00e-8924e724c5c5",
+    "imageUrl": "http://www.images.com",
+    "description": "this is a propper description",
+    "price": 200.56,
+    "discount": 0,
+    "dateAdded": "2023-01-29T00:39:03.908Z",
+    "supplier": {
+        "id": "3a5dcbb3-2476-43f1-a518-572fa412f766",
+        "name": "supplier 1",
+        "phone": "12345678",
+        "address": "my address",
+        "email": "name@email.com"
+    },
+    "ratingDetails": { "1": 0, "2": 0, "3": 0, "4": 0, "5": 0 },
+    "tags": [ "one", "two" ],
+    "imageArray": [],
+    "reviews": []
+    }
+}

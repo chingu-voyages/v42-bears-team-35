@@ -1,6 +1,5 @@
 /* eslint-disable import/no-cycle */
 import { SupplierResponse } from ".";
-import { PicturesResponse, TagResponse } from "./FormattedItemResponse";
 
 export type ItemCreate = {
   name: string;
@@ -24,14 +23,31 @@ export type ItemUpdate = {
   pictures: string[];
 };
 
+export interface RatingDetails {
+  1: number;
+  2: number;
+  3: number;
+  4: number;
+  5: number;
+}
+
+export interface ReviewDetails {
+  name: string;
+  date: Date;
+  review: string;
+}
+
 export interface FormattedItemResponse {
   id: string;
-  name: string;
+  imageUrl: string;
+  description: string;
   price: number;
-  height: number;
-  width: number;
-  length: number;
+  discount: number;
+  dateAdded: Date;
   supplier: SupplierResponse;
-  tags: TagResponse[];
-  pictures: PicturesResponse[];
+  productRating: number;
+  ratingDetails: RatingDetails;
+  tags: string[];
+  imageArray: string[];
+  reviews: ReviewDetails[];
 }

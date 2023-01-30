@@ -1,6 +1,15 @@
 import AppDataSource from "../db";
 import { formatOneItem } from "../formatting/formatItems";
-import { Item, ItemPicture, ItemTag, Picture, Supplier, Tag } from "../model";
+import {
+  Customer,
+  Item,
+  ItemPicture,
+  ItemTag,
+  Picture,
+  Rating,
+  Supplier,
+  Tag,
+} from "../model";
 import { ErrorType, SuccessType } from "../types";
 import { insertPicture } from "./picture";
 import { insertTag } from "./tag";
@@ -122,4 +131,81 @@ export async function getAllProducts() {
     .getMany();
 
   return data;
+}
+
+// eslint-disable-next-line consistent-return
+export async function addRating(
+  product: Item,
+  customer: Customer,
+  rating: number,
+): Promise<ErrorType | SuccessType> {
+  const productToSave = product;
+  try {
+    await queryRunner.startTransaction();
+
+    switch (rating) {
+      case 1:
+        productToSave.oneStar += 1;
+        break;
+      case 2:
+        productToSave.twoStar += 1;
+        break;
+      case 3:
+        productToSave.threeStar += 1;
+        break;
+      case 4:
+        productToSave.fourStar += 1;
+        break;
+      case 5:
+        productToSave.fiveStar += 1;
+        break;
+      default:
+        throw new Error("Rating should be between 1 and 5");
+    }
+
+    const totalRatings =
+      productToSave.oneStar +
+      productToSave.twoStar +
+      productToSave.threeStar +
+      productToSave.fourStar +
+      productToSave.fiveStar;
+
+    const totalStars =
+      productToSave.oneStar * 1 +
+      productToSave.twoStar * 2 +
+      productToSave.threeStar * 3 +
+      productToSave.fourStar * 4 +
+      productToSave.fiveStar * 5;
+
+    productToSave.productRating = totalStars / totalRatings;
+
+    await queryRunner.manager.save(productToSave);
+
+    const customerRating = new Rating();
+    customerRating.customer = customer;
+    customerRating.item = productToSave;
+    customerRating.score = rating;
+
+    await queryRunner.manager.save(customerRating);
+
+    await queryRunner.commitTransaction();
+
+    return { data: productToSave };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (err: any) {
+    await queryRunner.rollbackTransaction();
+    if (err.code === "23505") {
+      return {
+        errorKey: "email",
+        errorDescription: err.detail,
+        errorCode: 409,
+      };
+    }
+
+    return {
+      errorKey: "unknown",
+      errorCode: 500,
+      errorDescription: err.message,
+    };
+  }
 }

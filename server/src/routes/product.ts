@@ -1,14 +1,17 @@
 import { Router, Request, Response } from "express";
 import { validateUUID } from "../middleware/validateUUID";
 import validateData from "../middleware/dataValidation";
-import { productCreateValidator } from "../validators";
+import { productCreateValidator, productRatingValidator } from "../validators";
 import {
+  addRating,
   createNewProduct,
   getAllProducts,
   getOneProduct,
 } from "../controller/product";
 import { getOneSupplier } from "../controller/supplier";
 import { formatManyItems, formatOneItem } from "../formatting/formatItems";
+import { validateTokenMiddleware } from "../middleware/authMiddleWare";
+import { Item } from "../model";
 
 const router: Router = Router();
 
@@ -55,5 +58,36 @@ router.get("/:uuid", validateUUID, async (req: Request, res: Response) => {
   const formatedProduct = formatOneItem(product);
   return res.status(200).json({ data: formatedProduct });
 });
+
+router.post(
+  "/:uuid/ratings",
+  validateUUID,
+  validateTokenMiddleware,
+  validateData(productRatingValidator),
+  async (req: Request, res: Response) => {
+    const { uuid } = req.params;
+
+    const product = await getOneProduct(uuid);
+
+    if (product === null)
+      return res.status(404).json({
+        errorCode: 404,
+        errorKey: "uuid",
+        errorDescription: "No product found with that id",
+      });
+
+    const data = await addRating(
+      product,
+      res.locals.customer,
+      parseInt(req.body.rating, 10),
+    );
+
+    if ("errorKey" in data) return res.status(data.errorCode).json(data);
+
+    const formatedResponse = formatOneItem(data.data as Item);
+
+    return res.status(200).json({ data: formatedResponse });
+  },
+);
 
 export default router;

@@ -1,6 +1,5 @@
 import { Validator } from "../types";
 
-// eslint-disable-next-line import/prefer-default-export
 export const productCreateValidator: Validator[] = [
   {
     key: "imageUrl",
@@ -34,5 +33,15 @@ export const productCreateValidator: Validator[] = [
     key: "discount",
     required: false,
     type: "float",
+  },
+];
+
+export const productRatingValidator: Validator[] = [
+  {
+    key: "rating",
+    required: true,
+    type: "integer",
+    maxValue: 5,
+    minValue: 1,
   },
 ];

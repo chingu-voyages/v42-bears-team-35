@@ -11,6 +11,8 @@ import Review from "../components/Review"
 // if there are no reviews, display "no review... yet"
 // if logged in, add a button to allow to write review if item has been previously purchased
 // clean up barWidth "css"
+// size?? color selection
+// zoom in on images 
 
 export default ItemDescription = ({ navigation, route } ) => {
   const item = route.params

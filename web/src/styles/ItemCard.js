@@ -3,9 +3,13 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
+    display: "flex",
+    flexDirection: "column",
+    alignContent: "stretch"
   },
   imageBackground: {
     flex: 1,
+
   },
   itemText: {
     color: "black",
@@ -13,7 +17,8 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   renderItemContainer: {
-    backgroundColor: "#FFF",
     flex: 1,
+    backgroundColor: "#FFF",
+
   },
 });

@@ -1,8 +1,12 @@
-import React from "react";
-import { Pressable, Text } from "react-native";
+import { useState } from "react";
+import { Image, Pressable, Text, TextInput, ScrollView, SafeAreaView, StyleSheet, View, useWindowDimensions } from "react-native";
+import { useSelector } from "react-redux";
+import Navbar from "../components/Navbar";
+import Review from "../components/Review"
+
 
 const prop = {
-  imageUrl: "./red-hat.jpg",
+  imageUrl: "../assets/red-hat.jpg",
   productName: ["reddest", "barrette"],
   productDescription:
     "A fabulous red barret designed and made in France. Channel your inner french girl aesthetic with this hat",
@@ -32,10 +36,41 @@ const prop = {
   ],
 };
 
+const prop2 = {
+  imageUrl: "./blue-vase.jpg",
+  productName: ["bluest", "vase"],
+  productDescription:
+    "A fabulous blue vase",
+  price: 20.99,
+  discount: 5,
+  dateAdded: new Date(),
+  productRating: 4,
+  reviews: [
+    {
+      name: "S",
+      date: new Date(),
+      rating: 5,
+      review: "It's good",
+    },
+    {
+      name: "Anonymous",
+      date: new Date(),
+      rating: 2,
+      review: "It's garbage",
+    },
+    {
+      name: "Tim",
+      date: new Date(),
+      rating: 4,
+      review: "It's maroon, not red. Still pretty cute though.",
+    },
+  ],
+};
+
 export default ItemDescription = ({ navigation }) => {
+  const { width } = useWindowDimensions()
 
   const [orderQuantity, setOrderQuantity] = useState(1);
-  
   const style = StyleSheet.create({
     container: {
       width: "100%",
@@ -47,9 +82,9 @@ export default ItemDescription = ({ navigation }) => {
     right: {
       display: "flex",
       flexDirection: "column",
-      width:  "55%",
-      paddingTop: 0,
-      paddingLeft: 0,
+      width:  "58%",
+      padding: 0,
+      marginLeft: "5%"
     },
     prices: {
       display: "flex",
@@ -58,16 +93,16 @@ export default ItemDescription = ({ navigation }) => {
     row: {
       display: "flex",
       flexDirection: "row",
-      justifyContent: "space-around",
+      justifyContent: "space-between",
       alignItems: "flex-start",
-      width: "55%",
+          
     },
     rowBottom: {
       display: "flex",
       flexDirection: "row",
       justifyContent: "space-around",
       alignItems: "flex-end",
-      width: "55%",
+      width: "100%",
       marginTop: 12,
     },
     stars: {
@@ -75,24 +110,27 @@ export default ItemDescription = ({ navigation }) => {
       flexDirection: "row",
       justifyContent: "flex-start",
       height: 84,
-      paddingLeft: 24,
     },
     imageHeading: {
       display: "flex",
       flexDirection: "row",
     },
     mainImage: {
-      width: "40%",
-      height: "40%",
+      width: width * .34,
+      height: width * .34,
       borderRadius: 9,
     },
     smallRed: {
       color: "#f40",
-      alignSelf: "flex-start",
-      marginLeft: 12,
+      position: "absolute",
+      top: -12,
+      right: -16,
+      backgroundColor: "white",
+      padding: 4
     },
     h2: {
       fontSize: 32,
+      margin: 0
     },
     grey: {
       fontSize: 20,
@@ -150,7 +188,7 @@ export default ItemDescription = ({ navigation }) => {
     },
     greenButton: {
       backgroundColor: "#57D491",
-      width: "40%",
+      padding: width * .075,
       paddingTop: 16,
       paddingBottom: 16,
       borderRadius: 9,
@@ -258,7 +296,7 @@ export default ItemDescription = ({ navigation }) => {
     },
   });
   return (
-    <>
+    <SafeAreaView>
       <ScrollView bounces={true}>
         <Navbar />
         <View style={style.container}>
@@ -267,10 +305,9 @@ export default ItemDescription = ({ navigation }) => {
                 style={style.mainImage}
                 />
             <View style={style.right}>
-            
                     <View style={style.row}>
                         <Text style={style.h2}>{prop.productName.join(' ')}</Text>
-                        <Text style={style.smallRed}>NEW</Text>
+                        <Text style={style.smallRed}>New</Text>
                     </View>
                     <View style={style.rowBottom}>
                         <View style={style.stars}>
@@ -402,7 +439,7 @@ export default ItemDescription = ({ navigation }) => {
             {prop.reviews.map(r => <Review name={r.name} date={r.date} rating={r.rating} review={r.review} key={r.name + '-' + r.date.valueOf()}/>)}
         </View>
     </ScrollView>
-    </>
+    </SafeAreaView>
   );
 };
 

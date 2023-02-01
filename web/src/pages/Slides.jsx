@@ -1,9 +1,13 @@
 // makes ItemCard swipable 
 
-import React from "react";
-import { FlatList, ImageBackground, SafeAreaView, Text } from "react-native";
-import ItemCard from '../components/ItemCard'
+import { FlatList, SafeAreaView, ImageBackground, Text, useWindowDimensions, View, Pressable, Button } from "react-native";
+import { useState } from "react";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { styles } from "../styles/ItemCard";
+import { ROUTES } from "../constants";
+import axios from "axios";
+import {getItems} from "../constants/axios"
+import Navbar from "../components/Navbar";
 
 const MOCK_DATA = [
   {
@@ -23,18 +27,62 @@ const MOCK_DATA = [
   },
 ];
 
-export default Slides = ({ navigation }) => {
+const callItems = () => {
+  axios 
+  .get (`https://v42-bears-team-35-production.up.railway.app/items`)
+  .then (response => {
+    console.log('Response:', response?.data);
+  })
+  .catch (error => {
+    console.log('Error:', error) 
+  })
+}
 
+export default Slides = ({ navigation }) => {
+  const { height, width } = useWindowDimensions()
+  const ItemCard = ({ item }) => {
+    const { url, title } = item
+    return (
+      
+        <View style={{height: height - 60, flex: 1}}>
+          <Pressable onPress={() => navigation.navigate(ROUTES.ITEM_DESCRIPTION)}>
+            <ImageBackground
+              source={url}
+              imageStyle={{height: height - 80}}
+            //style={{ height: height, width: width}}
+            >
+              <View style={{width: width, height: height * .5, }}><Text style={{position: "absolute", left: 15, top: height * .45}}>{title}</Text>
+    </View>
+            </ImageBackground>
+        </Pressable>
+        </View>
+    )
+  }
 
   return (
     <SafeAreaView style={styles.container}>
-      <FlatList
-        data={MOCK_DATA}
-        renderItem={ItemCard}
-        pagingEnabled
-        keyExtractor={(item) => 'item-' + item.id}
-        decelerationRate="fast"
+      <Navbar />
+      <Button 
+        title={"fetch"}
+        onPress={() => {
+          callItems()
+        }}
       />
+      <FlatList
+          data={MOCK_DATA}
+          decelerationRate="fast"
+          keyExtractor={item => item.id.toString()}
+          onViewableItemsChanged={this.onViewableItemsChanged}
+          removeClippedSubviews={false}
+          renderItem={ItemCard}
+          showsVerticalScrollIndicator={false}
+          snapToAlignment="start"
+          snapToInterval={height - 60}
+          viewabilityConfig={{
+            waitForInteraction: true,
+            viewAreaCoveragePercentThreshold: 100,
+          }}
+        />
     </SafeAreaView>
   );
 };

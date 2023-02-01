@@ -8,6 +8,22 @@ import ItemDescription from "../pages/ItemDescription";
 
 const Stack = createStackNavigator();
 
+
+const LoginStack = () => {
+  return (
+      <Stack.Navigator
+        initialRouteName="Login"
+        screenOptions={{headerShown: false}}
+      >
+        <Stack.Screen
+          name="Login"
+          component={Login}
+        />
+      </Stack.Navigator>
+  );
+}
+
+
 export default MainNavigator = () => {
   return (
     <>
@@ -33,11 +49,7 @@ export default MainNavigator = () => {
           component={ItemDescription}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
-          name={ROUTES.SEARCH_RESULTS}
-          component={SearchResults}
-          options={{ headerShown: false }}
-        />
+        
       </Stack.Navigator>
     </>
   );

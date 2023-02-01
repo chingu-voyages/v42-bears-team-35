@@ -7,10 +7,12 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
   Relation,
+  Unique,
 } from "typeorm";
 import { Item, Order } from ".";
 
 @Entity()
+@Unique(["order", "item"])
 export default class OrderItem extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;

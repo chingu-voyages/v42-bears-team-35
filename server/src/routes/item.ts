@@ -8,6 +8,8 @@ import {
 } from "../controller/item";
 import { validateUUID } from "../middleware/validateUUID";
 import { itemCreateValidator } from "../validators";
+import { formatManyItems, formatOneItem } from "../formatting/formatItems";
+import { Item } from "../model";
 
 const router: Router = Router();
 
@@ -23,19 +25,23 @@ router.post(
   },
 );
 router.get("/", async (req: Request, res: Response) => {
-  const data = await getAllItems(req.query);
+  const allData: Item[] = await getAllItems(req.query);
+  const data = formatManyItems(allData);
 
   return res.status(200).json({ data });
 });
 
 router.get("/:uuid", validateUUID, async (req: Request, res: Response) => {
-  const data = await getOneItem(req.params.uuid);
+  const oneItem: Item | null = await getOneItem(req.params.uuid);
 
-  if (data === null) {
+  if (oneItem === null) {
     return res
       .status(404)
       .json({ errorKey: "uuid", errorDescription: "Unable to find item" });
   }
+
+  const data = formatOneItem(oneItem);
+
   return res.status(200).json({ data });
 });
 

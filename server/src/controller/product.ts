@@ -1,6 +1,7 @@
 import AppDataSource from "../db";
 import { formatOneItem } from "../formatting/formatItems";
 import {
+  Comment,
   Customer,
   Item,
   ItemPicture,
@@ -27,18 +28,20 @@ const queryRunner = AppDataSource.createQueryRunner();
 const itemRepository = AppDataSource.getRepository(Item);
 
 export async function getOneProduct(uuid: string) {
-  const data: Item | null = await itemRepository
+  const data = itemRepository
     .createQueryBuilder("item")
     .leftJoinAndSelect("item.itemTag", "itemTag")
     .leftJoinAndSelect("itemTag.tag", "tag")
     .leftJoinAndSelect("item.supplier", "supplier")
     .leftJoinAndSelect("item.itemPicture", "itemPicture")
     .leftJoinAndSelect("itemPicture.pictures", "pictures")
+    .leftJoinAndSelect("item.comments", "comments")
+    .leftJoinAndSelect("comments.customer", "customer")
     .andWhere("item.id = :id")
-    .setParameter("id", uuid)
-    .getOne();
+    .setParameter("id", uuid);
+  // .getOne();
 
-  return data;
+  return data.getOne();
 }
 
 export async function createNewProduct(
@@ -128,12 +131,13 @@ export async function getAllProducts() {
     .leftJoinAndSelect("item.supplier", "supplier")
     .leftJoinAndSelect("item.itemPicture", "itemPicture")
     .leftJoinAndSelect("itemPicture.pictures", "pictures")
+    .leftJoinAndSelect("item.comments", "comments")
+    .leftJoinAndSelect("comments.customer", "customer")
     .getMany();
 
   return data;
 }
 
-// eslint-disable-next-line consistent-return
 export async function addRating(
   product: Item,
   customer: Customer,
@@ -194,7 +198,7 @@ export async function addRating(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     await queryRunner.rollbackTransaction();
-    if (err.code === "23505") {
+    if ("code" in err && err.code === "23505") {
       return {
         errorKey: "email",
         errorDescription: err.detail,
@@ -208,4 +212,40 @@ export async function addRating(
       errorDescription: err.message,
     };
   }
+}
+
+export async function addComment(
+  product: Item,
+  customer: Customer,
+  comment: string,
+): Promise<ErrorType | SuccessType> {
+  try {
+    await queryRunner.startTransaction();
+
+    const commentedProduct = new Comment();
+    commentedProduct.item = product;
+    commentedProduct.customer = customer;
+    commentedProduct.comment = comment;
+    await queryRunner.manager.save(commentedProduct);
+
+    await queryRunner.commitTransaction();
+
+    const updatedProduct = getOneProduct(product.id);
+    return { data: updatedProduct };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (err: any) {
+    await queryRunner.rollbackTransaction();
+    if ("code" in err && err.code === "23505")
+      return {
+        errorKey: "customer",
+        errorCode: 409,
+        errorDescription: "Customer have already commented that product",
+      };
+  }
+
+  return {
+    errorCode: 500,
+    errorDescription: "unknown",
+    errorKey: "unknown",
+  };
 }

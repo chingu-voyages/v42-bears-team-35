@@ -45,3 +45,11 @@ export const productRatingValidator: Validator[] = [
     minValue: 1,
   },
 ];
+
+export const productCommentValidator: Validator[] = [
+  {
+    key: "comment",
+    required: true,
+    type: "string",
+  },
+];

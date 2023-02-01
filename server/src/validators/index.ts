@@ -12,6 +12,7 @@ import { itemCreateValidator, itemUpdateValidator } from "./ItemValidators";
 import {
   productCreateValidator,
   productRatingValidator,
+  productCommentValidator,
 } from "./productValidators";
 
 export {
@@ -25,4 +26,5 @@ export {
   orderItemValidator,
   productCreateValidator,
   productRatingValidator,
+  productCommentValidator,
 };

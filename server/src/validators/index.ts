@@ -9,7 +9,10 @@ import {
 import { orderCreateValidator } from "./orderValidator";
 import orderItemValidator from "./orderItemValidator";
 import { itemCreateValidator, itemUpdateValidator } from "./ItemValidators";
-import { productCreateValidator } from "./productValidators";
+import {
+  productCreateValidator,
+  productRatingValidator,
+} from "./productValidators";
 
 export {
   itemCreateValidator,
@@ -21,4 +24,5 @@ export {
   orderCreateValidator,
   orderItemValidator,
   productCreateValidator,
+  productRatingValidator,
 };

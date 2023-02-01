@@ -13,4 +13,6 @@ export type Validator = {
   length?: number;
   minArrayLength?: number;
   maxArrayLength?: number;
+  maxValue?: number;
+  minValue?: number;
 };

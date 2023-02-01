@@ -42,6 +42,37 @@ export default function validateData(dataValidator: Validator[]) {
           errorDescription: `${key} should be a valid number`,
         });
 
+      if (
+        type === "integer" &&
+        req.body[key] !== undefined &&
+        req.body[key] !== null &&
+        Number.isNaN(parseInt(req.body[key], 10))
+      )
+        return res.status(400).json({
+          errorKey: key,
+          errorDescription: `${key} should be a valid number`,
+        });
+
+      if (
+        toValidate.maxValue !== undefined &&
+        toValidate.maxValue !== null &&
+        parseInt(req.body[key], 10) > toValidate.maxValue
+      )
+        return res.status(400).json({
+          errorKey: key,
+          errorDescription: `${key} should not be greater than ${toValidate.maxValue}`,
+        });
+
+      if (
+        toValidate.minValue !== undefined &&
+        toValidate.minValue !== null &&
+        parseInt(req.body[key], 10) < toValidate.minValue
+      )
+        return res.status(400).json({
+          errorKey: key,
+          errorDescription: `${key} should be greater than ${toValidate.minValue}`,
+        });
+
       // If the key is email we will use the email validator
       if (
         type === "email" &&

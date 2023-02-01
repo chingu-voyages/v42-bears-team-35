@@ -32,11 +32,17 @@ export const itemCreateValidator: Validator[] = [
     type: "array",
     minArrayLength: 1,
   },
+  {
+    key: "pictures",
+    required: true,
+    type: "array",
+    minArrayLength: 1,
+  },
 ];
 
 export const itemUpdateValidator: Validator[] = [
   {
-    key: "description",
+    key: "name",
     required: false,
     type: "string",
   },
@@ -62,6 +68,12 @@ export const itemUpdateValidator: Validator[] = [
   },
   {
     key: "tags",
+    required: false,
+    type: "array",
+    minArrayLength: 1,
+  },
+  {
+    key: "pictures",
     required: false,
     type: "array",
     minArrayLength: 1,

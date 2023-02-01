@@ -12,18 +12,23 @@ const connection = {
   async clear() {
     const clearConnection = getConnection();
     const entities: string[] = [
+      "order_item",
       "item_tag",
       "tag",
       '"order"',
       "customer",
+      "item_picture",
+      "picture",
       "item",
       "supplier",
     ];
 
-    entities.forEach(async (entity) => {
+    for (let i = 0; i < entities.length; i += 1) {
+      const entity = entities[i];
       const repository = clearConnection.getRepository(entity);
+      // eslint-disable-next-line no-await-in-loop
       await repository.query(`DELETE FROM ${entity}`);
-    });
+    }
   },
 };
 

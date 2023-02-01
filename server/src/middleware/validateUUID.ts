@@ -15,7 +15,7 @@ export const validateUUID = (
 ) => {
   const { uuid } = req.params;
   // eslint-disable-next-line @typescript-eslint/naming-convention
-  const { item_uuid } = req.params;
+  const { itemUuid } = req.params;
 
   if (uuid.toLowerCase() !== "me") {
     if (!isValidUUID(uuid))
@@ -25,7 +25,7 @@ export const validateUUID = (
       });
   }
 
-  if (item_uuid !== undefined && !isValidUUID(item_uuid))
+  if (itemUuid !== undefined && !isValidUUID(itemUuid))
     return res.status(400).json({
       errorKey: "uuid",
       errorDescription: "Uuid provided is invalid",

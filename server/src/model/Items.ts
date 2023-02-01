@@ -1,27 +1,24 @@
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
   ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   Relation,
-  Unique,
 } from "typeorm";
 // eslint-disable-next-line import/no-cycle
-import { Supplier, Comment, Rating, OrderItem, ItemTag } from ".";
+import { Supplier, Comment, Rating, OrderItem, ItemTag, ItemPicture } from ".";
 
 @Entity()
-@Unique(["supplier", "name"])
 export default class Item extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column({
-    nullable: false,
-  })
-  name: string;
+  @Column({ nullable: false })
+  description: string;
 
   @Column({
     type: "float",
@@ -30,27 +27,64 @@ export default class Item extends BaseEntity {
   price: number;
 
   @Column({
-    type: "float",
-    nullable: true,
+    nullable: false,
   })
-  height: number;
+  imageUrl: string;
 
   @Column({
     type: "float",
     nullable: false,
+    default: 0,
   })
-  width: number;
+  discount: number;
 
   @Column({
     type: "float",
     nullable: false,
+    default: 0,
   })
-  length: number;
+  productRating: number;
 
-  // @Column({
-  //   nullable: false,
-  // })
-  // tag: string;
+  @Column({
+    type: "integer",
+    nullable: false,
+    default: 0,
+  })
+  oneStar: number;
+
+  @Column({
+    type: "integer",
+    nullable: false,
+    default: 0,
+  })
+  twoStar: number;
+
+  @Column({
+    type: "integer",
+    nullable: false,
+    default: 0,
+  })
+  threeStar: number;
+
+  @Column({
+    type: "integer",
+    nullable: false,
+    default: 0,
+  })
+  fourStar: number;
+
+  @Column({
+    type: "integer",
+    nullable: false,
+    default: 0,
+  })
+  fiveStar: number;
+
+  @CreateDateColumn({
+    type: "timestamptz",
+    nullable: false,
+  })
+  created_at: Date;
 
   @ManyToOne(() => Supplier, (supplier) => supplier.items)
   supplier: Relation<Supplier>;
@@ -66,4 +100,7 @@ export default class Item extends BaseEntity {
 
   @OneToMany(() => ItemTag, (itemTag: ItemTag) => itemTag.item)
   itemTag: ItemTag[];
+
+  @OneToMany(() => ItemPicture, (itemPicture) => itemPicture.item)
+  itemPicture: ItemPicture[];
 }

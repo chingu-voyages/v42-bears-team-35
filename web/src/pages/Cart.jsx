@@ -17,12 +17,18 @@ export default ItemDescription = ({ navigation }) => {
       height: height,
       display: "flex",
       padding: 20,
+    },
+    text: {
+      color: "white",
+      fontSize: 20,
+      marginBottom: 16
     }
   });
   return (
     <SafeAreaView>
       <Navbar />
       <ScrollView bounces={true} style={style.container}>
+        <Text style={style.text}>{cart.length == 0 ? "No" : cart.length} items in cart</Text>
        {cart.map(item => <CartItem image={item.image} name={item.productName} price={item.price} discount={item.discount} quantity={item.quantity} key={"cartItem-" + item.id} />)}
     </ScrollView>
     </SafeAreaView>

@@ -85,7 +85,7 @@ export const productSlice = createSlice({
           },
           {
             name: "Anonymous",
-            date: '4-6-2022',
+            date: '4-9-2022',
             rating: 2,
             review: "It's garbage",
           },

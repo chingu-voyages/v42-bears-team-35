@@ -2,34 +2,28 @@ import React, { useEffect, useState } from "react";
 import { Text, TextInput, View, Pressable, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch } from "react-redux";
-import { updateUser } from "../constants/userSlice";
-import Navbar from "../components/Navbar";
-import { ROUTES } from "../constants";
-
-const FAKE_USER = {
-  email: "test@thetest.com",
-}
+import { updateUser } from "../../constants/userSlice";
+import Navbar from "../../components/Navbar";
+import { ROUTES } from "../../constants";
 
 
-const Login = ({ navigation }) => {
-  const dispatch = useDispatch()
+export default FirstPage = ({ navigation, route}) => {
+  const { isVendor } = route && route.params || false
 
-  const [submitted, onSubmitted] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
   const [email, onChangeEmail] = useState("");
   const [password, onChangePassword] = useState("");
 
-  function login() {
-    if (email.length <= 3) return
-    if (password.length < 8) return 
-    dispatch(updateUser(FAKE_USER))
-    onSubmitted(true)
-    navigation.navigate(ROUTES.SLIDES)
-  }
+  const dispatch = useDispatch()
+
+  
+  
   const styles = StyleSheet.create({
     container: {
       width: "100%",
       backgroundColor: "#222020",
       minHeight: "100%",
+      paddingTop: 24
     },
     flexDiv: {
       alignItems: "center",
@@ -54,7 +48,8 @@ const Login = ({ navigation }) => {
       borderColor: "#ddd",
       borderWidth: 3,
       backgroundColor: "#222020",
-      color: "white"
+      color: "white",
+      fontWeight: "600"
     },
     label: {
       alignSelf: "flex-start",
@@ -74,6 +69,13 @@ const Login = ({ navigation }) => {
       alignSelf: "flex-start",
       color: "#fff"
 
+    },
+    p: {
+        color: "#fff",
+        alignSelf: "flex-start",
+        marginLeft: "5%",
+        marginBottom: 24,
+        fontSize: 20
     },
     greenButton: {
       backgroundColor: "#57D491",
@@ -105,6 +107,24 @@ const Login = ({ navigation }) => {
     error: {
       color: "#E44040",
       textAlign: "left"
+    },
+    progress: {
+        width: "90%",
+        marginLeft: "5%",
+        height: 6,
+        display: "flex",
+        flexDirection: "row",
+        backgroundColor: "#e5e5e5",
+        position: 'absolute',
+        top: 120,
+        left: 0,
+        borderRadius: 6
+    },
+    greenBar: {
+        width: "33%",
+        backgroundColor: "#57D491",
+        borderTopLeftRadius: 6,
+        borderBottomLeftRadius: 6
     }
   });
   
@@ -113,7 +133,9 @@ const Login = ({ navigation }) => {
       <Navbar />
       <View style={styles.container}>
         <View style={styles.flexDiv}>
-          <Text style={styles.h1}>Login</Text>
+          <Text style={styles.h1}>Sign Up</Text>
+          <Text style={styles.p}>{isVendor ? "Start selling today" : "So you can save your faves!"}</Text>
+          
           <Text style={styles.label}>Email</Text>
           <TextInput
             style={styles.input}
@@ -122,8 +144,9 @@ const Login = ({ navigation }) => {
             value={email}
             inputMode="email"
             placeholderTextColor="#888"
+
           />
-          <Text style={styles.error}>{submitted & email.length < 6 ? "Enter a valid email" : ""}</Text>
+          <Text style={styles.error}>{(submitted & email.length < 6) ? "Enter a valid email" : ""}</Text>
         </View>
         <View style={styles.flexDiv}>
           <Text style={styles.label}>Password</Text>
@@ -140,19 +163,28 @@ const Login = ({ navigation }) => {
         </View>
         <View style={styles.flexDiv}>
           <Pressable
-            onPressOut={() => login()}
             style={styles.greenButton}
           >
-            <Text style={styles.greenButtonText}>Login</Text>
+            <Text style={styles.greenButtonText} 
+            onPress={() => nextStep(dispatch, email, password, navigation, setSubmitted)}
+            >Login</Text>
           </Pressable>
         </View>
         <View style={styles.flexDiv}>
-          <Text style={styles.bold}>create new account</Text>
+          <Pressable onPress={() => navigation.navegate('login')}>
+           <Text style={styles.bottom}>already a member? login</Text>
+          </Pressable>
         </View>
-        <Text style={styles.bottom}>continue as guest</Text>
       </View>
+        <View style={styles.progress}>
+            <View style={styles.greenBar}></View>
+        </View>
     </SafeAreaView>
   );
 };
 
-export default Login;
+function nextStep(dispatch, email, password, navigation, setSubmitted) {
+    dispatch(updateUser({email, password}))
+    setSubmitted(true)
+    navigation.navigate('AddressInput', {isRegister: true})
+  }

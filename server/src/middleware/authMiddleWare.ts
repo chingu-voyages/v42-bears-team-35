@@ -1,5 +1,6 @@
 import { Secret, VerifyOptions, verify } from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
+import { getOneCustomer } from "../controller/customer";
 import { ErrorType, TokenPayload } from "../types";
 import { SECRET } from "../../environment";
 
@@ -21,7 +22,7 @@ export function validateToken(token: string, secret: Secret): TokenPayload {
 }
 
 // eslint-disable-next-line consistent-return
-export function validateTokenMiddleware(
+export async function validateTokenMiddleware(
   req: Request,
   res: Response,
   next: NextFunction,
@@ -39,6 +40,21 @@ export function validateTokenMiddleware(
 
   try {
     res.locals.token = validateToken(tokenData[1], SECRET);
+
+    const customer = await getOneCustomer(
+      (res.locals.token as TokenPayload).id,
+    );
+
+    if (!customer)
+      return res.status(404).json({
+        errorCode: 404,
+        errorKey: "token",
+        errorDescription: `Unable to find customer ${(res.locals.token as TokenPayload).id
+          }`,
+      });
+
+    res.locals.customer = customer;
+
     next();
   } catch (error) {
     return res.status(errorResponse.errorCode).json(errorResponse);

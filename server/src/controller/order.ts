@@ -46,12 +46,13 @@ export async function createOrder(
 export async function getAllOrders(): Promise<Order[]> {
   const data: Order[] = await orderRepository
     .createQueryBuilder("order")
-    .select("order.id")
-    .addSelect("order.customer")
-    .addSelect("order.email")
-    .addSelect("order.date")
-    .addSelect("order.total")
-    .addSelect("order.tracking_number")
+    .leftJoinAndSelect("order.orderItems", "orderItems")
+    .leftJoinAndSelect("orderItems.item", "item")
+    .leftJoinAndSelect("item.itemTag", "itemTag")
+    .leftJoinAndSelect("itemTag.tag", "tag")
+    .leftJoinAndSelect("item.supplier", "supplier")
+    .leftJoinAndSelect("item.itemPicture", "itemPicture")
+    .leftJoinAndSelect("itemPicture.pictures", "pictures")
     .getMany();
 
   return data;
@@ -60,12 +61,13 @@ export async function getAllOrders(): Promise<Order[]> {
 export async function getOneOrder(uuid: string): Promise<Order | null> {
   const data: Order | null = await orderRepository
     .createQueryBuilder("order")
-    .select("order.id")
-    .addSelect("order.customer")
-    .addSelect("order.email")
-    .addSelect("order.date")
-    .addSelect("order.total")
-    .addSelect("order.tracking_number")
+    .leftJoinAndSelect("order.orderItems", "orderItems")
+    .leftJoinAndSelect("orderItems.item", "item")
+    .leftJoinAndSelect("item.itemTag", "itemTag")
+    .leftJoinAndSelect("itemTag.tag", "tag")
+    .leftJoinAndSelect("item.supplier", "supplier")
+    .leftJoinAndSelect("item.itemPicture", "itemPicture")
+    .leftJoinAndSelect("itemPicture.pictures", "pictures")
     .andWhere("order.id = :id")
     .setParameter("id", uuid)
     .getOne();

@@ -5,11 +5,13 @@ import {
   BaseEntity,
   Relation,
   PrimaryGeneratedColumn,
+  Unique,
 } from "typeorm";
 // eslint-disable-next-line import/no-cycle
 import { Customer, Item } from ".";
 
 @Entity()
+@Unique(["customer", "item"])
 export default class Ratings extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;

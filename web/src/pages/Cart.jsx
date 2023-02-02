@@ -2,13 +2,14 @@ import { useState } from "react";
 import { Image, Pressable, Text, TextInput, ScrollView, StyleSheet, View, SafeAreaView, useWindowDimensions } from "react-native";
 import Review from "../components/Review"
 import Navbar from "../components/Navbar";
-import { useSelector } from "react-redux";
+import { updateCart } from '../constants/cartSlice';
+import { removeItem } from '../constants/cartSlice';
+import { useSelector, useDispatch } from "react-redux";
 import CartItem from "../components/CartItem";
 
 
-
 export default ItemDescription = ({ navigation }) => {
-  const {height } = useWindowDimensions()
+  const {height} = useWindowDimensions()
   const cart = useSelector(state => state.cart.value)
   const style = StyleSheet.create({
     container: {
@@ -24,12 +25,21 @@ export default ItemDescription = ({ navigation }) => {
       marginBottom: 16
     }
   });
+
+
+  const dispatch = useDispatch()
+  const handleDelete = () => {
+    dispatch(removeItem(cart.id))
+    console.log(cart.id)
+  }
+
+
   return (
     <SafeAreaView>
       <Navbar />
       <ScrollView bounces={true} style={style.container}>
         <Text style={style.text}>{cart.length == 0 ? "No" : cart.length} items in cart</Text>
-       {cart.map(item => <CartItem image={item.image} name={item.productName} price={item.price} discount={item.discount} quantity={item.quantity} key={"cartItem-" + item.id} />)}
+       {cart.map(item => <CartItem image={item.imageUrl} name={item.productName} price={item.price} discount={item.discount} quantity={item.quantity} key={"cartItem-" + item.id} />)}
     </ScrollView>
     </SafeAreaView>
   );

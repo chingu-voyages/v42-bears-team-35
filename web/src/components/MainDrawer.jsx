@@ -8,6 +8,9 @@ import Cart from '../pages/Cart'
 import Slides from "../pages/Slides";
 import ItemDescription from "../pages/ItemDescription";
 import Logout from "../pages/Logout";
+import VendorSignUpOne from "../pages/register/VendorSignUpOne";
+import FirstPage from "../pages/register/FirstPage";
+import AddressInput from "../pages/register/AddressInput";
 
 const Drawer = createDrawerNavigator();
 
@@ -71,14 +74,40 @@ export default MainDrawer = () => {
           component={Cart}
         />
         <Drawer.Screen
+          name={"VendorSignUpOne"}
+          options={{
+            drawerLabel: "Sell with us",
+            headerShown: false,
+            }}
+          component={VendorSignUpOne}
+        />
+        <Drawer.Screen
+          name={"Register"}
+          options={{
+            drawerLabel: "Register",
+            headerShown: false,
+            }}
+          component={FirstPage}
+        />
+        <Drawer.Screen
+          name={"AddressInput"}
+          options={{
+            drawerLabel: "AddressInput",
+            headerShown: false,
+            drawerItemStyle: { display: "none" }
+            }}
+          component={AddressInput}
+        />
+        <Drawer.Screen
           name={ROUTES.LOGIN}
           options={{
             drawerLabel: "Login",
             headerShown: false,
-             drawerItemStyle: { display: user && user.email ? "none" : "flex" }
+             drawerItemStyle: { display: "none" }
             }}
           component={Login}
         />
+        
         <Drawer.Screen
           name={ROUTES.LOGOUT}
           options={{

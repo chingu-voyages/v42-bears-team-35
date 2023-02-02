@@ -4,31 +4,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateCart } from '../constants/cartSlice'
 import Navbar from "../components/Navbar";
 import Review from "../components/Review"
-
-//still need review sort functionality
-//fix initial setOrderQuantity (I think it's undefined)
-//Actually calculate score based on reviews
-// if there are no reviews, display "no review... yet"
-// if logged in, add a button to allow to write review if item has been previously purchased
-// clean up barWidth "css"
-// size?? color selection
-// zoom in on images 
+import { useEffect } from "react";
 
 export default ItemDescription = ({ navigation, route } ) => {
   const item = route.params
   const { width } = useWindowDimensions()
 
   const cart = useSelector(state => state.cart.value)
-  const numberInCart = cart.find(itemInCart => itemInCart.id === item.id )
-  const [orderQuantity, setOrderQuantity] = useState(numberInCart ? numberInCart.quantity : 1);
+  const [orderQuantity, setOrderQuantity] = useState(1);
   
   const dispatch = useDispatch()
-  function update() {
-      const newItem = {...item}
-      newItem.quantity = orderQuantity
-      const newCart = cart.filter(cartItem => cartItem.id != newItem.id)      
-      dispatch(updateCart([...newCart, newItem]))
-  }
+  
+  useEffect(() => {
+    const numberInCart = cart.find(itemInCart => itemInCart.id === item.id )
+    setOrderQuantity(numberInCart ? numberInCart.quantity : 1)
+  }, [cart, item])
   
   const style = StyleSheet.create({
     dark: {
@@ -325,7 +315,7 @@ export default ItemDescription = ({ navigation, route } ) => {
             </Pressable>
             <Pressable 
                 style={style.greenButton}
-                onPress={update}
+                onPress={() => update(dispatch, item, cart, orderQuantity)}
             >
                 <Text style={style.p}>Put in cart</Text>
             </Pressable>
@@ -398,9 +388,16 @@ export default ItemDescription = ({ navigation, route } ) => {
             </Pressable>
         </View>
         <View>
-            {item.reviews.map(r => <Review name={r.name} date={r.date} rating={r.rating} review={r.review} key={r.name + '-' + r.date.valueOf()}/>)}
+            {item.reviews.map(r => <Review name={r.name} date={r.date} rating={r.rating} review={r.review} key={item.productName.join('-') + '-' + r.name + '-' + r.date.valueOf()}/>)}
         </View>
     </ScrollView>
     </SafeAreaView>
   );
 };
+
+function update(dispatch, item, cart, orderQuantity) {
+  const newItem = {...item}
+  newItem.quantity = orderQuantity
+  const newCart = cart.filter(cartItem => cartItem.id != newItem.id)      
+  dispatch(updateCart([...newCart, newItem]))
+}

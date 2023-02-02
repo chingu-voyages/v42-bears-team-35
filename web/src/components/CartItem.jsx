@@ -12,7 +12,8 @@ export default CartItem = ({image, name, discount, price, quantity}) => {
             borderRadius: 9,
             padding: 6,
             paddingTop: 12,
-            width: "100%"
+            width: "100%",
+            marginBottom: 24
         },
         image: {
             borderRadius: 9,

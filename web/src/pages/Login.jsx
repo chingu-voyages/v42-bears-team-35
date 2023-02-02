@@ -1,22 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, TextInput, View, Pressable, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { styles } from "../../styles";
-import { ROUTES } from "../constants";
+import { useDispatch } from "react-redux";
+import { updateUser } from "../constants/userSlice";
 import Navbar from "../components/Navbar";
+import { ROUTES } from "../constants";
+
+const FAKE_USER = {
+  email: "test@thetest.com",
+}
+
 
 const Login = ({ navigation }) => {
+  const dispatch = useDispatch()
+
   const [email, onChangeEmail] = useState("");
   const [password, onChangePassword] = useState("");
 
-  function conditionalNavigation() {
-    navigation.navigate(ROUTES.FRONT);
+  function login() {
+    if (email.length <= 3) return
+    if (password.length < 8) return 
+    dispatch(updateUser(FAKE_USER))
+    navigation.navigate(ROUTES.SLIDES)
   }
-
   const styles = StyleSheet.create({
     container: {
       width: "100%",
-      backgroundColor: "#fff",
+      backgroundColor: "#222020",
       minHeight: "100%",
     },
     flexDiv: {
@@ -28,6 +38,7 @@ const Login = ({ navigation }) => {
       fontSize: 20,
       fontWeight: "800",
       margin: 16,
+      color: "#57D491"
     },
     input: {
       height: 48,
@@ -37,7 +48,8 @@ const Login = ({ navigation }) => {
       borderWidth: 2,
       fontSize: 20,
       marginTop: 16,
-      marginBottom: 16
+      marginBottom: 16,
+      backgroundColor: "#ddd"
     },
     label: {
       alignSelf: "flex-start",
@@ -45,6 +57,8 @@ const Login = ({ navigation }) => {
       marginLeft: "5%",
       fontSize: 20,
       marginBottom: 4,
+      color: "#fff"
+
     },
     h1: {
       fontSize: 20,
@@ -53,6 +67,8 @@ const Login = ({ navigation }) => {
       marginLeft: "5%",
       fontWeight: "800",
       alignSelf: "flex-start",
+      color: "#fff"
+
     },
     greenButton: {
       backgroundColor: "#57D491",
@@ -79,8 +95,12 @@ const Login = ({ navigation }) => {
       margin: 36,
       fontSize: 20,
       fontWeight: "600",
-      color: "#787",
+      color: "#fff",
     },
+    error: {
+      color: "#E44040",
+      textAlign: "left"
+    }
   });
   
   return (
@@ -96,6 +116,7 @@ const Login = ({ navigation }) => {
             placeholder="Enter your email"
             value={email}
           />
+          <Text style={styles.error}>{email.length < 6 && "Enter a valid email"}</Text>
         </View>
         <View style={styles.flexDiv}>
           <Text style={styles.label}>Password</Text>
@@ -106,10 +127,12 @@ const Login = ({ navigation }) => {
             secureTextEntry={true}
             placeholder="Enter your password"
           />
+          <Text style={styles.error}>{password.length <= 8 && "Password must be at least 8 characters"}</Text>
+
         </View>
         <View style={styles.flexDiv}>
           <Pressable
-            onPressOut={() => conditionalNavigation()}
+            onPressOut={() => login()}
             style={styles.greenButton}
           >
             <Text style={styles.greenButtonText}>Login</Text>

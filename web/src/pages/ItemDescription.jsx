@@ -1,83 +1,45 @@
 import { useState } from "react";
 import { Image, Pressable, Text, TextInput, ScrollView, SafeAreaView, StyleSheet, View, useWindowDimensions } from "react-native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { updateCart } from '../constants/cartSlice'
 import Navbar from "../components/Navbar";
 import Review from "../components/Review"
 
+//still need review sort functionality
+//fix initial setOrderQuantity (I think it's undefined)
+//Actually calculate score based on reviews
+// if there are no reviews, display "no review... yet"
+// if logged in, add a button to allow to write review if item has been previously purchased
+// clean up barWidth "css"
+// size?? color selection
+// zoom in on images 
 
-const prop = {
-  imageUrl: "../assets/red-hat.jpg",
-  productName: ["reddest", "barrette"],
-  productDescription:
-    "A fabulous red barret designed and made in France. Channel your inner french girl aesthetic with this hat",
-  price: 30.99,
-  discount: 5,
-  dateAdded: new Date(),
-  productRating: 4,
-  reviews: [
-    {
-      name: "S",
-      date: new Date(),
-      rating: 5,
-      review: "It's good",
-    },
-    {
-      name: "Anonymous",
-      date: new Date(),
-      rating: 2,
-      review: "It's garbage",
-    },
-    {
-      name: "Tim",
-      date: new Date(),
-      rating: 4,
-      review: "It's maroon, not red. Still pretty cute though.",
-    },
-  ],
-};
-
-const prop2 = {
-  imageUrl: "./blue-vase.jpg",
-  productName: ["bluest", "vase"],
-  productDescription:
-    "A fabulous blue vase",
-  price: 20.99,
-  discount: 5,
-  dateAdded: new Date(),
-  productRating: 4,
-  reviews: [
-    {
-      name: "S",
-      date: new Date(),
-      rating: 5,
-      review: "It's good",
-    },
-    {
-      name: "Anonymous",
-      date: new Date(),
-      rating: 2,
-      review: "It's garbage",
-    },
-    {
-      name: "Tim",
-      date: new Date(),
-      rating: 4,
-      review: "It's maroon, not red. Still pretty cute though.",
-    },
-  ],
-};
-
-export default ItemDescription = ({ navigation }) => {
+export default ItemDescription = ({ navigation, route } ) => {
+  const item = route.params
   const { width } = useWindowDimensions()
 
-  const [orderQuantity, setOrderQuantity] = useState(1);
+  const cart = useSelector(state => state.cart.value)
+  const numberInCart = cart.find(itemInCart => itemInCart.id === item.id )
+  const [orderQuantity, setOrderQuantity] = useState(numberInCart ? numberInCart.quantity : 1);
+  
+  const dispatch = useDispatch()
+  function update() {
+      const newItem = {...item}
+      newItem.quantity = orderQuantity
+      const newCart = cart.filter(cartItem => cartItem.id != newItem.id)      
+      dispatch(updateCart([...newCart, newItem]))
+  }
+  
   const style = StyleSheet.create({
+    dark: {
+      backgroundColor: "#222020"
+    },
     container: {
       width: "100%",
       padding: 20,
       display: "flex",
       flexDirection: "row",
-      paddingBottom: 0,
+      paddingBottom: 0
     },
     right: {
       display: "flex",
@@ -89,6 +51,7 @@ export default ItemDescription = ({ navigation }) => {
     prices: {
       display: "flex",
       flexDirection: "column",
+      color: "#fff"
     },
     row: {
       display: "flex",
@@ -110,6 +73,8 @@ export default ItemDescription = ({ navigation }) => {
       flexDirection: "row",
       justifyContent: "flex-start",
       height: 84,
+      color: "#fff"
+
     },
     imageHeading: {
       display: "flex",
@@ -125,12 +90,12 @@ export default ItemDescription = ({ navigation }) => {
       position: "absolute",
       top: -12,
       right: -16,
-      backgroundColor: "white",
       padding: 4
     },
     h2: {
       fontSize: 32,
-      margin: 0
+      margin: 0,
+      color: "#fff"
     },
     grey: {
       fontSize: 20,
@@ -143,12 +108,16 @@ export default ItemDescription = ({ navigation }) => {
       fontSize: 20,
       alignItems: "flex-end",
       padding: 0,
+      color: "#fff"
+
     },
     fullStar: {
       color: "#F1C644",
     },
     reviewCount: {
       marginLeft: 12,
+      color: "#fff"
+
     },
     imageSelector: {
       width: "100%",
@@ -171,6 +140,8 @@ export default ItemDescription = ({ navigation }) => {
     },
     p: {
       fontSize: 20,
+      color: "#fff"
+
     },
     text: {
       width: "100%",
@@ -202,12 +173,12 @@ export default ItemDescription = ({ navigation }) => {
     },
     numberInput: {
       fontSize: 20,
-      borderWidth: 2,
-      borderColor: "#000",
       borderRadius: 9,
       width: 56,
       marginRight: 8,
       textAlign: "center",
+      backgroundColor: "#fff"
+
     },
     reviews: {
       width: "100%",
@@ -216,6 +187,7 @@ export default ItemDescription = ({ navigation }) => {
     h3: {
       fontSize: 24,
       marginBottom: 8,
+      color: "#fff"
     },
     starsNoPadding: {
       display: "flex",
@@ -297,16 +269,16 @@ export default ItemDescription = ({ navigation }) => {
   });
   return (
     <SafeAreaView>
-      <ScrollView bounces={true}>
+      <ScrollView bounces={true} style={style.dark}>
         <Navbar />
         <View style={style.container}>
             <Image 
-                source={require('../assets/red-hat.jpg')}
+                source={{uri: item.imageUrl}}
                 style={style.mainImage}
                 />
             <View style={style.right}>
                     <View style={style.row}>
-                        <Text style={style.h2}>{prop.productName.join(' ')}</Text>
+                        <Text style={style.h2}>{item.productName.join(' ')}</Text>
                         <Text style={style.smallRed}>New</Text>
                     </View>
                     <View style={style.rowBottom}>
@@ -319,29 +291,18 @@ export default ItemDescription = ({ navigation }) => {
                             <Text style={style.reviewCount}>5 reviews</Text>
                         </View>
                         <View style={style.prices}>
-                            <Text style={style.grey}>{(prop.discount && prop.price).toLocaleString("us-EN", {style: "currency", currency: "USD"})}</Text>
-                            <Text style={style.price}>{(prop.price - parseFloat(prop.price * (prop.discount / 100))).toLocaleString("us-EN", {style: "currency", currency: "USD"})}</Text>
+                            <Text style={style.grey}>{(item.discount && item.price).toLocaleString("us-EN", {style: "currency", currency: "USD"})}</Text>
+                            <Text style={style.price}>{(item.price - parseFloat(item.price * (item.discount / 100))).toLocaleString("us-EN", {style: "currency", currency: "USD"})}</Text>
                         </View>
                 </View>
             </View>
         </View>
         <View style={style.imageSelector}>
-            <Image 
-                source={require('../assets/red-hat.jpg')}
-                style={style.secondaryImage}
-            />
-            <Image 
-                source={require('../assets/red-hat.jpg')}
-                style={style.secondaryImage}
-            />
-            <Image 
-                source={require('../assets/red-hat.jpg')}
-                style={style.secondaryImage}
-            />
+            
             
         </View>
         <View style={style.text}>
-            <Text style={style.p}>{prop.productDescription}</Text>
+            <Text style={style.p}>{item.productDescription}</Text>
         </View>
         <View style={style.imageSelector }>
             <Pressable 
@@ -364,6 +325,7 @@ export default ItemDescription = ({ navigation }) => {
             </Pressable>
             <Pressable 
                 style={style.greenButton}
+                onPress={update}
             >
                 <Text style={style.p}>Put in cart</Text>
             </Pressable>
@@ -436,11 +398,9 @@ export default ItemDescription = ({ navigation }) => {
             </Pressable>
         </View>
         <View>
-            {prop.reviews.map(r => <Review name={r.name} date={r.date} rating={r.rating} review={r.review} key={r.name + '-' + r.date.valueOf()}/>)}
+            {item.reviews.map(r => <Review name={r.name} date={r.date} rating={r.rating} review={r.review} key={r.name + '-' + r.date.valueOf()}/>)}
         </View>
     </ScrollView>
     </SafeAreaView>
   );
 };
-
-

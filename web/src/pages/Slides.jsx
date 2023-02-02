@@ -53,12 +53,12 @@ export default Slides = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <Navbar />
-      <Button 
+      {/* <Button 
         title={"fetch"}
         onPress={() => {
           callItems()
         }}
-      />
+      /> */}
       <FlatList
           data={products}
           decelerationRate="fast"

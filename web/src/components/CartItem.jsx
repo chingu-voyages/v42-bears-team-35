@@ -2,7 +2,7 @@ import { View, Text, Image, StyleSheet, Pressable, Systrace, useWindowDimensions
 import Quantity from './Quantity'
 
 
-export default CartItem = ({image, name, discount, price, quantity}) => {
+export default CartItem = ({id, imageUrl, name, discount, price, quantity, handleDelete}) => {
     const { width } = useWindowDimensions()
     const style = StyleSheet.create({
         box: {
@@ -54,11 +54,14 @@ export default CartItem = ({image, name, discount, price, quantity}) => {
             color: "white"
         }
     })
+        // console.log(id)
 
     return (
         <View style={style.box}>
-            <Image source={{ uri: image}} />
-            <View style={style.image}></View>
+            <Image 
+                source={{uri:imageUrl}}
+                style={style.image}
+                />
             <View style={style.column}>
                 <Text style={style.discount}>{discount > 0 && discount + '% OFF'}</Text>
                 <Pressable>
@@ -68,6 +71,9 @@ export default CartItem = ({image, name, discount, price, quantity}) => {
                     <Text style={style.price}>{(price - parseFloat(price * (discount / 100))).toLocaleString("us-EN", {style: "currency", currency: "USD"})}</Text>
                     <Quantity currentQuantity={quantity} />
                 </View>
+                <Pressable onPress={() => handleDelete()}>
+                    <Text style={style.name}>Delete</Text>
+                </Pressable>
             </View>
         </View>
     )

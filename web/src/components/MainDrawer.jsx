@@ -1,6 +1,5 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { useDispatch, useSelector } from "react-redux";
-import { updateUser } from "../constants/userSlice";
 import { ROUTES } from "../constants";
 import Front from "./Front";
 import Login from "../pages/Login";
@@ -11,6 +10,9 @@ import Logout from "../pages/Logout";
 import VendorSignUpOne from "../pages/register/VendorSignUpOne";
 import FirstPage from "../pages/register/FirstPage";
 import AddressInput from "../pages/register/AddressInput";
+import Grid from "./Grid";
+import SignupComplete from "../pages/register/SignupComplete";
+import SearchResults from "./SearchResults";
 
 const Drawer = createDrawerNavigator();
 
@@ -19,7 +21,7 @@ export default MainDrawer = () => {
   const dispatch = useDispatch()
   return (
     <Drawer.Navigator 
-      initialRouteName={ROUTES.LOGIN}
+      initialRouteName={ROUTES.SLIDES}
       screenOptions={{
               headerShown: false,
               drawerStyle: {
@@ -36,15 +38,7 @@ export default MainDrawer = () => {
             }}
       options={{ drawerItemStyle: { height: 0, }}}
       >
-        <Drawer.Screen
-          name={ROUTES.FRONT}
-          component={Front}
-          options={{ 
-            headerShown: false,
-            drawerLabel: "Home",
-            drawerItemStyle: { display: "none" }
-          }}
-        />
+
         <Drawer.Screen
           name={ROUTES.SLIDES}
           options={{
@@ -73,6 +67,7 @@ export default MainDrawer = () => {
             }}
           component={Cart}
         />
+        
         <Drawer.Screen
           name={"VendorSignUpOne"}
           options={{
@@ -117,7 +112,33 @@ export default MainDrawer = () => {
             }}
           component={Logout}
         />
-        
+        <Drawer.Screen
+          name={'Grid'}
+          options={{
+            drawerLabel: "Grid",
+            headerShown: false,
+            drawerItemStyle: { display: "none" }
+            }}
+          component={Grid}
+        />
+        <Drawer.Screen
+          name={'SignupComplete'}
+          options={{
+            drawerLabel: "SignupComplete",
+            headerShown: false,
+            drawerItemStyle: { display: "none" }
+            }}
+          component={SignupComplete}
+        />
+        <Drawer.Screen
+          name={"SearchResults"}
+          options={{
+            drawerLabel: "SearchResults",
+            headerShown: false,
+            drawerItemStyle: { display: "none" }
+            }}
+          component={SearchResults}
+        />
     </Drawer.Navigator>
   );
 };

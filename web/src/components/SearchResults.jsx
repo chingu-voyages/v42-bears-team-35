@@ -1,31 +1,36 @@
-import { Pressable, Text } from "react-native";
-import { UserSelector, useDispatch, useSelector } from "react-redux";
-import { SafeAreaView } from "react-native"; 
+import { Image, Text, StyleSheet, View } from "react-native";
+import { SafeAreaView } from "react-native";
 import Navbar from "./Navbar";
-import { ROUTES } from "../constants";
-export default SearchResults = ({ navigation}) => {
-    const [searchResults, searchTerm] = useSelector(state => state.searchResults.value)
+import Grid from "./Grid";
+import searchStyle from "../styles/searchStyle";
 
-    if (searchTerm.length == 0) navigation.navigate(ROUTES.FRONT)
+const style = StyleSheet.create({
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginTop: "10%",
+    marginBottom: "6%"
+  }
+})
 
-    if (searchResults.length == 0) return (
-        <SafeAreaView>
-        <Navbar />
-        <Text>Sorry, we couldn't find that</Text>
+export default SearchResults = ({ navigation, route }) => {
+  const { searchResult, searchTerm } = route.params
+  //if (searchTerm.length == 0) navigation.navigate(ROUTES.FRONT)
+
+  if (searchResult.length == 0) return (
+    <SafeAreaView>
+      <Navbar />
+      <Text style={style.title}>No results for : {searchTerm.toLowerCase()}</Text>
       </SafeAreaView>
-    )
-   
-    return (
-        <SafeAreaView>
-        <Navbar />
-        <Text>We got results</Text>
-            <Text>{searchResults[0].title}</Text>
-            <Pressable onPress={() => navigation.navigate(ROUTES.SLIDES)}>
-              <Text>Go to item</Text>
-            </Pressable>
+  )
+  return (
+    <SafeAreaView>
+      <Navbar />
+      <Text style={style.title}>Results for : {searchTerm}</Text>
+       <Grid products={searchResult} />
+    </SafeAreaView>
 
-      </SafeAreaView>
-            
-    )
+  )
 
 }

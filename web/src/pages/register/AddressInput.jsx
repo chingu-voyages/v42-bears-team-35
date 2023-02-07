@@ -216,7 +216,7 @@ export default AddressInput = ({ navigation, route }) => {
 
 function nextStep(dispatch,  navigation, setSubmitted) {
     //dispatch(updateUser({email, password}))
-    console.log('go to pay')
+    ('go to pay')
     setSubmitted(true)
-    //navigation.navigate('AddressInput')
+    navigation.navigate('SignupComplete')
 }

@@ -1,8 +1,12 @@
-import { View, Text, Image, StyleSheet, Pressable, Systrace, useWindowDimensions} from 'react-native'
+import { View, Text, Image, StyleSheet, Pressable, Systrace, useWindowDimensions } from 'react-native'
 import Quantity from './Quantity'
+import { useDispatch, useSelector } from 'react-redux'
 
 
-export default CartItem = ({id, imageUrl, name, discount, price, quantity, handleDelete}) => {
+export default CartItem = ({ id, imageUrl, name, discount, price, quantity, handleDelete }) => {
+    const cart = useSelector(state => state.cart.value)
+    const dispatch = useDispatch()
+
     const { width } = useWindowDimensions()
     const style = StyleSheet.create({
         box: {
@@ -20,11 +24,12 @@ export default CartItem = ({id, imageUrl, name, discount, price, quantity, handl
             margin: 12,
             width: 90,
             height: 140,
-            backgroundColor: "grey"
+            marginRight: 0
         },
         column: {
             display: "flex",
             padding: 20,
+            paddingLeft: 12
         },
         discount: {
             color: "#E44040",
@@ -54,27 +59,28 @@ export default CartItem = ({id, imageUrl, name, discount, price, quantity, handl
             color: "white"
         }
     })
-        // console.log(id)
+
+    
 
     return (
         <View style={style.box}>
-            <Image 
-                source={{uri:imageUrl}}
+            <Image
+                source={{ uri: imageUrl }}
                 style={style.image}
-                />
+            />
             <View style={style.column}>
                 <Text style={style.discount}>{discount > 0 && discount + '% OFF'}</Text>
                 <Pressable>
                     <Text style={style.name}>{name.join(" ")}</Text>
                 </Pressable>
                 <View style={style.row}>
-                    <Text style={style.price}>{(price - parseFloat(price * (discount / 100))).toLocaleString("us-EN", {style: "currency", currency: "USD"})}</Text>
-                    <Quantity currentQuantity={quantity} />
+                    <Text style={style.price}>{(price - parseFloat(price * (discount / 100))).toLocaleString("us-EN", { style: "currency", currency: "USD", currencyDisplay: "symbol" })}</Text>
+                    <Quantity currentQuantity={quantity} id={id}/>
+                    
                 </View>
-                <Pressable onPress={() => handleDelete()}>
-                    <Text style={style.name}>Delete</Text>
-                </Pressable>
+                    <Text style={style.price}>{quantity}</Text>
             </View>
         </View>
     )
 }
+

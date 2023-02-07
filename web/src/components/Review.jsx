@@ -13,15 +13,17 @@ const style = StyleSheet.create({
     },  
     name: {
         padding: 4,
-        paddingLeft: 12,
+        paddingLeft: 0,
         paddingRight: 12,
-        backgroundColor: "white",
+        color: "#57D491",
         fontSize: 20,
+        borderRadius: 30,
+        fontWeight: "600"
         
     },
     space: {
         margin: 4,
-        marginLeft: 20,
+        marginLeft: 0,
         fontSize: 20,
         color: "#fff"
     },

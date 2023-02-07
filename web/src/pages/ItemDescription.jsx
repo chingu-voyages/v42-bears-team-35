@@ -26,9 +26,11 @@ export default ItemDescription = ({ navigation, route } ) => {
     item.ratingDetails[key] > 0 && (ratingsCount += item.ratingDetails[key])
   }
   for (let key in item.ratingDetails) {
-    barChartPercentages.push(Math.round((item.ratingDetails[key] / ratingsCount) * 100))
+    console.log(item.ratingDetails[key])
+    if (item.ratingDetails[key] == 0) barChartPercentages.push(0)
+    else barChartPercentages.push(Math.round((item.ratingDetails[key] / ratingsCount) * 100))
   }
-
+  console.log("BAR CHART PERCENTAGES", barChartPercentages)
   useEffect(() => {
     const numberInCart = cart.find(itemInCart => itemInCart.id === item.id )
     setOrderQuantity(numberInCart ? numberInCart.quantity : 1)

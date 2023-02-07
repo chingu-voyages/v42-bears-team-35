@@ -26,20 +26,22 @@ export default ItemDescription = ({ navigation }) => {
     }
   });
 
-
   const dispatch = useDispatch()
-  const handleDelete = () => {
-    dispatch(removeItem(cart.id))
-    console.log(cart.id)
-  }
-
-
+  
   return (
     <SafeAreaView>
       <Navbar />
       <ScrollView bounces={true} style={style.container}>
         <Text style={style.text}>{cart.length == 0 ? "No" : cart.length} items in cart</Text>
-       {cart.map(item => <CartItem image={item.imageUrl} name={item.productName} price={item.price} discount={item.discount} quantity={item.quantity} key={"cartItem-" + item.id} />)}
+       {cart.map(item => <CartItem 
+        id={item.id}
+        imageUrl={item.imageUrl} 
+        name={item.productName} 
+        price={item.price} 
+        discount={item.discount} 
+        quantity={item.quantity} 
+        key={"cartItem-" + item.id} 
+        />)}
     </ScrollView>
     </SafeAreaView>
   );

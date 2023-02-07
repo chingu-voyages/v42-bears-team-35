@@ -5,42 +5,26 @@ import { updateSearch } from "../constants/searchSlice";
 import { useNavigation } from '@react-navigation/native';
 import { ROUTES } from "../constants";
 
-//delete soon
-const MOCK_DATA = [
-  {
-    id: 1,
-    url: { uri: "https://img.makeupalley.com/3/9/7/8/3630182.jpg" },
-    title: "Lancome",
-  },
-  {
-    id: 2,
-    url: { uri: "https://img.makeupalley.com/3/9/7/8/3630182.jpg" },
-    title: "Lancome2",
-  },
-  {
-    id: 3,
-    url: { uri: "https://img.makeupalley.com/3/9/7/8/3630182.jpg" },
-    title: "Lancome3",
-  },
-];
-
 export default Navbar = () => {
+  const products = useSelector(state => state.product.value)
+
   const navigation = useNavigation()
   const [searchTerm, setSearchTerm] = useState('')
 
   const dispatch = useDispatch()
-  const search = useSelector(state => state.search.value)
+  //const search = useSelector(state => state.search.value)
 
-  useEffect(() => {
-    realtimeSearchDB()
-  }, [searchTerm])
 
   function realtimeSearchDB() {
     // query DB and update dispatch with it
-    const searchResult = MOCK_DATA.filter((item) => item.title.includes(searchTerm))
+    const searchResult = products.filter((item) => item.productName.join(' ').toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase()))
+    console.log('searchResult', searchResult.length)
     const db = { searchTerm, searchResult }
+    
     dispatch(updateSearch(db))
-    //navigation.navigate(ROUTES.SEARCH_RESULTS)
+    if (searchTerm.length > 0) {
+      navigation.navigate("SearchResults", { searchResult, searchTerm })
+    }
   }
 
   const style = StyleSheet.create({
@@ -75,7 +59,8 @@ export default Navbar = () => {
       height: 24,
       width: 24,
       marginRight: 12
-    }
+    },
+    
   })
 
   return (
@@ -89,11 +74,15 @@ export default Navbar = () => {
       <TextInput
         style={style.searchBar}
         onChangeText={setSearchTerm}
+        onEndEditing={() => realtimeSearchDB()}
         value={searchTerm}
         secureTextEntry={false}
         placeholder="Search"
       />
-      <Pressable style={style.menuContainer} onPress={() => navigation.navigate(ROUTES.CART)}>
+      <Pressable 
+        style={style.menuContainer} 
+        onPress={() => navigation.navigate(ROUTES.CART)}
+        >
         <Image
           source={require('../assets/shopping-cart.png')}
           style={style.menu}

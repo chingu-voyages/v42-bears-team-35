@@ -1,80 +1,75 @@
 // makes ItemCard swipable 
 
-import { FlatList, SafeAreaView, ImageBackground, Text, useWindowDimensions, View, Pressable, Button } from "react-native";
+import { FlatList, SafeAreaView, ImageBackground, Text, useWindowDimensions, View, Pressable, ActivityIndicator } from "react-native";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import AsyncStorage from "@react-native-async-storage/async-storage"; import { LinearGradient } from "expo-linear-gradient";
+import Navbar from "../components/Navbar";
 import { styles } from "../styles/ItemCard";
 import { ROUTES } from "../constants";
-import axios from "axios";
-import {getItems} from "../constants/axios"
-import Navbar from "../components/Navbar";
-import { LinearGradient } from "expo-linear-gradient";
+import slides from "../styles/slides";
+import { getItems } from "../constants/axios"
 
-const callItems = () => {
-  axios 
-  .get (`https://v42-bears-team-35-production.up.railway.app/items`)
-  .then (response => {
-    console.log('Response:', response?.data);
-  })
-  .catch (error => {
-    console.log('Error:', error) 
-  })
-}
 
 export default Slides = ({ navigation }) => {
+  const [visitedBefore, setVisitedBefore] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const { height, width } = useWindowDimensions()
   const products = useSelector(state => state.product.value)
 
-  const ItemCard = ({ item }) => {
+
+  useEffect(() => {
+
+    //retrieveData()
+  }, [])
+
+
+  const ItemCard = ({ item, index }) => {
     const { imageUrl, productName } = item
-    const name = productName.join(' ')
+    const name = productName.join(" ")
     return (
-      
-        <View style={{height: height - 60, flex: 1}}>
-          <Pressable onPress={() => navigation.navigate(ROUTES.ITEM_DESCRIPTION, item)}>
-            <ImageBackground
-              source={{uri: imageUrl}}
-              imageStyle={{height: height - 80}}
-            //style={{ height: height, width: width}}
-            >
-              <View style={{width: width, height: height * .5, }}>
-                <LinearGradient 
-                  colors={["rgba(0,0,0,.6)", "transparent"]}
-                  style={{width: "100%", height: "100%", display: "flex", justifyContent: "flex-start", alignItems: "center"}}
-                >
-                  <Text style={{fontSize: 36, color: "white", marginTop: 36}}>{name}</Text>
-                </LinearGradient>
-              </View>
-            </ImageBackground>
+      <View style={{ height: height - 60, flex: 1, backgroundColor: "#222020" }}>
+        <Pressable onPress={() => navigation.navigate(ROUTES.ITEM_DESCRIPTION, item)}>
+          <ImageBackground
+            source={{ uri: imageUrl }}
+            imageStyle={{ height: height - 80 }}
+          //style={{ height: height, width: width}}
+          >
+            <View style={{ width: width, height: height * .5, }}>
+              <LinearGradient
+                colors={["rgba(0,0,0,.6)", "transparent"]}
+                style={{ width: "100%", height: "100%", display: "flex", justifyContent: "flex-start", alignItems: "center" }}
+              >
+                <Text style={{ fontSize: 36, color: "white", marginTop: 36 }}>{name}</Text>
+              </LinearGradient>
+            </View>
+          </ImageBackground>
+          {index == 0 && <Text style={slides.scroll}>Scroll</Text>}
         </Pressable>
-        </View>
+      </View>
     )
   }
+
 
   return (
     <SafeAreaView style={styles.container}>
       <Navbar />
-      {/* <Button 
-        title={"fetch"}
-        onPress={() => {
-          callItems()
-        }}
-      /> */}
+
       <FlatList
-          data={products}
-          decelerationRate="fast"
-          keyExtractor={item => item.id.toString()}
-          onViewableItemsChanged={this.onViewableItemsChanged}
-          removeClippedSubviews={false}
-          renderItem={ItemCard}
-          showsVerticalScrollIndicator={false}
-          snapToAlignment="start"
-          snapToInterval={height - 60}
-          viewabilityConfig={{
-            waitForInteraction: true,
-            viewAreaCoveragePercentThreshold: 100,
-          }}
-        />
+        data={products}
+        decelerationRate="fast"
+        keyExtractor={item => item.id.toString()}
+        onViewableItemsChanged={this.onViewableItemsChanged}
+        removeClippedSubviews={false}
+        showsVerticalScrollIndicator={false}
+        snapToAlignment="start"
+        snapToInterval={height - 60}
+
+        renderItem={({ item, index }) => <ItemCard item={item} index={index} />}
+
+      />
     </SafeAreaView>
   );
-};
+
+}
 

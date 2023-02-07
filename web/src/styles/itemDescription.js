@@ -163,6 +163,7 @@ export default StyleSheet.create({
       flexDirection: "row",
       justifyContent: "flex-start",
       marginBottom: 4,
+      width: 100
     },
     starsMinWidth: {
       width: 84,

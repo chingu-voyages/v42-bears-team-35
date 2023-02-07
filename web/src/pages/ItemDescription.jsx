@@ -16,6 +16,19 @@ export default ItemDescription = ({ navigation, route } ) => {
   
   const dispatch = useDispatch()
   
+  let productRating = item.productRating
+
+  let ratingsCount = 0
+  
+  const barChartPercentages = []
+
+  for (let key in item.ratingDetails) {
+    item.ratingDetails[key] > 0 && (ratingsCount += item.ratingDetails[key])
+  }
+  for (let key in item.ratingDetails) {
+    barChartPercentages.push(Math.round((item.ratingDetails[key] / ratingsCount) * 100))
+  }
+
   useEffect(() => {
     const numberInCart = cart.find(itemInCart => itemInCart.id === item.id )
     setOrderQuantity(numberInCart ? numberInCart.quantity : 1)
@@ -23,6 +36,8 @@ export default ItemDescription = ({ navigation, route } ) => {
   
 
   //to set image size correctly, need width here
+
+
   return (
     <SafeAreaView>
       <ScrollView bounces={true} style={itemDescription.dark}>
@@ -34,15 +49,13 @@ export default ItemDescription = ({ navigation, route } ) => {
                 />
             <View style={itemDescription.right}>
                     <View style={itemDescription.row}>
-                        <Text style={itemDescription.h2}>{item.productName.join(' ')}</Text>
+                        <Text style={itemDescription.h2}>{item.tags.join(' ')}</Text>
                         <Text style={itemDescription.smallRed}>New</Text>
                     </View>
                     <View style={itemDescription.rowBottom}>
                         <View style={itemDescription.stars}>
-                            <Text style={itemDescription.fullStar}>★</Text>
-                            <Text style={itemDescription.fullStar}>★</Text>
-                            <Text style={itemDescription.fullStar}>★</Text>
-                            <Text style={itemDescription.reviewCount}>5 reviews</Text>
+                            <Text style={itemDescription.fullStar}>{"★".repeat(item.productRating)}</Text>
+                            <Text style={itemDescription.reviewCount}>{ratingsCount} {ratingsCount > 1 ? "reviews" : "review"}</Text>
                         </View>
                         <View style={itemDescription.prices}>
                             <Text style={itemDescription.grey}>{(item.discount && item.price).toLocaleString("us-EN", {style: "currency", currency: "USD"})}</Text>
@@ -92,67 +105,22 @@ export default ItemDescription = ({ navigation, route } ) => {
                 <Text style={itemDescription.fullStar}>★</Text>
                 <Text style={itemDescription.fullStar}>★</Text>
                 <Text style={itemDescription.fullStar}>★</Text>
-                <Text style={itemDescription.reviewCount}>5 reviews</Text>
+                <Text style={itemDescription.reviewCount}>{ratingsCount} {ratingsCount > 1 ? "reviews" : "review"}</Text>
             </View>
-            <Pressable style={itemDescription.starsNoPadding}>
-                <View style={itemDescription.starsMinWidth}>
-                    <Text style={itemDescription.fullStar}>★</Text>
-                </View>
-                <View style={itemDescription.starsNoPadding}>
-                    <View style={itemDescription.barWidth0}></View>
-                    <Text style={itemDescription.reviewCount}>0% </Text> 
-                </View>
-            </Pressable>
-            <Pressable style={itemDescription.starsNoPadding}>
-                <View style={itemDescription.starsMinWidth}>
-                    <Text style={itemDescription.fullStar}>★</Text>
-                    <Text style={itemDescription.fullStar}>★</Text>
-                </View>
-                <View style={itemDescription.starsNoPadding}>
-                    <View style={itemDescription.barWidth100}></View>
-                    <Text style={itemDescription.reviewCount}>100% </Text> 
-                </View>
-            </Pressable>
-            <Pressable style={itemDescription.starsNoPadding}>
-                <View style={itemDescription.starsMinWidth}>
-                    <Text style={itemDescription.fullStar}>★</Text>
-                    <Text style={itemDescription.fullStar}>★</Text>
-                    <Text style={itemDescription.fullStar}>★</Text>
-                </View>
-                <View style={itemDescription.starsNoPadding}>
-                    <View style={itemDescription.barWidth90}></View>
-                    <Text style={itemDescription.reviewCount}>90% </Text> 
-                </View>
-            </Pressable>
-            <Pressable style={itemDescription.starsNoPadding}>
-                <View style={itemDescription.starsMinWidth}>
-                    <Text style={itemDescription.fullStar}>★</Text>
-                    <Text style={itemDescription.fullStar}>★</Text>
-                    <Text style={itemDescription.fullStar}>★</Text>
-                    <Text style={itemDescription.fullStar}>★</Text>
-                </View>
-                <View style={itemDescription.starsNoPadding}>
-                    <View style={itemDescription.barWidth10}></View>
-                    <Text style={itemDescription.reviewCount}>10% </Text> 
-                </View>
-            </Pressable>
-            <Pressable style={itemDescription.starsNoPadding}>
-                <View style={itemDescription.starsMinWidth}>
-                    <Text style={itemDescription.fullStar}>★</Text>
-                    <Text style={itemDescription.fullStar}>★</Text>
-                    <Text style={itemDescription.fullStar}>★</Text>
-                    <Text style={itemDescription.fullStar}>★</Text>
-                    <Text style={itemDescription.fullStar}>★</Text>
-
-                </View>
-                <View style={itemDescription.starsNoPadding}>
-                    <View style={itemDescription.barWidth50}></View>
-                    <Text style={itemDescription.reviewCount}>50% </Text> 
-                </View>
-            </Pressable>
+            {barChartPercentages.map((percent, i) => { return (
+                <Pressable style={itemDescription.starsNoPadding}>
+                    <View style={itemDescription.starsMinWidth}>
+                        <Text style={itemDescription.fullStar}>{"★".repeat(i + 1)}</Text>
+                    </View>
+                    <View style={itemDescription.starsNoPadding}>
+                        <View style={{...itemDescription.barWidth0, width: percent == 0 ? "5%" : percent.toLocaleString() + "%"}}></View>
+                        <Text style={itemDescription.reviewCount}>{percent}% </Text> 
+                    </View>
+                </Pressable>
+            )})}
         </View>
         <View>
-            {item.reviews.map(r => <Review name={r.name} date={r.date} rating={r.rating} review={r.review} key={item.productName.join('-') + '-' + r.name + '-' + r.date.valueOf()}/>)}
+            {item.reviews.map(r => <Review name={r.name} date={r.date} rating={r.rating} review={r.review} key={item.tags.join('-') + '-' + r.name + '-' + r.date.valueOf()}/>)}
         </View>
     </ScrollView>
     </SafeAreaView>

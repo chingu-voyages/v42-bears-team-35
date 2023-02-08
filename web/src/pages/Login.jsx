@@ -15,8 +15,8 @@ const Login = ({ navigation }) => {
   const dispatch = useDispatch()
 
   const [submitted, onSubmitted] = useState(false)
-  const [email, onChangeEmail] = useState("");
-  const [password, onChangePassword] = useState("");
+  const [email, onChangeEmail] = useState(null);
+  const [password, onChangePassword] = useState(null);
 
   function login() {
     if (email.length <= 3) return

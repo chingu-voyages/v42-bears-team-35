@@ -7,7 +7,7 @@ import Navbar from "../../components/Navbar";
 import { ROUTES } from "../../constants";
 
 
-export default FirstPage = ({ navigation, route}) => {
+export default FirstPage = ({ navigation, route }) => {
   const { isVendor } = route && route.params || false
 
   const [submitted, setSubmitted] = useState(false)
@@ -16,8 +16,8 @@ export default FirstPage = ({ navigation, route}) => {
 
   const dispatch = useDispatch()
 
-  
-  
+
+
   const styles = StyleSheet.create({
     container: {
       width: "100%",
@@ -71,11 +71,11 @@ export default FirstPage = ({ navigation, route}) => {
 
     },
     p: {
-        color: "#fff",
-        alignSelf: "flex-start",
-        marginLeft: "5%",
-        marginBottom: 24,
-        fontSize: 20
+      color: "#fff",
+      alignSelf: "flex-start",
+      marginLeft: "5%",
+      marginBottom: 24,
+      fontSize: 20
     },
     greenButton: {
       backgroundColor: "#57D491",
@@ -109,25 +109,25 @@ export default FirstPage = ({ navigation, route}) => {
       textAlign: "left"
     },
     progress: {
-        width: "90%",
-        marginLeft: "5%",
-        height: 6,
-        display: "flex",
-        flexDirection: "row",
-        backgroundColor: "#e5e5e5",
-        position: 'absolute',
-        top: 120,
-        left: 0,
-        borderRadius: 6
+      width: "90%",
+      marginLeft: "5%",
+      height: 6,
+      display: "flex",
+      flexDirection: "row",
+      backgroundColor: "#e5e5e5",
+      position: 'absolute',
+      top: 120,
+      left: 0,
+      borderRadius: 6
     },
     greenBar: {
-        width: "33%",
-        backgroundColor: "#57D491",
-        borderTopLeftRadius: 6,
-        borderBottomLeftRadius: 6
+      width: "33%",
+      backgroundColor: "#57D491",
+      borderTopLeftRadius: 6,
+      borderBottomLeftRadius: 6
     }
   });
-  
+
   return (
     <SafeAreaView>
       <Navbar />
@@ -135,7 +135,7 @@ export default FirstPage = ({ navigation, route}) => {
         <View style={styles.flexDiv}>
           <Text style={styles.h1}>Sign Up</Text>
           <Text style={styles.p}>{isVendor ? "Start selling today" : "So you can save your faves!"}</Text>
-          
+
           <Text style={styles.label}>Email</Text>
           <TextInput
             style={styles.input}
@@ -165,26 +165,26 @@ export default FirstPage = ({ navigation, route}) => {
           <Pressable
             style={styles.greenButton}
           >
-            <Text style={styles.greenButtonText} 
-            onPress={() => nextStep(dispatch, email, password, navigation, setSubmitted)}
+            <Text style={styles.greenButtonText}
+              onPress={() => nextStep(dispatch, email, password, navigation, setSubmitted)}
             >Sign up</Text>
           </Pressable>
         </View>
         <View style={styles.flexDiv}>
           <Pressable onPress={() => navigation.navigate('Login')}>
-           <Text style={styles.bottom}>already a member? login</Text>
+            <Text style={styles.bottom}>already a member? login</Text>
           </Pressable>
         </View>
       </View>
-        <View style={styles.progress}>
-            <View style={styles.greenBar}></View>
-        </View>
+      <View style={styles.progress}>
+        <View style={styles.greenBar}></View>
+      </View>
     </SafeAreaView>
   );
 };
 
 function nextStep(dispatch, email, password, navigation, setSubmitted) {
-    dispatch(updateUser({email, password}))
-    setSubmitted(true)
-    navigation.navigate('AddressInput', {isRegister: true})
-  }
+  dispatch(updateUser({ email, password }))
+  setSubmitted(true)
+  navigation.navigate('AddressInput', { isRegister: true })
+}

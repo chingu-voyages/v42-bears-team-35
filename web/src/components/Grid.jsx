@@ -47,7 +47,7 @@ export default Grid = ({ products }) => {
                         style={grid.gridItem}
                         onPress={() => navigation.navigate(ROUTES.ITEM_DESCRIPTION, { item })} >
                         <View key={item.id} >
-                            <Text style={grid.name}>{item.productName.join(' ')}</Text>
+                            <Text style={grid.name}>{item.tags.join(' ')}</Text>
                             <Image source={{ uri: item.imageUrl }} style={grid.image} />
                         </View>
                     </Pressable>

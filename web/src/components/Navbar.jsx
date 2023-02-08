@@ -18,7 +18,6 @@ export default Navbar = () => {
   function realtimeSearchDB() {
     // query DB and update dispatch with it
     const searchResult = products.filter((item) => item.productName.join(' ').toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase()))
-    console.log('searchResult', searchResult.length)
     const db = { searchTerm, searchResult }
     
     dispatch(updateSearch(db))

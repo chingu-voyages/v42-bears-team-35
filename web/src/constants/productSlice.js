@@ -7,7 +7,7 @@ export const productSlice = createSlice({
       {
         id: 1,
         imageUrl: "https://abracadabra-app.s3.us-west-2.amazonaws.com/red-hat.jpg",
-        productName: ["red", "barrette"],
+        tags: ["red", "barrette"],
         productDescription:
           "A fabulous red barret designed and made in France. Channel your inner french girl aesthetic with this hat",
         price: 30.99,
@@ -38,7 +38,7 @@ export const productSlice = createSlice({
       {
         id: 2,
         imageUrl: "https://abracadabra-app.s3.us-west-2.amazonaws.com/blue-vase.jpg",
-        productName: ["blue", "vase"],
+        tags: ["blue", "vase"],
         productDescription:
           "A fabulous blue vase",
         price: 20.99,
@@ -69,7 +69,7 @@ export const productSlice = createSlice({
       {
         id: 3,
         imageUrl: "https://abracadabra-app.s3.us-west-2.amazonaws.com/beige-suit.jpeg",
-        productName: ["beige", "suit"],
+        tags: ["beige", "suit"],
         productDescription:
           "A fabulous beige suit designed and made in France. Channel your inner french girl aesthetic with this hat",
         price: 30.99,
@@ -118,7 +118,7 @@ export const productSlice = createSlice({
       {
         id: 4,
         imageUrl: "https://abracadabra-app.s3.us-west-2.amazonaws.com/bucket-hat.jpeg",
-        productName: ["bucket", "hat"],
+        tags: ["bucket", "hat"],
         productDescription:
           "A fabulous bucket hat",
         price: 20.99,
@@ -149,7 +149,7 @@ export const productSlice = createSlice({
       {
         id: 5,
         imageUrl: "https://abracadabra-app.s3.us-west-2.amazonaws.com/combat-boots.jpeg",
-        productName: ["bluest", "vase"],
+        tags: ["bluest", "vase"],
         productDescription:
           "A fabulous blue vase",
         price: 20.99,
@@ -180,7 +180,7 @@ export const productSlice = createSlice({
       {
         id: 6,
         imageUrl: "https://abracadabra-app.s3.us-west-2.amazonaws.com/fishnet-tights.jpeg",
-        productName: ["fishnet", "tights"],
+        tags: ["fishnet", "tights"],
         productDescription:
           "A fabulous red barret designed and made in France. Channel your inner french girl aesthetic with this hat",
         price: 11.29,
@@ -211,7 +211,7 @@ export const productSlice = createSlice({
       {
         id: 7,
         imageUrl: "https://abracadabra-app.s3.us-west-2.amazonaws.com/flower-blouse.jpeg",
-        productName: ["flower", "blouse"],
+        tags: ["flower", "blouse"],
         productDescription:
           "A fabulous red barret designed and made in France. Channel your inner french girl aesthetic with this hat",
         price: 30.99,
@@ -242,7 +242,7 @@ export const productSlice = createSlice({
       {
         id: 8,
         imageUrl: "https://abracadabra-app.s3.us-west-2.amazonaws.com/flower-blouse2.jpeg",
-        productName: ["flower", "blouse"],
+        tags: ["flower", "blouse"],
         productDescription:
           "A fabulous red barret designed and made in France. Channel your inner french girl aesthetic with this hat",
         price: 140.99,
@@ -273,7 +273,7 @@ export const productSlice = createSlice({
       {
         id: 9,
         imageUrl: "https://abracadabra-app.s3.us-west-2.amazonaws.com/green-turtleneck.jpeg",
-        productName: ["green", "turtleneck"],
+        tags: ["green", "turtleneck"],
         productDescription:
           "A fabulous red barret designed and made in France. Channel your inner french girl aesthetic with this hat",
         price: 30.99,
@@ -305,7 +305,7 @@ export const productSlice = createSlice({
         id: 10,
         imageUrl: "https://abracadabra-app.s3.us-west-2.amazonaws.com/plaid-pants.jpeg",
         imageArray: [],
-        productName: ["plaid", "pants"],
+        tags: ["plaid", "pants"],
         productDescription:
           "A fabulous pair of pants designed and made in France. Channel your inner french girl aesthetic with this hat",
         price: 30.99,
@@ -337,7 +337,7 @@ export const productSlice = createSlice({
         id: 11,
         imageUrl: "https://abracadabra-app.s3.us-west-2.amazonaws.com/print-skirt.jpeg",
         imageArray: [],
-        productName: ["print", "skirt"],
+        tags: ["print", "skirt"],
         productDescription:
           "A fabulous pair of pants designed and made in France. Channel your inner french girl aesthetic with this hat",
         price: 30.99,
@@ -350,7 +350,7 @@ export const productSlice = createSlice({
         id: 12,
         imageUrl: "https://abracadabra-app.s3.us-west-2.amazonaws.com/red-coat.jpeg",
         imageArray: [],
-        productName: ["red", "coat"],
+        tags: ["red", "coat"],
         productDescription:
           "A fabulous pair of pants designed and made in France. Channel your inner french girl aesthetic with this hat",
         price: 30.99,
@@ -363,7 +363,7 @@ export const productSlice = createSlice({
         id: 13,
         imageUrl: "https://abracadabra-app.s3.us-west-2.amazonaws.com/striped-blouse.jpeg",
         imageArray: [],
-        productName: ["striped", "blouse"],
+        tags: ["striped", "blouse"],
         productDescription:
           "A fabulous pair of pants designed and made in France. Channel your inner french girl aesthetic with this hat",
         price: 30.99,

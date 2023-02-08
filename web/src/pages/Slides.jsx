@@ -3,30 +3,38 @@
 import { FlatList, SafeAreaView, ImageBackground, Text, useWindowDimensions, View, Pressable, ActivityIndicator } from "react-native";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import AsyncStorage from "@react-native-async-storage/async-storage"; import { LinearGradient } from "expo-linear-gradient";
+import { LinearGradient } from "expo-linear-gradient";
 import Navbar from "../components/Navbar";
 import { styles } from "../styles/ItemCard";
 import { ROUTES } from "../constants";
 import slides from "../styles/slides";
-import { getItems } from "../constants/axios"
+import { URL } from "@env";
 
 
 export default Slides = ({ navigation }) => {
   const [visitedBefore, setVisitedBefore] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
+  const [products, setProducts] = useState([])
   const { height, width } = useWindowDimensions()
-  const products = useSelector(state => state.product.value)
+  let reduxProducts = useSelector(state => state.product.value)
 
 
   useEffect(() => {
-
+    getItems()
     //retrieveData()
   }, [])
 
+  function getItems() {
+    fetch(URL + '/products')
+      .then(response => response.json())
+      .then(data => {
+        setProducts([...data.data, ...reduxProducts])
+      })
+      .catch(err => console.log(err))
+  }
 
   const ItemCard = ({ item, index }) => {
-    const { imageUrl, productName } = item
-    const name = productName.join(" ")
+    const { imageUrl, tags } = item
+    const name = tags ? tags.join(" ") : "No tags"
     return (
       <View style={{ height: height - 60, flex: 1, backgroundColor: "#222020" }}>
         <Pressable onPress={() => navigation.navigate(ROUTES.ITEM_DESCRIPTION, item)}>
@@ -50,7 +58,7 @@ export default Slides = ({ navigation }) => {
     )
   }
 
-
+  if (products.length > 0) { 
   return (
     <SafeAreaView style={styles.container}>
       <Navbar />
@@ -70,6 +78,7 @@ export default Slides = ({ navigation }) => {
       />
     </SafeAreaView>
   );
-
+  }
+  return <SafeAreaView><Text>Loading</Text></SafeAreaView>
 }
 

@@ -36,7 +36,7 @@ export default ItemDescription = ({ navigation }) => {
        {cart.map(item => <CartItem 
         id={item.id}
         imageUrl={item.imageUrl} 
-        name={item.productName} 
+        name={item.tags} 
         price={item.price} 
         discount={item.discount} 
         quantity={item.quantity} 

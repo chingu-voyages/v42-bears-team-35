@@ -18,5 +18,12 @@ module.exports = {
     project: "tsconfig.json",
   },
   plugins: ["@typescript-eslint", "prettier"],
-  rules: {},
+  rules: {
+    "no-console": [
+      "error",
+      {
+        allow: ["error", "info"],
+      },
+    ],
+  },
 };

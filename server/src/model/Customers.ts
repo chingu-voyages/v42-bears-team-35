@@ -44,6 +44,13 @@ export default class Customer extends BaseEntity {
   })
   phone: string;
 
+  @Column({
+    nullable: false,
+    type: "boolean",
+    default: true,
+  })
+  is_registered: boolean;
+
   @CreateDateColumn({
     type: "timestamptz",
   })

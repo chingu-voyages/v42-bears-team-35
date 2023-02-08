@@ -1,4 +1,4 @@
-import { QueryRunner, Repository } from "typeorm";
+import { QueryRunner, Repository, TypeORMError } from "typeorm";
 /* eslint-disable import/prefer-default-export */
 import {
   ErrorType,
@@ -6,6 +6,7 @@ import {
   CustomerCreate,
   CustomerResponse,
   CustomerUpdate,
+  NonRegisteredCustomerInterface,
 } from "../types";
 import AppDataSource from "../db";
 import { Customer } from "../model";
@@ -14,6 +15,18 @@ import { hashPassword } from "../authentication";
 const queryRunner: QueryRunner = AppDataSource.createQueryRunner();
 const customerRepositry: Repository<Customer> =
   AppDataSource.getRepository(Customer);
+
+export async function getCustomerByEmail(
+  email: string,
+): Promise<Customer | null> {
+  const customer: Customer | null = await customerRepositry
+    .createQueryBuilder("customer")
+    .andWhere("customer.email = :email")
+    .setParameter("email", email)
+    .getOne();
+
+  return customer;
+}
 
 export async function createCustomer(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -40,6 +53,7 @@ export async function createCustomer(
         name: customer.name,
         address: customer.address,
         email: customer.email,
+        phone: customer.phone,
       },
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -56,6 +70,57 @@ export async function createCustomer(
       errorKey: "unknown",
       errorDescription: "unknown error",
       errorCode: 500,
+    };
+  }
+}
+
+export async function createNonRegisteredCustomer(
+  customerToCreate: NonRegisteredCustomerInterface,
+): Promise<Customer | ErrorType> {
+  try {
+    await queryRunner.startTransaction();
+
+    const customer = new Customer();
+    customer.name = customerToCreate.name;
+    customer.email = customerToCreate.email;
+    customer.address = customerToCreate.address;
+    customer.phone = customerToCreate.phone;
+    customer.is_registered = false;
+
+    await queryRunner.manager.save(customer);
+
+    await queryRunner.commitTransaction();
+
+    return customer;
+  } catch (err: unknown) {
+    await queryRunner.rollbackTransaction();
+
+    if (err instanceof TypeORMError && "code" in err && err.code === "23505") {
+      const returnedCustomer = await getCustomerByEmail(customerToCreate.email);
+
+      if (returnedCustomer === null) {
+        console.error(err);
+        return {
+          errorCode: 500,
+          errorDescription: "Unable to find customer",
+          errorKey: "unknown",
+        };
+      }
+
+      if (returnedCustomer.is_registered === false) return returnedCustomer;
+
+      return {
+        errorCode: 403,
+        errorDescription: "That is a registered customer, please log in",
+        errorKey: "email",
+      };
+    }
+
+    console.error(err);
+    return {
+      errorCode: 500,
+      errorDescription: "Unknown error",
+      errorKey: "unknown",
     };
   }
 }
@@ -137,16 +202,4 @@ export async function updateOneCustomer(
       errorDescription: err.message,
     };
   }
-}
-
-export async function getCustomerByEmail(
-  email: string,
-): Promise<Customer | null> {
-  const customer: Customer | null = await customerRepositry
-    .createQueryBuilder("customer")
-    .andWhere("customer.email = :email")
-    .setParameter("email", email)
-    .getOne();
-
-  return customer;
 }

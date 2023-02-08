@@ -147,7 +147,9 @@ const Login = ({ navigation }) => {
           </Pressable>
         </View>
         <View style={styles.flexDiv}>
+          <Pressable onPress={() => navigation.navigate('Register')}>
           <Text style={styles.bold}>create new account</Text>
+          </Pressable>
         </View>
         <Text style={styles.bottom}>continue as guest</Text>
       </View>

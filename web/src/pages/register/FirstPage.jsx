@@ -167,11 +167,11 @@ export default FirstPage = ({ navigation, route}) => {
           >
             <Text style={styles.greenButtonText} 
             onPress={() => nextStep(dispatch, email, password, navigation, setSubmitted)}
-            >Login</Text>
+            >Sign up</Text>
           </Pressable>
         </View>
         <View style={styles.flexDiv}>
-          <Pressable onPress={() => navigation.navegate('login')}>
+          <Pressable onPress={() => navigation.navigate('Login')}>
            <Text style={styles.bottom}>already a member? login</Text>
           </Pressable>
         </View>

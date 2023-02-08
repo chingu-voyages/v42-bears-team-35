@@ -171,7 +171,7 @@ export default FirstPage = ({ navigation, route}) => {
           </Pressable>
         </View>
         <View style={styles.flexDiv}>
-          <Pressable onPress={() => navigation.navegate('login')}>
+          <Pressable onPress={() => navigation.navigate('login')}>
            <Text style={styles.bottom}>already a member? login</Text>
           </Pressable>
         </View>

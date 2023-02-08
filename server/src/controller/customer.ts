@@ -15,10 +15,10 @@ const queryRunner: QueryRunner = AppDataSource.createQueryRunner();
 const customerRepositry: Repository<Customer> =
   AppDataSource.getRepository(Customer);
 
-export const createCustomer = async (
+export async function createCustomer(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   body: CustomerCreate,
-): Promise<ErrorType | SuccessType> => {
+): Promise<ErrorType | SuccessType> {
   try {
     await queryRunner.startTransaction();
 
@@ -58,9 +58,9 @@ export const createCustomer = async (
       errorCode: 500,
     };
   }
-};
+}
 
-export const getAllCustomers = async (): Promise<CustomerResponse[]> => {
+export async function getAllCustomers(): Promise<CustomerResponse[]> {
   const allCustomers: CustomerResponse[] = await customerRepositry
     .createQueryBuilder("customer")
     .select("customer.id")
@@ -72,11 +72,9 @@ export const getAllCustomers = async (): Promise<CustomerResponse[]> => {
     .getMany();
 
   return allCustomers;
-};
+}
 
-export const getOneCustomer = async (
-  uuid: string,
-): Promise<Customer | null> => {
+export async function getOneCustomer(uuid: string): Promise<Customer | null> {
   const customer: Customer | null = await customerRepositry
     .createQueryBuilder("customer")
     .select("customer.id")
@@ -89,7 +87,7 @@ export const getOneCustomer = async (
     .getOne();
 
   return customer;
-};
+}
 
 export async function updateOneCustomer(
   body: CustomerUpdate,
@@ -141,9 +139,9 @@ export async function updateOneCustomer(
   }
 }
 
-export const getCustomerByEmail = async (
+export async function getCustomerByEmail(
   email: string,
-): Promise<Customer | null> => {
+): Promise<Customer | null> {
   const customer: Customer | null = await customerRepositry
     .createQueryBuilder("customer")
     .andWhere("customer.email = :email")
@@ -151,4 +149,4 @@ export const getCustomerByEmail = async (
     .getOne();
 
   return customer;
-};
+}

@@ -5,26 +5,43 @@ import { useDispatch } from "react-redux";
 import { updateUser } from "../constants/userSlice";
 import Navbar from "../components/Navbar";
 import { ROUTES } from "../constants";
-
-const FAKE_USER = {
-  email: "test@thetest.com",
-}
-
+// import { URL } from "@env";
 
 const Login = ({ navigation }) => {
   const dispatch = useDispatch()
-
+  const BASE_URL = "https://v42-bears-team-35-production.up.railway.app";
   const [submitted, onSubmitted] = useState(false)
-  const [email, onChangeEmail] = useState(null);
-  const [password, onChangePassword] = useState(null);
+  const [email, onChangeEmail] = useState("");
+  const [password, onChangePassword] = useState("");
 
-  function login() {
-    if (email.length <= 3) return
-    if (password.length < 8) return 
-    dispatch(updateUser(FAKE_USER))
-    onSubmitted(true)
-    navigation.navigate(ROUTES.SLIDES)
-  }
+  useEffect(() => {
+    login()
+  }, [])
+
+function login(e) {
+    fetch(BASE_URL + '/login',{
+      method: "POST",
+      headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password })
+        })
+            .then(res => {
+                if (res.ok) {
+                    res.json().then(user => {
+                        onChangeEmail(email)
+                        onChangePassword(password)
+                        console.log("ok!!!")
+                        navigation.navigate(ROUTES.SLIDES)
+                    })
+                } else {
+                    res.json().then(errors => {
+                        console.error(errors)
+                    })
+                }
+            })
+    }  
+
   const styles = StyleSheet.create({
     container: {
       width: "100%",

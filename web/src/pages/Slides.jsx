@@ -8,11 +8,12 @@ import Navbar from "../components/Navbar";
 import { styles } from "../styles/ItemCard";
 import { ROUTES } from "../constants";
 import slides from "../styles/slides";
-import { URL } from "@env";
+// import { URL } from "@env";
 
 
 export default Slides = ({ navigation }) => {
   const [visitedBefore, setVisitedBefore] = useState(false)
+  const BASE_URL = "https://v42-bears-team-35-production.up.railway.app";
   const [products, setProducts] = useState([])
   const { height, width } = useWindowDimensions()
   let reduxProducts = useSelector(state => state.product.value)
@@ -24,10 +25,11 @@ export default Slides = ({ navigation }) => {
   }, [])
 
   function getItems() {
-    fetch(URL + '/products')
+    fetch(BASE_URL + '/products')
       .then(response => response.json())
       .then(data => {
-        setProducts([...data.data, ...reduxProducts])
+        setProducts([...data.data,reduxProducts])
+        console.log(products)
       })
       .catch(err => console.log(err))
   }

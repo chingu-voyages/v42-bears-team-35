@@ -30,7 +30,7 @@ export default class Customer extends BaseEntity {
   email: string;
 
   @Column({
-    nullable: false,
+    nullable: true,
   })
   password: string;
 

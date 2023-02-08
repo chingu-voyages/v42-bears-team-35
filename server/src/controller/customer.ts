@@ -25,7 +25,8 @@ export const createCustomer = async (
     const customer = new Customer();
     customer.name = body.name;
     customer.phone = body.phone;
-    customer.password = await hashPassword(body.password);
+    if (body.password !== undefined)
+      customer.password = await hashPassword(body.password);
     customer.address = body.address;
     customer.email = body.email;
 

@@ -13,9 +13,6 @@ export async function createOrder(
     await queryRunner.startTransaction();
     const order = new Order();
 
-    order.email = body.email;
-    order.date = new Date(body.date);
-
     await queryRunner.manager.save(order);
 
     await queryRunner.commitTransaction();
@@ -23,8 +20,6 @@ export async function createOrder(
     return {
       data: {
         id: order.id,
-        email: order.email,
-        date: order.date,
         customer: order.customer ? order.customer : null,
         total: order.total,
         tracking: order.tracking_number,
@@ -80,8 +75,6 @@ export async function updateOneOrder(
   order: Order,
 ): Promise<SuccessType | ErrorType> {
   const orderToUpdate = order;
-
-  orderToUpdate.email = body.email ? body.email : order.email;
   orderToUpdate.tracking_number = body.tracking
     ? body.tracking
     : orderToUpdate.tracking_number;
@@ -96,8 +89,6 @@ export async function updateOneOrder(
       data: {
         id: orderToUpdate.id,
         customer: orderToUpdate.customer,
-        email: orderToUpdate.email,
-        date: orderToUpdate.date,
         total: orderToUpdate.total,
         tracking: orderToUpdate.tracking_number,
       },

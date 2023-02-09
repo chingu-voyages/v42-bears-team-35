@@ -1,11 +1,7 @@
-import { FormattedItemResponse } from "../types";
-import { Order, OrderItem } from "../model";
-import { formatOneItem } from "./formatItems";
+import { Order } from "../model";
 
 export interface OrderResponseInterface {
   id: string;
-  date: Date;
-  email: string;
   total: number;
 }
 
@@ -26,8 +22,6 @@ export function formatOneOrder(order: Order): OrderResponseInterface {
 
   return {
     id: order.id,
-    date: order.date,
-    email: order.email,
     total: order.total,
   };
 }

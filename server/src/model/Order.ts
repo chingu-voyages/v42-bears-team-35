@@ -17,22 +17,17 @@ export default class Order extends BaseEntity {
   id: string;
 
   @Column({
-    nullable: false,
-  })
-  email: string;
-
-  @Column({
-    type: "date",
-    nullable: false,
-  })
-  date: Date;
-
-  @Column({
     type: "float",
     nullable: false,
     default: 0,
   })
   total: number;
+
+  @Column({
+    nullable: false,
+    default: "open",
+  })
+  status: string;
 
   @CreateDateColumn({
     type: "timestamptz",

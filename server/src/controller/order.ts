@@ -9,33 +9,38 @@ const orderRepository = AppDataSource.getRepository(Order);
 export async function createOrder(
   body: OrderCreate,
 ): Promise<ErrorType | SuccessType> {
-  try {
-    await queryRunner.startTransaction();
-    const order = new Order();
+  // try {
+  //   await queryRunner.startTransaction();
+  //   const order = new Order();
 
-    await queryRunner.manager.save(order);
+  //   await queryRunner.manager.save(order);
 
-    await queryRunner.commitTransaction();
+  //   await queryRunner.commitTransaction();
 
-    return {
-      data: {
-        id: order.id,
-        customer: order.customer ? order.customer : null,
-        total: order.total,
-        tracking: order.tracking_number,
-      },
-    };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    await queryRunner.rollbackTransaction();
-    // eslint-disable-next-line no-console
-    console.error(error);
-    return {
-      errorCode: 500,
-      errorDescription: error.message,
-      errorKey: "unknown",
-    };
-  }
+  //   return {
+  //     data: {
+  //       id: order.id,
+  //       customer: order.customer ? order.customer : null,
+  //       total: order.total,
+  //       tracking: order.tracking_number,
+  //     },
+  //   };
+  //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // } catch (error: any) {
+  //   await queryRunner.rollbackTransaction();
+  //   // eslint-disable-next-line no-console
+  //   console.error(error);
+  //   return {
+  //     errorCode: 500,
+  //     errorDescription: error.message,
+  //     errorKey: "unknown",
+  //   };
+  // }
+  return {
+    errorCode: 500,
+    errorDescription: body.productID,
+    errorKey: "unknown",
+  };
 }
 
 export async function getAllOrders(): Promise<Order[]> {

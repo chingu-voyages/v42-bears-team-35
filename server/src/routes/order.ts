@@ -19,18 +19,21 @@ import { Order } from "../model";
 import { ErrorType, SuccessType } from "../types";
 import { formatManyOrders, formatOneOrder } from "../formatting/formatOrders";
 import validateItemUUID from "../middleware/validateItemUUID";
+import { validateTokenMiddleware } from "../middleware/authMiddleWare";
 
 const router: Router = Router();
 
 router.post(
   "/",
+  validateTokenMiddleware,
   validateData(orderCreateValidator),
   async (req: Request, res: Response) => {
-    const data = await createOrder(req.body);
+    const { customer } = res.locals;
 
-    if ("errorCode" in data) return res.status(data.errorCode).json(data);
+    console.log(customer);
 
-    return res.status(201).json(data);
+
+    return res.sendStatus(204);
   },
 );
 

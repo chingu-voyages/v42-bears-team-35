@@ -3,18 +3,43 @@ import { Validator } from "../types";
 
 export const orderCreateValidator: Validator[] = [
   {
-    key: "date",
-    type: "date",
-    required: true,
-  },
-  {
     key: "email",
     type: "email",
+    required: false,
+  },
+  {
+    key: "name",
+    type: "string",
+    required: false,
+  },
+  {
+    key: "phone",
+    type: "string",
+    required: false,
+  },
+  {
+    key: "address",
+    type: "string",
+    required: false,
+  },
+  {
+    key: "productID",
+    type: "uuid",
     required: true,
   },
   {
-    key: "traking",
-    type: "string",
-    required: false,
+    key: "quantity",
+    type: "float",
+    required: true,
+  },
+  {
+    key: "cost",
+    type: "float",
+    required: true,
+  },
+  {
+    key: "total",
+    type: "float",
+    required: true,
   },
 ];

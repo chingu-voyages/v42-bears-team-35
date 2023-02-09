@@ -49,8 +49,9 @@ export async function validateTokenMiddleware(
       return res.status(404).json({
         errorCode: 404,
         errorKey: "token",
-        errorDescription: `Unable to find customer ${(res.locals.token as TokenPayload).id
-          }`,
+        errorDescription: `Unable to find customer ${
+          (res.locals.token as TokenPayload).id
+        }`,
       });
 
     res.locals.customer = customer;

@@ -9,7 +9,8 @@ export interface CustomerCreate extends NonRegisteredCustomerInterface {
   // phone: string;
   // address: string;
   // email: string;
-  password: string;
+  password?: string;
+  isRegistered?: boolean;
 }
 
 export interface CustomerResponse extends NonRegisteredCustomerInterface {

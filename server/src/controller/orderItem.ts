@@ -12,6 +12,8 @@ export async function createOrderItem(
   item: Item,
   order: Order,
   quantity: number,
+  cost: number,
+  total: number,
 ): Promise<SuccessType | ErrorType> {
   const orderToUpdate = order;
   try {
@@ -22,8 +24,8 @@ export async function createOrderItem(
     orderItem.item = item;
     orderItem.order = order;
     orderItem.quantity = quantity;
-    orderItem.cost = item.price;
-    orderItem.total = quantity * item.price;
+    orderItem.cost = cost;
+    orderItem.total = total;
 
     await queryRunner.manager.save(orderItem);
 
@@ -92,7 +94,9 @@ async function getOneOrderItemById(
   return oneOrderItem;
 }
 
-export async function updateOrderItem(): Promise<void> {}
+export async function updateOrderItem(): Promise<null> {
+  return null;
+}
 
 export async function deleteOrderItem(
   item: Item,

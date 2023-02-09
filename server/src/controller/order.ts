@@ -1,46 +1,87 @@
 import { QueryRunner } from "typeorm";
-import { Order } from "../model";
-import { ErrorType, OrderCreate, OrderUpdate, SuccessType } from "../types";
+import { Customer, Order } from "../model";
+import { ErrorType, OrderUpdate, SuccessType } from "../types";
 import AppDataSource from "../db";
+import { getOneProduct } from "./product";
+import { createOrderItem } from "./orderItem";
 
 const queryRunner: QueryRunner = AppDataSource.createQueryRunner();
 const orderRepository = AppDataSource.getRepository(Order);
 
+interface CreateOrderItemInterface {
+  productID: string;
+  quantity: number;
+  cost: number;
+  total: number;
+}
+
+export async function getOpenOrderByCustomer(customer: Customer) {
+  const data = await orderRepository
+    .createQueryBuilder("order")
+    .andWhere("order.customer = :customer")
+    .andWhere("order.status = :status")
+    .setParameter("customer", customer.id)
+    .setParameter("status", "open")
+    .getOne();
+  return data;
+}
+
 export async function createOrder(
-  body: OrderCreate,
+  customer: Customer,
+  orderItem: CreateOrderItemInterface,
 ): Promise<ErrorType | SuccessType> {
-  // try {
-  //   await queryRunner.startTransaction();
-  //   const order = new Order();
+  const product = await getOneProduct(orderItem.productID);
+  if (product === null)
+    return {
+      errorCode: 404,
+      errorKey: "productID",
+      errorDescription: "Unable to find the product",
+    };
 
-  //   await queryRunner.manager.save(order);
+  try {
+    await queryRunner.startTransaction();
 
-  //   await queryRunner.commitTransaction();
+    let order: Order | null = await getOpenOrderByCustomer(customer);
 
-  //   return {
-  //     data: {
-  //       id: order.id,
-  //       customer: order.customer ? order.customer : null,
-  //       total: order.total,
-  //       tracking: order.tracking_number,
-  //     },
-  //   };
-  //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  // } catch (error: any) {
-  //   await queryRunner.rollbackTransaction();
-  //   // eslint-disable-next-line no-console
-  //   console.error(error);
-  //   return {
-  //     errorCode: 500,
-  //     errorDescription: error.message,
-  //     errorKey: "unknown",
-  //   };
-  // }
-  return {
-    errorCode: 500,
-    errorDescription: body.productID,
-    errorKey: "unknown",
-  };
+    if (order === null) {
+      order = new Order();
+      order.customer = customer;
+      await queryRunner.manager.save(order);
+      await queryRunner.commitTransaction();
+      await queryRunner.startTransaction();
+    }
+
+    const createdOrderItem = await createOrderItem(
+      product,
+      order,
+      orderItem.quantity,
+      orderItem.cost,
+      orderItem.total,
+    );
+
+    if ("errorCode" in createdOrderItem) {
+      await queryRunner.rollbackTransaction();
+      return {
+        errorCode: createdOrderItem.errorCode,
+        errorKey: createdOrderItem.errorKey,
+        errorDescription: createdOrderItem.errorDescription,
+      };
+    }
+
+    await queryRunner.commitTransaction();
+
+    return { data: order };
+  } catch (error) {
+    await queryRunner.rollbackTransaction();
+
+    console.error(error);
+
+    return {
+      errorCode: 500,
+      errorKey: "unknown",
+      errorDescription: "Unknown error, check your logs",
+    };
+  }
 }
 
 export async function getAllOrders(): Promise<Order[]> {

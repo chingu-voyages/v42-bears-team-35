@@ -38,10 +38,13 @@ export async function createCustomer(
     const customer = new Customer();
     customer.name = body.name;
     customer.phone = body.phone;
-    if (body.password !== undefined)
-      customer.password = await hashPassword(body.password);
     customer.address = body.address;
     customer.email = body.email;
+
+    if (body.password !== undefined)
+      customer.password = await hashPassword(body.password);
+    if (body.isRegistered !== undefined)
+      customer.is_registered = body.isRegistered;
 
     await queryRunner.manager.save(customer);
 

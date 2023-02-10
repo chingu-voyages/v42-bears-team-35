@@ -11,7 +11,7 @@ import {
 } from "../controller/order";
 import validateOrderUUID from "../middleware/validateOrderUUID";
 import { deleteOrderItem, getAllOrderItems } from "../controller/orderItem";
-import { Customer } from "../model";
+import { Customer, Item, Order } from "../model";
 import { OrderCreate, OrderUpdate } from "../types";
 import { formatManyOrders, formatOneOrder } from "../formatting/formatOrders";
 import validateItemUUID from "../middleware/validateItemUUID";
@@ -170,13 +170,25 @@ router.get(
   },
 );
 
+interface DeleteOrderItem {
+  order: Order;
+  item: Item;
+}
+
 router.delete(
   "/:uuid/items/:itemUuid",
   validateUUID,
   validateOrderUUID,
   validateItemUUID,
   async (req: Request, res: Response) => {
-    const { order, item } = res.locals;
+    const { order, item } = res.locals as DeleteOrderItem;
+
+    if (order.status !== "open")
+      return res.status(405).json({
+        errorKey: "status",
+        errorDescription: "Method not Allowed: Order is closed",
+        errorStatus: 405,
+      });
 
     const deleteResponse = await deleteOrderItem(item, order);
 

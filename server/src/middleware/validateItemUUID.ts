@@ -7,7 +7,7 @@ export default async function validateItemUUID(
   res: Response,
   next: NextFunction,
 ) {
-  const item = getOneItem(req.params.itemUuid);
+  const item = await getOneItem(req.params.itemUuid);
 
   if (!item)
     return res

@@ -11,6 +11,7 @@ export interface OrderResponseInterface {
 }
 
 export interface OrderItemResponseInterface {
+  id: string;
   quantity: number;
   cost: number;
   total: number;
@@ -20,6 +21,7 @@ export interface OrderItemResponseInterface {
 export function formatOneOrder(order: Order): OrderResponseInterface {
   const orderItemsResponse = order.orderItems.map((orderItem: OrderItem) => {
     return {
+      id: orderItem.id,
       quantity: orderItem.quantity,
       cost: orderItem.cost,
       total: orderItem.total,

@@ -84,9 +84,13 @@ export async function createOrder(
   }
 }
 
-export async function getAllOrders(): Promise<Order[]> {
-  const data: Order[] = await orderRepository
+export async function getAllOrders(
+  customerEmail: string,
+  status?: string,
+): Promise<Order[]> {
+  let data = orderRepository
     .createQueryBuilder("order")
+    .leftJoinAndSelect("order.customer", "customer")
     .leftJoinAndSelect("order.orderItems", "orderItems")
     .leftJoinAndSelect("orderItems.item", "item")
     .leftJoinAndSelect("item.itemTag", "itemTag")
@@ -94,9 +98,17 @@ export async function getAllOrders(): Promise<Order[]> {
     .leftJoinAndSelect("item.supplier", "supplier")
     .leftJoinAndSelect("item.itemPicture", "itemPicture")
     .leftJoinAndSelect("itemPicture.pictures", "pictures")
-    .getMany();
+    .andWhere("customer.email = :email")
+    .setParameter("email", customerEmail);
 
-  return data;
+  if (status !== undefined)
+    data = data
+      .andWhere("order.status = :status")
+      .setParameter("status", status.toLowerCase());
+
+  const dataResponse = await data.getMany();
+
+  return dataResponse;
 }
 
 export async function getOneOrder(uuid: string): Promise<Order | null> {
@@ -124,6 +136,10 @@ export async function updateOneOrder(
   orderToUpdate.tracking_number = body.tracking
     ? body.tracking
     : orderToUpdate.tracking_number;
+
+  orderToUpdate.status = body.status
+    ? body.status.toLowerCase()
+    : orderToUpdate.status;
 
   try {
     await queryRunner.startTransaction();

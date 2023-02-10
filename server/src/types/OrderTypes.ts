@@ -12,6 +12,8 @@ export interface OrderCreate {
 
 export type OrderStatus = "open" | "cancelled" | "approved";
 
+export const orderStatusTypes = <const>["open", "cancelled", "approved"];
+
 export interface OrderUpdate {
   tracking?: string;
   status?: OrderStatus;

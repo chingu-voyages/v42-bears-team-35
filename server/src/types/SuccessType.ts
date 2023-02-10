@@ -1,3 +1,3 @@
-export type SuccessType = {
+export interface SuccessType {
   data: unknown;
-};
+}

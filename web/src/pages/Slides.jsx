@@ -1,6 +1,6 @@
 // makes ItemCard swipable 
 
-import { FlatList, SafeAreaView, ImageBackground, Text, useWindowDimensions, View, Pressable, ActivityIndicator } from "react-native";
+import { FlatList, SafeAreaView, ImageBackground, Text, useWindowDimensions, View, Pressable, RefreshControl, ActivityIndicator } from "react-native";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
@@ -13,9 +13,13 @@ import { URL } from "@env";
 
 export default Slides = ({ navigation }) => {
   const [visitedBefore, setVisitedBefore] = useState(false)
+  const [refreshing, setRefreshing] = useState(false);
   const [products, setProducts] = useState([])
   const { height, width } = useWindowDimensions()
   let reduxProducts = useSelector(state => state.product.value)
+
+  
+
 
 
   useEffect(() => {
@@ -36,8 +40,9 @@ export default Slides = ({ navigation }) => {
     const { imageUrl, tags } = item
     const name = tags ? tags.join(" ") : "No tags"
     return (
-      <View style={{ height: height - 60, flex: 1, backgroundColor: "#222020" }}>
+      <View style={{...slides.div, height: height - 60}}>
         <Pressable onPress={() => navigation.navigate(ROUTES.ITEM_DESCRIPTION, item)}>
+
           <ImageBackground
             source={{ uri: imageUrl }}
             imageStyle={{ height: height - 80 }}
@@ -52,33 +57,36 @@ export default Slides = ({ navigation }) => {
               </LinearGradient>
             </View>
           </ImageBackground>
-          {index == 0 && <Text style={slides.scroll}>Scroll</Text>}
+          {index == 0 && <Text style={slides.scroll}>↓</Text>}
         </Pressable>
       </View>
     )
   }
 
-  if (products.length > 0) { 
-  return (
-    <SafeAreaView style={styles.container}>
-      <Navbar />
+  if (products.length > 0) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <Navbar />
 
-      <FlatList
-        data={products}
-        decelerationRate="fast"
-        keyExtractor={item => item.id.toString()}
-        onViewableItemsChanged={this.onViewableItemsChanged}
-        removeClippedSubviews={false}
-        showsVerticalScrollIndicator={false}
-        snapToAlignment="start"
-        snapToInterval={height - 60}
+        <FlatList
+          data={products}
+          decelerationRate="fast"
+          keyExtractor={item => item.id.toString()}
+          onViewableItemsChanged={this.onViewableItemsChanged}
+          removeClippedSubviews={false}
+          showsVerticalScrollIndicator={false}
+          snapToAlignment="start"
+          snapToInterval={height - 60}
 
-        renderItem={({ item, index }) => <ItemCard item={item} index={index} />}
+          renderItem={({ item, index }) => <ItemCard item={item} index={index} />}
 
-      />
-    </SafeAreaView>
-  );
+        />
+      </SafeAreaView>
+    );
   }
-  return <SafeAreaView><Text>Loading</Text></SafeAreaView>
+  return <SafeAreaView style={slides.loading}>
+    <Text style={slides.loadingText}>Loading</Text>
+    <ActivityIndicator size="large" color="#57D491" />
+  </SafeAreaView>
 }
 

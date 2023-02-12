@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch } from "react-redux";
 import Navbar from "../../components/Navbar";
 
-export default AddressInput = ({ navigation, route }) => {
+export default Payment = ({ navigation, route }) => {
   const isRegister = route.params
 
   const [submitted, setSubmitted] = useState(false)

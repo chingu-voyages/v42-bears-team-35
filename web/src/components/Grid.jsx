@@ -1,5 +1,6 @@
 import { View, Image, Pressable, StyleSheet, Text, SafeAreaView, } from "react-native"
 import { useSelector } from "react-redux"
+import { useState } from "react"
 import { useNavigation } from "@react-navigation/native"
 import { ROUTES } from "../constants"
 
@@ -18,26 +19,32 @@ const grid = StyleSheet.create({
         display: "relative"
     },
     image: {
-        height: "100%",
-        width: "100%"
+        height: "80%",
+        width: "90%",
+        borderRadius: 6,
     },
     name: {
-        backgroundColor: "#fff",
+        color: "#fff",
         display: "block",
         position: "relative",
         width: "100%",
         textAlign: "center",
-        top: "100%",
-        left: 0,
-        zIndex: 5,
-
+       
+    },
+    id: {
+        backgroundColor: "black",
+        borderRadius: 9,
+        display: "grid",
+        flexDirection: 'column-reverse',
+        justifyContent: "space-evenly",
+        alignItems: "center",
+        height: "100%",
     }
 })
 
 export default Grid = ({ products }) => {
     const navigation = useNavigation()
-    //const products = useSelector(state => state.product.value)
-    //fetch 9 random items
+
     return (
         <SafeAreaView>
             <View style={grid.grid}>
@@ -46,7 +53,7 @@ export default Grid = ({ products }) => {
                         key={'grid-item-' + item.id}
                         style={grid.gridItem}
                         onPress={() => navigation.navigate(ROUTES.ITEM_DESCRIPTION, { item })} >
-                        <View key={item.id} >
+                        <View key={item.id} style={grid.id}>
                             <Text style={grid.name}>{item.tags.join(' ')}</Text>
                             <Image source={{ uri: item.imageUrl }} style={grid.image} />
                         </View>

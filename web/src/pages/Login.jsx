@@ -15,8 +15,8 @@ const Login = ({ navigation }) => {
   const dispatch = useDispatch()
 
   const [submitted, onSubmitted] = useState(false)
-  const [email, onChangeEmail] = useState("");
-  const [password, onChangePassword] = useState("");
+  const [email, onChangeEmail] = useState(null);
+  const [password, onChangePassword] = useState(null);
 
   function login() {
     if (email.length <= 3) return
@@ -147,7 +147,9 @@ const Login = ({ navigation }) => {
           </Pressable>
         </View>
         <View style={styles.flexDiv}>
+          <Pressable onPress={() => navigation.navigate('Register')}>
           <Text style={styles.bold}>create new account</Text>
+          </Pressable>
         </View>
         <Text style={styles.bottom}>continue as guest</Text>
       </View>

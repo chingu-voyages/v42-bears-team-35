@@ -13,6 +13,7 @@ import AddressInput from "../pages/register/AddressInput";
 import Grid from "./Grid";
 import SignupComplete from "../pages/register/SignupComplete";
 import SearchResults from "./SearchResults";
+import Payment from "../pages/checkout/Payment";
 
 const Drawer = createDrawerNavigator();
 
@@ -138,6 +139,15 @@ export default MainDrawer = () => {
             drawerItemStyle: { display: "none" }
             }}
           component={SearchResults}
+        />
+        <Drawer.Screen
+          name={"Payment"}
+          options={{
+            drawerLabel: "Payment",
+            headerShown: false,
+            drawerItemStyle: { display: "none" }
+            }}
+          component={Payment}
         />
     </Drawer.Navigator>
   );

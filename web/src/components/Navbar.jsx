@@ -1,28 +1,23 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Image, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
-import { updateSearch } from "../constants/searchSlice";
 import { useNavigation } from '@react-navigation/native';
 import { ROUTES } from "../constants";
+import { URL } from "@env";
+
+
+
 
 export default Navbar = () => {
-  const products = useSelector(state => state.product.value)
 
   const navigation = useNavigation()
   const [searchTerm, setSearchTerm] = useState('')
 
-  const dispatch = useDispatch()
-  //const search = useSelector(state => state.search.value)
-
-
   function realtimeSearchDB() {
-    // query DB and update dispatch with it
-    const searchResult = products.filter((item) => item.productName.join(' ').toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase()))
-    const db = { searchTerm, searchResult }
-    
-    dispatch(updateSearch(db))
-    if (searchTerm.length > 0) {
-      navigation.navigate("SearchResults", { searchResult, searchTerm })
+    if (searchTerm.length >= 3) {
+    fetch(URL + '/products?name=' + searchTerm)
+      .then(response => response.json())
+      .then(data => navigation.navigate("SearchResults", {searchTerm, results: [...data.data] }))
+      .catch(error => console.log(error))
     }
   }
 

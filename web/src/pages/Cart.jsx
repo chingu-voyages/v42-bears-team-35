@@ -15,7 +15,8 @@ export default ItemDescription = ({ navigation }) => {
     container: {
       backgroundColor: "#222020",
       width: "100%",
-      height: height,
+      minHeight: "100%",
+      height: height - 120,
       display: "flex",
       padding: 20,
     },
@@ -34,14 +35,13 @@ export default ItemDescription = ({ navigation }) => {
       <ScrollView bounces={true} style={style.container}>
         <Text style={style.text}>{cart.length == 0 ? "No" : cart.length} items in cart</Text>
        {cart.map(item => <CartItem 
-        id={item.id}
-        imageUrl={item.imageUrl} 
-        name={item.tags} 
-        price={item.price} 
-        discount={item.discount} 
-        quantity={item.quantity} 
+        item={item}
         key={"cartItem-" + item.id} 
         />)}
+
+        <Pressable onPress={() => navigation.navigate("Payment")} style={{backgroundColor: "#57D491", padding: 20, borderRadius: 10, marginTop: 20, marginBottom: 20, alignItems: "center"}} >
+          <Text style={{color: "black", fontSize: 20}}>Checkout</Text>
+        </Pressable>
     </ScrollView>
     </SafeAreaView>
   );

@@ -69,7 +69,7 @@ export default StyleSheet.create({
     grey: {
       fontSize: 20,
       color: "#c9c9c9",
-      textDecorationColor: "#000",
+      textDecorationColor: "#fff",
       textDecorationLine: "line-through",
       alignItems: "flex-end",
     },
@@ -136,9 +136,14 @@ export default StyleSheet.create({
       justifyContent: "center",
       alignItems: "center",
     },
+    buttonP: {
+      fontSize: 20,
+      color: "#000"
+    },
     buttonText: {
       fontSize: 20,
       fontWeight: "900",
+      color: "#000"
     },
     numberInput: {
       fontSize: 20,
@@ -176,64 +181,5 @@ export default StyleSheet.create({
       height: 20,
       marginRight: 8,
     },
-    barWidth10: {
-      backgroundColor: "#d9d9d9",
-      width: 16,
-      height: 20,
-      marginRight: 8,
-    },
-    barWidth20: {
-      backgroundColor: "#d9d9d9",
-      width: 24,
-      height: 20,
-      marginRight: 8,
-    },
-    barWidth30: {
-      backgroundColor: "#d9d9d9",
-      width: 32,
-      height: 20,
-      marginRight: 8,
-    },
-    barWidth40: {
-      backgroundColor: "#d9d9d9",
-      width: 40,
-      height: 20,
-      marginRight: 8,
-    },
-    barWidth50: {
-      backgroundColor: "#d9d9d9",
-      width: 48,
-      height: 20,
-      marginRight: 8,
-    },
-    barWidth60: {
-      backgroundColor: "#d9d9d9",
-      width: 56,
-      height: 20,
-      marginRight: 8,
-    },
-    barWidth70: {
-      backgroundColor: "#d9d9d9",
-      width: 64,
-      height: 20,
-      marginRight: 8,
-    },
-    barWidth80: {
-      backgroundColor: "#d9d9d9",
-      width: 72,
-      height: 20,
-      marginRight: 8,
-    },
-    barWidth90: {
-      backgroundColor: "#d9d9d9",
-      width: 80,
-      height: 20,
-      marginRight: 8,
-    },
-    barWidth100: {
-      backgroundColor: "#d9d9d9",
-      width: 88,
-      height: 20,
-      marginRight: 8,
-    },
+
   });

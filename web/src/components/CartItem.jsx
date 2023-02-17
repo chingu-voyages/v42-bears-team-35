@@ -1,9 +1,13 @@
 import { View, Text, Image, StyleSheet, Pressable, Systrace, useWindowDimensions } from 'react-native'
 import Quantity from './Quantity'
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigation } from '@react-navigation/native'
 
 
-export default CartItem = ({ id, imageUrl, name, discount, price, quantity, handleDelete }) => {
+export default CartItem = ({ item }) => {
+    const navigation = useNavigation()
+    console.log('ITEM', item)
+    const {id, imageUrl, tags, discount, price, quantity, handleDelete} = item
     const cart = useSelector(state => state.cart.value)
     const dispatch = useDispatch()
 
@@ -70,15 +74,14 @@ export default CartItem = ({ id, imageUrl, name, discount, price, quantity, hand
             />
             <View style={style.column}>
                 <Text style={style.discount}>{discount > 0 && discount + '% OFF'}</Text>
-                <Pressable>
-                    <Text style={style.name}>{name.join(" ")}</Text>
+                <Pressable onPress={() => navigation.navigate("Item-Description", item)}>
+                    <Text style={style.name}>{tags.join(" ")}</Text>
                 </Pressable>
                 <View style={style.row}>
                     <Text style={style.price}>{(price - parseFloat(price * (discount / 100))).toLocaleString("us-EN", { style: "currency", currency: "USD", currencyDisplay: "symbol" })}</Text>
                     <Quantity currentQuantity={quantity} id={id}/>
                     
                 </View>
-                    <Text style={style.price}>{quantity}</Text>
             </View>
         </View>
     )

@@ -9,7 +9,7 @@ import MainDrawer from "./src/components/MainDrawer";
 
 export default function App() {
   return (
-    <NavigationContainer >
+    <NavigationContainer>
       <Provider store={store}>
           <MainDrawer />
       </Provider>

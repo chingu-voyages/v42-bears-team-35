@@ -78,12 +78,6 @@ export const productSlice = createSlice({
         productRating: 4,
         reviews: [
           {
-            name: "S",
-            date: '3-5-2014',
-            rating: 5,
-            review: "It's good",
-          },
-          {
             name: "Anonymous",
             date: '4-9-2022',
             rating: 2,

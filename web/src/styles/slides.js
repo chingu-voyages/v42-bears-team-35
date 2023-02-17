@@ -1,14 +1,27 @@
 import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
+    div: {
+        flex: 1, 
+        backgroundColor: "#222020",
+       
+    },
     scroll: {
-        width: "100%",
-        fontSize: 36,
+        fontSize: 72,
         fontWeight: "bold",
         color: "white",
-        backgroundColor: "#000",
         textAlign: "center",
-        padding: 20,
-        marginTop: 160
+        marginTop: 140,
+        borderRadius: 100,
+    },
+    loading: {
+        backgroundColor: "#222020",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100%",
+    },
+    loadingText: {
+        color: "#fff",
     }
 })

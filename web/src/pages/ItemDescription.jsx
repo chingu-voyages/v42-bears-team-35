@@ -15,9 +15,6 @@ export default ItemDescription = ({ navigation, route } ) => {
   const [orderQuantity, setOrderQuantity] = useState(1);
   
   const dispatch = useDispatch()
-  
-  let productRating = item.productRating
-
   let ratingsCount = 0
   
   const barChartPercentages = []
@@ -26,11 +23,9 @@ export default ItemDescription = ({ navigation, route } ) => {
     item.ratingDetails[key] > 0 && (ratingsCount += item.ratingDetails[key])
   }
   for (let key in item.ratingDetails) {
-    console.log(item.ratingDetails[key])
     if (item.ratingDetails[key] == 0) barChartPercentages.push(0)
     else barChartPercentages.push(Math.round((item.ratingDetails[key] / ratingsCount) * 100))
   }
-  console.log("BAR CHART PERCENTAGES", barChartPercentages)
   useEffect(() => {
     const numberInCart = cart.find(itemInCart => itemInCart.id === item.id )
     setOrderQuantity(numberInCart ? numberInCart.quantity : 1)
@@ -71,7 +66,7 @@ export default ItemDescription = ({ navigation, route } ) => {
             
         </View>
         <View style={itemDescription.text}>
-            <Text style={itemDescription.p}>{item.productDescription}</Text>
+            <Text style={itemDescription.p}>{item.description}</Text>
         </View>
         <View style={itemDescription.imageSelector }>
             <Pressable 
@@ -96,21 +91,17 @@ export default ItemDescription = ({ navigation, route } ) => {
                 style={itemDescription.greenButton}
                 onPress={() => update(dispatch, item, cart, orderQuantity)}
             >
-                <Text style={itemDescription.p}>Put in cart</Text>
+                <Text style={itemDescription.buttonP}>Put in cart</Text>
             </Pressable>
         </View>
         <View style={itemDescription.reviews}>
             <Text style={itemDescription.h3 }>Reviews</Text>
             <View style={itemDescription.starsNoPadding}>
-                <Text style={itemDescription.fullStar}>★</Text>
-                <Text style={itemDescription.fullStar}>★</Text>
-                <Text style={itemDescription.fullStar}>★</Text>
-                <Text style={itemDescription.fullStar}>★</Text>
-                <Text style={itemDescription.fullStar}>★</Text>
+                <Text style={itemDescription.fullStar}>★★★★★</Text>
                 <Text style={itemDescription.reviewCount}>{ratingsCount} {ratingsCount > 1 ? "reviews" : "review"}</Text>
             </View>
             {barChartPercentages.map((percent, i) => { return (
-                <Pressable style={itemDescription.starsNoPadding}>
+                <Pressable style={itemDescription.starsNoPadding} key={"review-" + i}>
                     <View style={itemDescription.starsMinWidth}>
                         <Text style={itemDescription.fullStar}>{"★".repeat(i + 1)}</Text>
                     </View>

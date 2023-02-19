@@ -123,8 +123,8 @@ export async function createNewProduct(
   }
 }
 
-export async function getAllProducts() {
-  const data: Item[] = await itemRepository
+export async function getAllProducts(tag?: string) {
+    let query = itemRepository
     .createQueryBuilder("item")
     .leftJoinAndSelect("item.itemTag", "itemTag")
     .leftJoinAndSelect("itemTag.tag", "tag")
@@ -132,10 +132,16 @@ export async function getAllProducts() {
     .leftJoinAndSelect("item.itemPicture", "itemPicture")
     .leftJoinAndSelect("itemPicture.pictures", "pictures")
     .leftJoinAndSelect("item.comments", "comments")
-    .leftJoinAndSelect("comments.customer", "customer")
-    .getMany();
+    .leftJoinAndSelect("comments.customer", "customer");
 
-  return data;
+    if (tag !== undefined)
+        query = query
+    .andWhere("itemTag.name = :tag")
+    .setParameter("tag", tag);
+
+    const data = await query.getMany();
+
+    return data;
 }
 
 export async function addRating(

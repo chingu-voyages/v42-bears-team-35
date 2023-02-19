@@ -30,7 +30,7 @@ export async function getCustomerByEmail(
 
 export async function createCustomer(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  body: CustomerCreate,
+  body: CusstomerCreate,
 ): Promise<ErrorType | SuccessType> {
   try {
     await queryRunner.startTransaction();
@@ -38,8 +38,11 @@ export async function createCustomer(
     const customer = new Customer();
     customer.name = body.name;
     customer.phone = body.phone;
-    customer.address = body.address;
     customer.email = body.email;
+    customer.street = body.street;
+    customer.city = body.city;
+    customer.state = body.state;
+    customer.zip = body.zip;
 
     if (body.password !== undefined)
       customer.password = await hashPassword(body.password);
@@ -54,9 +57,12 @@ export async function createCustomer(
       data: {
         id: customer.id,
         name: customer.name,
-        address: customer.address,
         email: customer.email,
         phone: customer.phone,
+        street: customer.street,
+        city: customer.city,
+        state: customer.state,
+        zip: customer.zip,
       },
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -86,8 +92,11 @@ export async function createNonRegisteredCustomer(
     const customer = new Customer();
     customer.name = customerToCreate.name;
     customer.email = customerToCreate.email;
-    customer.address = customerToCreate.address;
     customer.phone = customerToCreate.phone;
+    customer.street = customerToCreate.street;
+    customer.city = customerToCreate.city;
+    customer.state = customerToCreate.state;
+    customer.zip = customerToCreate.zip; 
     customer.is_registered = false;
 
     await queryRunner.manager.save(customer);
@@ -134,8 +143,11 @@ export async function getAllCustomers(): Promise<CustomerResponse[]> {
     .select("customer.id")
     .addSelect("customer.name")
     .addSelect("customer.email")
-    .addSelect("customer.address")
     .addSelect("customer.phone")
+    .addSelect("customer.street")
+    .addSelect("customer.city")
+    .addSelect("customer.state")
+    .addSelect("customer.zip")
     .orderBy("customer.name")
     .getMany();
 
@@ -148,8 +160,11 @@ export async function getOneCustomer(uuid: string): Promise<Customer | null> {
     .select("customer.id")
     .addSelect("customer.name")
     .addSelect("customer.email")
-    .addSelect("customer.address")
     .addSelect("customer.phone")
+    .addSelect("customer.street")
+    .addSelect("customer.city")
+    .addSelect("customer.state")
+    .addSelect("customer.zip")
     .andWhere("customer.id = :id")
     .setParameter("id", uuid)
     .getOne();
@@ -164,8 +179,11 @@ export async function updateOneCustomer(
   const customerToUpdate = customer;
   customerToUpdate.name = body.name ? body.name : customer.name;
   customerToUpdate.email = body.email ? body.email : customer.email;
-  customerToUpdate.address = body.address ? body.address : customer.address;
   customerToUpdate.phone = body.phone ? body.phone : customer.phone;
+  customerToUpdate.street = body.street ? body.street : customer.street;
+  customerToUpdate.city =body.city ? body.city : customer.city;
+  customerToUpdate.state = body.state ? body.state : customer.state;
+  customerToUpdate.zip = body.zip ? body.zip : customer.zip;
 
   if (body.password)
     customerToUpdate.password = await hashPassword(body.password);
@@ -183,9 +201,12 @@ export async function updateOneCustomer(
       data: {
         id: customerUpdateResponse.id,
         name: customerUpdateResponse.name,
-        address: customerToUpdate.address,
         email: customerToUpdate.email,
         phone: customerToUpdate.phone,
+        street: customerToUpdate.street,
+        city: customerToUpdate.city,
+        state: customerToUpdate.state,
+        zip: customerToUpdate.zip,
       },
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -37,7 +37,22 @@ export default class Customer extends BaseEntity {
   @Column({
     nullable: true,
   })
-  address: string;
+  street: string;
+
+  @Column({
+    nullable: true
+  })
+  city: string;
+
+  @Column({
+    nullable: true
+  })
+  state: string;
+
+  @Column({
+    nullable: true
+  })
+  zip: string;
 
   @Column({
     nullable: true,

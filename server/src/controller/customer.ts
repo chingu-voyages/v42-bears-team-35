@@ -1,4 +1,4 @@
-import { QueryRunner, Repository } from "typeorm";
+import { QueryRunner, Repository, TypeORMError } from "typeorm";
 /* eslint-disable import/prefer-default-export */
 import {
   ErrorType,
@@ -6,6 +6,7 @@ import {
   CustomerCreate,
   CustomerResponse,
   CustomerUpdate,
+  NonRegisteredCustomerInterface,
 } from "../types";
 import AppDataSource from "../db";
 import { Customer } from "../model";
@@ -15,19 +16,38 @@ const queryRunner: QueryRunner = AppDataSource.createQueryRunner();
 const customerRepositry: Repository<Customer> =
   AppDataSource.getRepository(Customer);
 
-export const createCustomer = async (
+export async function getCustomerByEmail(
+  email: string,
+): Promise<Customer | null> {
+  const customer: Customer | null = await customerRepositry
+    .createQueryBuilder("customer")
+    .andWhere("customer.email = :email")
+    .setParameter("email", email)
+    .getOne();
+
+  return customer;
+}
+
+export async function createCustomer(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  body: CustomerCreate,
-): Promise<ErrorType | SuccessType> => {
+  body: CusstomerCreate,
+): Promise<ErrorType | SuccessType> {
   try {
     await queryRunner.startTransaction();
 
     const customer = new Customer();
     customer.name = body.name;
     customer.phone = body.phone;
-    customer.password = await hashPassword(body.password);
-    customer.address = body.address;
     customer.email = body.email;
+    customer.street = body.street;
+    customer.city = body.city;
+    customer.state = body.state;
+    customer.zip = body.zip;
+
+    if (body.password !== undefined)
+      customer.password = await hashPassword(body.password);
+    if (body.isRegistered !== undefined)
+      customer.is_registered = body.isRegistered;
 
     await queryRunner.manager.save(customer);
 
@@ -37,8 +57,12 @@ export const createCustomer = async (
       data: {
         id: customer.id,
         name: customer.name,
-        address: customer.address,
         email: customer.email,
+        phone: customer.phone,
+        street: customer.street,
+        city: customer.city,
+        state: customer.state,
+        zip: customer.zip,
       },
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -57,38 +81,96 @@ export const createCustomer = async (
       errorCode: 500,
     };
   }
-};
+}
 
-export const getAllCustomers = async (): Promise<CustomerResponse[]> => {
+export async function createNonRegisteredCustomer(
+  customerToCreate: NonRegisteredCustomerInterface,
+): Promise<Customer | ErrorType> {
+  try {
+    await queryRunner.startTransaction();
+
+    const customer = new Customer();
+    customer.name = customerToCreate.name;
+    customer.email = customerToCreate.email;
+    customer.phone = customerToCreate.phone;
+    customer.street = customerToCreate.street;
+    customer.city = customerToCreate.city;
+    customer.state = customerToCreate.state;
+    customer.zip = customerToCreate.zip; 
+    customer.is_registered = false;
+
+    await queryRunner.manager.save(customer);
+
+    await queryRunner.commitTransaction();
+
+    return customer;
+  } catch (err: unknown) {
+    await queryRunner.rollbackTransaction();
+
+    if (err instanceof TypeORMError && "code" in err && err.code === "23505") {
+      const returnedCustomer = await getCustomerByEmail(customerToCreate.email);
+
+      if (returnedCustomer === null) {
+        console.error(err);
+        return {
+          errorCode: 500,
+          errorDescription: "Unable to find customer",
+          errorKey: "unknown",
+        };
+      }
+
+      if (returnedCustomer.is_registered === false) return returnedCustomer;
+
+      return {
+        errorCode: 403,
+        errorDescription: "That is a registered customer, please log in",
+        errorKey: "email",
+      };
+    }
+
+    console.error(err);
+    return {
+      errorCode: 500,
+      errorDescription: "Unknown error",
+      errorKey: "unknown",
+    };
+  }
+}
+
+export async function getAllCustomers(): Promise<CustomerResponse[]> {
   const allCustomers: CustomerResponse[] = await customerRepositry
     .createQueryBuilder("customer")
     .select("customer.id")
     .addSelect("customer.name")
     .addSelect("customer.email")
-    .addSelect("customer.address")
     .addSelect("customer.phone")
+    .addSelect("customer.street")
+    .addSelect("customer.city")
+    .addSelect("customer.state")
+    .addSelect("customer.zip")
     .orderBy("customer.name")
     .getMany();
 
   return allCustomers;
-};
+}
 
-export const getOneCustomer = async (
-  uuid: string,
-): Promise<Customer | null> => {
+export async function getOneCustomer(uuid: string): Promise<Customer | null> {
   const customer: Customer | null = await customerRepositry
     .createQueryBuilder("customer")
     .select("customer.id")
     .addSelect("customer.name")
     .addSelect("customer.email")
-    .addSelect("customer.address")
     .addSelect("customer.phone")
+    .addSelect("customer.street")
+    .addSelect("customer.city")
+    .addSelect("customer.state")
+    .addSelect("customer.zip")
     .andWhere("customer.id = :id")
     .setParameter("id", uuid)
     .getOne();
 
   return customer;
-};
+}
 
 export async function updateOneCustomer(
   body: CustomerUpdate,
@@ -97,8 +179,11 @@ export async function updateOneCustomer(
   const customerToUpdate = customer;
   customerToUpdate.name = body.name ? body.name : customer.name;
   customerToUpdate.email = body.email ? body.email : customer.email;
-  customerToUpdate.address = body.address ? body.address : customer.address;
   customerToUpdate.phone = body.phone ? body.phone : customer.phone;
+  customerToUpdate.street = body.street ? body.street : customer.street;
+  customerToUpdate.city =body.city ? body.city : customer.city;
+  customerToUpdate.state = body.state ? body.state : customer.state;
+  customerToUpdate.zip = body.zip ? body.zip : customer.zip;
 
   if (body.password)
     customerToUpdate.password = await hashPassword(body.password);
@@ -116,9 +201,12 @@ export async function updateOneCustomer(
       data: {
         id: customerUpdateResponse.id,
         name: customerUpdateResponse.name,
-        address: customerToUpdate.address,
         email: customerToUpdate.email,
         phone: customerToUpdate.phone,
+        street: customerToUpdate.street,
+        city: customerToUpdate.city,
+        state: customerToUpdate.state,
+        zip: customerToUpdate.zip,
       },
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -139,15 +227,3 @@ export async function updateOneCustomer(
     };
   }
 }
-
-export const getCustomerByEmail = async (
-  email: string,
-): Promise<Customer | null> => {
-  const customer: Customer | null = await customerRepositry
-    .createQueryBuilder("customer")
-    .andWhere("customer.email = :email")
-    .setParameter("email", email)
-    .getOne();
-
-  return customer;
-};

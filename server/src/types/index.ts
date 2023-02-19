@@ -5,6 +5,7 @@ import {
   CustomerCreate,
   CustomerResponse,
   CustomerUpdate,
+  NonRegisteredCustomerInterface,
 } from "./CustomerTypes";
 import {
   SupplierCreate,
@@ -33,4 +34,5 @@ export {
   Token,
   TokenPayload,
   FormattedItemResponse,
+  NonRegisteredCustomerInterface,
 };

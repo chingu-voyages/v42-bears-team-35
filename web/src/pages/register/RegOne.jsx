@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Text, TextInput, View, Pressable, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ROUTES } from "../../constants/";
+import { ROUTES } from "../../constants";
 
-export default Signup1 = ({ navigation }) => {
+export default RegisterOne = ({ navigation }) => {
   const [email, onChangeEmail] = useState("");
   const [password, onChangePassword] = useState("");
   const [state, setIt] = useState("ok")

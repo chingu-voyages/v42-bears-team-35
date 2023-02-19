@@ -1,34 +1,40 @@
-import { FormattedItemResponse } from "../types";
+import { FormattedItemResponse } from "../types/ItemTypes";
 import { Order, OrderItem } from "../model";
 import { formatOneItem } from "./formatItems";
 
 export interface OrderResponseInterface {
   id: string;
-  date: Date;
-  email: string;
   total: number;
+  status: string;
+  date: Date;
+  orderItem: OrderItemResponseInterface[];
 }
 
 export interface OrderItemResponseInterface {
+  id: string;
   quantity: number;
   cost: number;
   total: number;
+  product: FormattedItemResponse;
 }
 
 export function formatOneOrder(order: Order): OrderResponseInterface {
-  // const orderItemsResponse = order.orderItems.map((orderItem: OrderItem) => {
-  //   return {
-  //     quantity: orderItem.quantity,
-  //     cost: orderItem.cost,
-  //     total: orderItem.total,
-  //   };
-  // });
+  const orderItemsResponse = order.orderItems.map((orderItem: OrderItem) => {
+    return {
+      id: orderItem.id,
+      quantity: orderItem.quantity,
+      cost: orderItem.cost,
+      total: orderItem.total,
+      product: formatOneItem(orderItem.item),
+    };
+  });
 
   return {
     id: order.id,
-    date: order.date,
-    email: order.email,
     total: order.total,
+    status: order.status,
+    date: order.created_at,
+    orderItem: orderItemsResponse,
   };
 }
 

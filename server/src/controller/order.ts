@@ -1,51 +1,96 @@
 import { QueryRunner } from "typeorm";
-import { Order } from "../model";
-import { ErrorType, OrderCreate, OrderUpdate, SuccessType } from "../types";
+import { Customer, Order } from "../model";
+import { ErrorType, OrderUpdate, SuccessType } from "../types";
 import AppDataSource from "../db";
+import { getOneProduct } from "./product";
+import { createOrderItem } from "./orderItem";
 
 const queryRunner: QueryRunner = AppDataSource.createQueryRunner();
 const orderRepository = AppDataSource.getRepository(Order);
 
+interface CreateOrderItemInterface {
+  productID: string;
+  quantity: number;
+  cost: number;
+  total: number;
+}
+
+export async function getOpenOrderByCustomer(customer: Customer) {
+  const data = await orderRepository
+    .createQueryBuilder("order")
+    .andWhere("order.customer = :customer")
+    .andWhere("order.status = :status")
+    .setParameter("customer", customer.id)
+    .setParameter("status", "open")
+    .getOne();
+  return data;
+}
+
 export async function createOrder(
-  body: OrderCreate,
+  customer: Customer,
+  orderItem: CreateOrderItemInterface,
 ): Promise<ErrorType | SuccessType> {
+  const product = await getOneProduct(orderItem.productID);
+  if (product === null)
+    return {
+      errorCode: 404,
+      errorKey: "productID",
+      errorDescription: "Unable to find the product",
+    };
+
   try {
     await queryRunner.startTransaction();
-    const order = new Order();
 
-    order.email = body.email;
-    order.date = new Date(body.date);
+    let order: Order | null = await getOpenOrderByCustomer(customer);
 
-    await queryRunner.manager.save(order);
+    if (order === null) {
+      order = new Order();
+      order.customer = customer;
+      await queryRunner.manager.save(order);
+      await queryRunner.commitTransaction();
+      await queryRunner.startTransaction();
+    }
+
+    const createdOrderItem = await createOrderItem(
+      product,
+      order,
+      orderItem.quantity,
+      orderItem.cost,
+      orderItem.total,
+    );
+
+    if ("errorCode" in createdOrderItem) {
+      await queryRunner.rollbackTransaction();
+      return {
+        errorCode: createdOrderItem.errorCode,
+        errorKey: createdOrderItem.errorKey,
+        errorDescription: createdOrderItem.errorDescription,
+      };
+    }
 
     await queryRunner.commitTransaction();
 
-    return {
-      data: {
-        id: order.id,
-        email: order.email,
-        date: order.date,
-        customer: order.customer ? order.customer : null,
-        total: order.total,
-        tracking: order.tracking_number,
-      },
-    };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
+    return { data: order };
+  } catch (error) {
     await queryRunner.rollbackTransaction();
-    // eslint-disable-next-line no-console
+
     console.error(error);
+
     return {
       errorCode: 500,
-      errorDescription: error.message,
       errorKey: "unknown",
+      errorDescription: "Unknown error, check your logs",
     };
   }
 }
 
-export async function getAllOrders(): Promise<Order[]> {
-  const data: Order[] = await orderRepository
+export async function getAllOrders(
+  customerEmail: string,
+  status?: string,
+): Promise<Order[]> {
+  let data = orderRepository
     .createQueryBuilder("order")
+    .leftJoinAndSelect("order.customer", "customer")
     .leftJoinAndSelect("order.orderItems", "orderItems")
     .leftJoinAndSelect("orderItems.item", "item")
     .leftJoinAndSelect("item.itemTag", "itemTag")
@@ -53,9 +98,17 @@ export async function getAllOrders(): Promise<Order[]> {
     .leftJoinAndSelect("item.supplier", "supplier")
     .leftJoinAndSelect("item.itemPicture", "itemPicture")
     .leftJoinAndSelect("itemPicture.pictures", "pictures")
-    .getMany();
+    .andWhere("customer.email = :email")
+    .setParameter("email", customerEmail);
 
-  return data;
+  if (status !== undefined)
+    data = data
+      .andWhere("order.status = :status")
+      .setParameter("status", status.toLowerCase());
+
+  const dataResponse = await data.getMany();
+
+  return dataResponse;
 }
 
 export async function getOneOrder(uuid: string): Promise<Order | null> {
@@ -80,11 +133,13 @@ export async function updateOneOrder(
   order: Order,
 ): Promise<SuccessType | ErrorType> {
   const orderToUpdate = order;
-
-  orderToUpdate.email = body.email ? body.email : order.email;
   orderToUpdate.tracking_number = body.tracking
     ? body.tracking
     : orderToUpdate.tracking_number;
+
+  orderToUpdate.status = body.status
+    ? body.status.toLowerCase()
+    : orderToUpdate.status;
 
   try {
     await queryRunner.startTransaction();
@@ -96,8 +151,6 @@ export async function updateOneOrder(
       data: {
         id: orderToUpdate.id,
         customer: orderToUpdate.customer,
-        email: orderToUpdate.email,
-        date: orderToUpdate.date,
         total: orderToUpdate.total,
         tracking: orderToUpdate.tracking_number,
       },

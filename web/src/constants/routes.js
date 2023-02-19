@@ -8,5 +8,6 @@ export default {
   ITEM_DESCRIPTION: "Item-Description",
   CART: "Cart",
   NAV_DRAWER: "Nav-Drawer",
-  SEARCH_RESULTS: "Search-Results"
+  SEARCH_RESULTS: "Search-Results",
+  LOGOUT: "Logout"
 };

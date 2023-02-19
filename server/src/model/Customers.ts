@@ -30,19 +30,41 @@ export default class Customer extends BaseEntity {
   email: string;
 
   @Column({
-    nullable: false,
+    nullable: true,
   })
   password: string;
 
   @Column({
     nullable: true,
   })
-  address: string;
+  street: string;
+
+  @Column({
+    nullable: true
+  })
+  city: string;
+
+  @Column({
+    nullable: true
+  })
+  state: string;
+
+  @Column({
+    nullable: true
+  })
+  zip: string;
 
   @Column({
     nullable: true,
   })
   phone: string;
+
+  @Column({
+    nullable: false,
+    type: "boolean",
+    default: true,
+  })
+  is_registered: boolean;
 
   @CreateDateColumn({
     type: "timestamptz",

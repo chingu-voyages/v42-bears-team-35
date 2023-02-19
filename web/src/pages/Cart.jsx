@@ -1,44 +1,16 @@
 import { useState } from "react";
 import { Image, Pressable, Text, TextInput, ScrollView, StyleSheet, View, SafeAreaView, useWindowDimensions } from "react-native";
 import Review from "../components/Review"
-import { useSelector } from "react-redux";
+import Navbar from "../components/Navbar";
+import { updateCart } from '../constants/cartSlice';
+import { removeItem } from '../constants/cartSlice';
+import { useSelector, useDispatch } from "react-redux";
 import CartItem from "../components/CartItem";
 
-const prop = {
-  image: "../assets/red-hat.jpg",
-  productName: ["reddest", "barrette"],
-  productDescription:
-    "A fabulous red barret designed and made in France. Channel your inner french girl aesthetic with this hat",
-  price: 30.99,
-  discount: 5,
-  dateAdded: new Date(),
-  productRating: 4,
-  reviews: [
-    {
-      name: "S",
-      date: new Date(),
-      rating: 5,
-      review: "It's good",
-    },
-    {
-      name: "Anonymous",
-      date: new Date(),
-      rating: 2,
-      review: "It's garbage",
-    },
-    {
-      name: "Tim",
-      date: new Date(),
-      rating: 4,
-      review: "It's maroon, not red. Still pretty cute though.",
-    },
-  ],
-};
 
 export default ItemDescription = ({ navigation }) => {
-  const {height, width } = useWindowDimensions()
-
-  const [orderQuantity, setOrderQuantity] = useState(1);
+  const {height} = useWindowDimensions()
+  const cart = useSelector(state => state.cart.value)
   const style = StyleSheet.create({
     container: {
       backgroundColor: "#222020",
@@ -46,12 +18,28 @@ export default ItemDescription = ({ navigation }) => {
       height: height,
       display: "flex",
       padding: 20,
+    },
+    text: {
+      color: "white",
+      fontSize: 20,
+      marginBottom: 16
     }
   });
+
+
+  const dispatch = useDispatch()
+  const handleDelete = () => {
+    dispatch(removeItem(cart.id))
+    console.log(cart.id)
+  }
+
+
   return (
     <SafeAreaView>
+      <Navbar />
       <ScrollView bounces={true} style={style.container}>
-       <CartItem image={prop.image} name={prop.productName} price={prop.price} discount={prop.discount} quantity={5} />
+        <Text style={style.text}>{cart.length == 0 ? "No" : cart.length} items in cart</Text>
+       {cart.map(item => <CartItem image={item.imageUrl} name={item.productName} price={item.price} discount={item.discount} quantity={item.quantity} key={"cartItem-" + item.id} />)}
     </ScrollView>
     </SafeAreaView>
   );
